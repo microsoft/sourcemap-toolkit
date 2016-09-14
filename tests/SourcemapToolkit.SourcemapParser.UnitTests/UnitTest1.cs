@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SourcemapParser.UnitTests
+namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
 	[TestClass]
 	public class UnitTest1

@@ -6,8 +6,8 @@
     <ProjectGuid>{9F51324A-632A-45C0-9082-B49D78B12962}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CallstackDeminifier.UnitTests</RootNamespace>
-    <AssemblyName>CallstackDeminifier.UnitTests</AssemblyName>
+    <RootNamespace>SourcemapToolkit.CallstackDeminifier.UnitTests</RootNamespace>
+    <AssemblyName>SourcemapToolkit.CallstackDeminifier.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

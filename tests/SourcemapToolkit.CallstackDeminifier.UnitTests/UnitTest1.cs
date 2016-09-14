@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CallstackDeminifier.UnitTests
+namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
 	[TestClass]
 	public class UnitTest1
