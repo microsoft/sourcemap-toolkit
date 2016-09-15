@@ -2,7 +2,6 @@
     var longLocalVariableName = 16;
     longLocalVariableName += 2;
     level2(longLocalVariableName);
-
 }
 
 function level2(input) {
