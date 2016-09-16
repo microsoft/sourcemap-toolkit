@@ -36,13 +36,6 @@ namespace SourcemapToolkit.SourcemapParser
 		// The continuation bit is the 6th bit.
 		private static readonly int VlqContinuationBit = VlqBase;
 
-		private readonly Base64Converter _base64Converter;
-
-		public Base64VlqDecoder()
-		{
-			_base64Converter = new Base64Converter();
-		}
-
 		/// <summary>
 		/// Converts to a two-complement value from a value where the sign bit is
 		/// is placed in the least significant bit.For example, as decimals:
@@ -109,7 +102,7 @@ namespace SourcemapToolkit.SourcemapParser
 			do
 			{
 				char c = charProvider.GetNextCharacter();
-				int digit = _base64Converter.FromBase64(c);
+				int digit = Base64Converter.FromBase64(c);
 				continuation = (digit & VlqContinuationBit) != 0;
 				digit &= VlqBaseMask;
 				result = result + (digit << shift);
