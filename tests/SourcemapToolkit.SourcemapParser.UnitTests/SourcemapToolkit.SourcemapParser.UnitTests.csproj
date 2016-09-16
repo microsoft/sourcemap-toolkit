@@ -50,8 +50,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Base64ConverterUnitTests.cs" />
+    <Compile Include="Base64VlqDecoderUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">
+      <Project>{69FD1EB5-32F2-4759-9187-9A8E25927BCA}</Project>
+      <Name>SourcemapToolkit.SourcemapParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
