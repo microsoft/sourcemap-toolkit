@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
@@ -6,6 +7,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 	[TestClass]
 	public class MappingsListParserUnitTests
 	{
+
 		[TestMethod]
 		public void ParseSingleMappingSegment_NoPreviousStateSingleSegment_GeneratedColumnSet()
 		{
@@ -27,7 +29,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void ParseSingleMappingSegment_NoPreviousState4Segments_OriginalNameIndexNotSet()
+		public void ParseSingleMappingSegment_NoPreviousState4Segments_OriginalNameIndexNotSetInMappingEntry()
 		{
 			// Arrange
 			MappingsListParser mappingsListParser = new MappingsListParser();
@@ -47,7 +49,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void ParseSingleMappingSegment_NoPreviousState5Segments_AllFieldsSet()
+		public void ParseSingleMappingSegment_NoPreviousState5Segments_AllFieldsSetInMappingEntry()
 		{
 			// Arrange
 			MappingsListParser mappingsListParser = new MappingsListParser();
@@ -71,16 +73,12 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			MappingsListParser mappingsListParser = new MappingsListParser();
-			MappingsParserState mappingsParserState = new MappingsParserState
-			{
-				CurrentGeneratedColumnBase = 6,
-				SourcesListIndexBase = 7,
-				OriginalSourceStartingLineBase = 8,
-				OriginalSourceStartingColumnBase = 9,
-				NamesListIndexBase = 10
-
-			};
-			List<int> segmentFields = new List<int> { 1, 2, 3, 4, 5 };
+			MappingsParserState mappingsParserState = new MappingsParserState(newGeneratedColumnBase: 6,
+				newSourcesListIndexBase: 7,
+				newOriginalSourceStartingLineBase: 8,
+				newOriginalSourceStartingColumnBase: 9,
+				newNamesListIndexBase: 10);
+				List <int> segmentFields = new List<int> { 1, 2, 3, 4, 5 };
 
 			// Act 
 			MappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
@@ -92,102 +90,6 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.AreEqual(11, result.OriginalLineNumber);
 			Assert.AreEqual(13, result.OriginalColumnNumber);
 			Assert.AreEqual(15, result.OriginalNameIndex);
-		}
-
-		[TestMethod]
-		public void UpdateMappingParserStateAfterSegmentParse_NoPreviousState5Segments_AllStateFieldsInitialized()
-		{
-			// Arrange
-			MappingsListParser mappingsListParser = new MappingsListParser();
-			MappingsParserState mappingsParserState = new MappingsParserState();
-			MappingEntry mappingEntry = new MappingEntry
-			{
-				GeneratedColumnNumber = 1,
-				OriginalSourceFileIndex = 2,
-				OriginalLineNumber = 3,
-				OriginalColumnNumber = 4,
-				OriginalNameIndex = 5
-			};
-
-			// Act
-			mappingsListParser.UpdateMappingParserStateAfterSegmentParse(mappingsParserState, mappingEntry);
-
-			// Assert
-			Assert.AreEqual(0, mappingsParserState.CurrentGeneratedLineNumber);
-			Assert.AreEqual(1, mappingsParserState.CurrentGeneratedColumnBase);
-			Assert.AreEqual(2, mappingsParserState.SourcesListIndexBase);
-			Assert.AreEqual(3, mappingsParserState.OriginalSourceStartingLineBase);
-			Assert.AreEqual(4, mappingsParserState.OriginalSourceStartingColumnBase);
-			Assert.AreEqual(5, mappingsParserState.NamesListIndexBase);
-		}
-
-		[TestMethod]
-		public void UpdateMappingParserStateAfterSegmentParse_HasPreviousState5Segments_AllStateFieldsOverridden()
-		{
-			// Arrange
-			MappingsListParser mappingsListParser = new MappingsListParser();
-			MappingsParserState mappingsParserState = new MappingsParserState
-			{
-				CurrentGeneratedLineNumber = 20,
-				CurrentGeneratedColumnBase = 6,
-				SourcesListIndexBase = 7,
-				OriginalSourceStartingLineBase = 8,
-				OriginalSourceStartingColumnBase = 9,
-				NamesListIndexBase = 10
-			};
-			MappingEntry mappingEntry = new MappingEntry
-			{
-				GeneratedColumnNumber = 1,
-				OriginalSourceFileIndex = 2,
-				OriginalLineNumber = 3,
-				OriginalColumnNumber = 4,
-				OriginalNameIndex = 5
-			};
-
-			// Act
-			mappingsListParser.UpdateMappingParserStateAfterSegmentParse(mappingsParserState, mappingEntry);
-
-			// Assert
-			Assert.AreEqual(20, mappingsParserState.CurrentGeneratedLineNumber);
-			Assert.AreEqual(1, mappingsParserState.CurrentGeneratedColumnBase);
-			Assert.AreEqual(2, mappingsParserState.SourcesListIndexBase);
-			Assert.AreEqual(3, mappingsParserState.OriginalSourceStartingLineBase);
-			Assert.AreEqual(4, mappingsParserState.OriginalSourceStartingColumnBase);
-			Assert.AreEqual(5, mappingsParserState.NamesListIndexBase);
-		}
-
-		[TestMethod]
-		public void UpdateMappingParserStateAfterSegmentParse_HasPreviousState4Segments_NamesListIndexUnchanged()
-		{
-			// Arrange
-			MappingsListParser mappingsListParser = new MappingsListParser();
-			MappingsParserState mappingsParserState = new MappingsParserState
-			{
-				CurrentGeneratedLineNumber = 20,
-				CurrentGeneratedColumnBase = 6,
-				SourcesListIndexBase = 7,
-				OriginalSourceStartingLineBase = 8,
-				OriginalSourceStartingColumnBase = 9,
-				NamesListIndexBase = 10
-			};
-			MappingEntry mappingEntry = new MappingEntry
-			{
-				GeneratedColumnNumber = 1,
-				OriginalSourceFileIndex = 2,
-				OriginalLineNumber = 3,
-				OriginalColumnNumber = 4
-			};
-
-			// Act
-			mappingsListParser.UpdateMappingParserStateAfterSegmentParse(mappingsParserState, mappingEntry);
-
-			// Assert
-			Assert.AreEqual(20, mappingsParserState.CurrentGeneratedLineNumber);
-			Assert.AreEqual(1, mappingsParserState.CurrentGeneratedColumnBase);
-			Assert.AreEqual(2, mappingsParserState.SourcesListIndexBase);
-			Assert.AreEqual(3, mappingsParserState.OriginalSourceStartingLineBase);
-			Assert.AreEqual(4, mappingsParserState.OriginalSourceStartingColumnBase);
-			Assert.AreEqual(10, mappingsParserState.NamesListIndexBase);
 		}
 
 		[TestMethod]

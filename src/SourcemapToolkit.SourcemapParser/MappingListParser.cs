@@ -7,14 +7,30 @@ namespace SourcemapToolkit.SourcemapParser
 	/// The various fields within a segment of the Mapping parser are relative to the previous value we parsed.
 	/// This class tracks this state throughout the parsing process. 
 	/// </summary>
-	internal class MappingsParserState
+	internal struct MappingsParserState
 	{
-		public int CurrentGeneratedLineNumber;
-		public int CurrentGeneratedColumnBase;
-		public int SourcesListIndexBase;
-		public int OriginalSourceStartingLineBase;
-		public int OriginalSourceStartingColumnBase;
-		public int NamesListIndexBase;
+		public readonly int CurrentGeneratedLineNumber;
+		public readonly int CurrentGeneratedColumnBase;
+		public readonly int SourcesListIndexBase;
+		public readonly int OriginalSourceStartingLineBase;
+		public readonly int OriginalSourceStartingColumnBase;
+		public readonly int NamesListIndexBase;
+
+		public MappingsParserState(MappingsParserState previousMappingsParserState = new MappingsParserState(),
+			int? newGeneratedLineNumber = null,
+			int? newGeneratedColumnBase = null,
+			int? newSourcesListIndexBase = null,
+			int? newOriginalSourceStartingLineBase = null,
+			int? newOriginalSourceStartingColumnBase = null,
+			int? newNamesListIndexBase = null)
+		{
+			CurrentGeneratedLineNumber = newGeneratedLineNumber ?? previousMappingsParserState.CurrentGeneratedLineNumber;
+			CurrentGeneratedColumnBase = newGeneratedColumnBase ?? previousMappingsParserState.CurrentGeneratedColumnBase;
+			SourcesListIndexBase = newSourcesListIndexBase ?? previousMappingsParserState.SourcesListIndexBase;
+			OriginalSourceStartingLineBase = newOriginalSourceStartingLineBase ?? previousMappingsParserState.OriginalSourceStartingLineBase;
+			OriginalSourceStartingColumnBase = newOriginalSourceStartingColumnBase ?? previousMappingsParserState.OriginalSourceStartingColumnBase;
+			NamesListIndexBase = newNamesListIndexBase ?? previousMappingsParserState.NamesListIndexBase;
+		}
 	}
 
 	/// <summary>
@@ -80,38 +96,6 @@ namespace SourcemapToolkit.SourcemapParser
 		}
 
 		/// <summary>
-		/// The values encoded for a field in the mapping string are based on the previous occurance of that field.
-		/// This method updates the state of the MappingParser after parsing a new segment into a MappingEntry. 
-		/// It should only be called once per generation of a MappingEntry.
-		/// </summary>
-		/// <param name="mappingsParserState">The MappingsParserState object that should be updated</param>
-		/// <param name="parsedSegment">The newly parsed segment that should cause a state update</param>
-		internal void UpdateMappingParserStateAfterSegmentParse(MappingsParserState mappingsParserState, MappingEntry parsedSegment)
-		{
-			mappingsParserState.CurrentGeneratedColumnBase = parsedSegment.GeneratedColumnNumber;
-
-			if (parsedSegment.OriginalSourceFileIndex.HasValue)
-			{
-				mappingsParserState.SourcesListIndexBase = parsedSegment.OriginalSourceFileIndex.Value;
-			}
-
-			if (parsedSegment.OriginalLineNumber.HasValue)
-			{
-				mappingsParserState.OriginalSourceStartingLineBase = parsedSegment.OriginalLineNumber.Value;
-			}
-
-			if (parsedSegment.OriginalColumnNumber.HasValue)
-			{
-				mappingsParserState.OriginalSourceStartingColumnBase = parsedSegment.OriginalColumnNumber.Value;
-			}
-
-			if (parsedSegment.OriginalNameIndex.HasValue)
-			{
-				mappingsParserState.NamesListIndexBase = parsedSegment.OriginalNameIndex.Value;
-			}
-		}
-
-		/// <summary>
 		/// Top level API that should be called for decoding the MappingsString element. It will convert the string containing Base64 
 		/// VLQ encoded segments into a list of MappingEntries.
 		/// </summary>
@@ -127,17 +111,22 @@ namespace SourcemapToolkit.SourcemapParser
 			for (int lineNumber = 0; lineNumber < lines.Length; lineNumber += 1)
 			{
 				// The only value that resets when encountering a semicolon is the starting column.
-				currentMappingsParserState.CurrentGeneratedLineNumber = lineNumber;
-				currentMappingsParserState.CurrentGeneratedColumnBase = 0;
+				currentMappingsParserState = new MappingsParserState(currentMappingsParserState, newGeneratedLineNumber:lineNumber, newGeneratedColumnBase: 0);
 				string[] segmentsForLine = lines[lineNumber].Split(',');
 
 				foreach (string segment in segmentsForLine)
 				{
-					MappingEntry parsedSegment = ParseSingleMappingSegment(Base64VlqDecoder.Decode(segment), currentMappingsParserState);
-					UpdateMappingParserStateAfterSegmentParse(currentMappingsParserState, parsedSegment);
-					mappingEntries.Add(parsedSegment);
-				}
+					MappingEntry mappingEntry = ParseSingleMappingSegment(Base64VlqDecoder.Decode(segment), currentMappingsParserState);
+					mappingEntries.Add(mappingEntry);
 
+					// Update the current MappingParserState based on the generated MappingEntry
+					currentMappingsParserState = new MappingsParserState(currentMappingsParserState,
+						newGeneratedColumnBase: mappingEntry.GeneratedColumnNumber,
+						newSourcesListIndexBase: mappingEntry.OriginalSourceFileIndex,
+						newOriginalSourceStartingLineBase: mappingEntry.OriginalLineNumber,
+						newOriginalSourceStartingColumnBase: mappingEntry.OriginalColumnNumber,
+						newNamesListIndexBase: mappingEntry.OriginalNameIndex);
+				}
 			}
 			return mappingEntries;
 		}
