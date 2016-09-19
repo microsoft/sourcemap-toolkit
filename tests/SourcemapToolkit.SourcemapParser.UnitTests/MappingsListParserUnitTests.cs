@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,6 +8,57 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 	[TestClass]
 	public class MappingsListParserUnitTests
 	{
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void ParseSingleMappingSegment_NullSegmentFields_ThrowArgumentNullException()
+		{
+			// Arrange
+			MappingsListParser mappingsListParser = new MappingsListParser();
+			MappingsParserState mappingsParserState = new MappingsParserState();
+			List<int> segmentFields = null;
+
+			// Act
+			mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ParseSingleMappingSegment_0SegmentFields_ArgumentOutOfRangeException()
+		{
+			// Arrange
+			MappingsListParser mappingsListParser = new MappingsListParser();
+			MappingsParserState mappingsParserState = new MappingsParserState();
+			List<int> segmentFields = new List<int>();
+
+			// Act
+			mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ParseSingleMappingSegment_2SegmentFields_ArgumentOutOfRangeException()
+		{
+			// Arrange
+			MappingsListParser mappingsListParser = new MappingsListParser();
+			MappingsParserState mappingsParserState = new MappingsParserState();
+			List<int> segmentFields = new List<int> { 1, 2 };
+
+			// Act
+			mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ParseSingleMappingSegment_3SegmentFields_ArgumentOutOfRangeException()
+		{
+			// Arrange
+			MappingsListParser mappingsListParser = new MappingsListParser();
+			MappingsParserState mappingsParserState = new MappingsParserState();
+			List<int> segmentFields = new List<int> { 1, 2, 3 };
+
+			// Act
+			mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+		}
 
 		[TestMethod]
 		public void ParseSingleMappingSegment_NoPreviousStateSingleSegment_GeneratedColumnSet()

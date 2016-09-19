@@ -49,6 +49,16 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <returns></returns>
 		internal MappingEntry ParseSingleMappingSegment(List<int> segmentFields, MappingsParserState mappingsParserState)
 		{
+			if (segmentFields == null)
+			{
+				throw new ArgumentNullException(nameof(segmentFields));
+			}
+
+			if (segmentFields.Count == 0 || segmentFields.Count == 2 || segmentFields.Count == 3)
+			{
+				throw new ArgumentOutOfRangeException(nameof(segmentFields));
+			}
+
 			MappingEntry mappingEntry = new MappingEntry
 			{
 				GeneratedLineNumber = mappingsParserState.CurrentGeneratedLineNumber,
@@ -81,9 +91,7 @@ namespace SourcemapToolkit.SourcemapParser
 			if (segmentFields.Count > 1)
 			{
 				mappingEntry.OriginalSourceFileIndex = mappingsParserState.SourcesListIndexBase + segmentFields[1];
-
 				mappingEntry.OriginalLineNumber = mappingsParserState.OriginalSourceStartingLineBase + segmentFields[2];
-
 				mappingEntry.OriginalColumnNumber = mappingsParserState.OriginalSourceStartingColumnBase + segmentFields[3];
 			}
 
