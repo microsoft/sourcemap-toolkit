@@ -117,8 +117,12 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <UsingTask AssemblyFile="..\..\packages\ajaxmin.5.14.5506.26202\tools\net40\AjaxMinTask.dll" TaskName="AjaxMin" /> 
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <JS Include="crashcauser.js" />
+    </ItemGroup>
+    <AjaxMin SourceMapType="V3" JsSourceFiles="@(JS)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" CssSourceFiles="@(CSS)" CssSourceExtensionPattern="\.css$" CssTargetExtension=".min.css" />
+  </Target>
 </Project>
