@@ -25,10 +25,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			StackTraceParser stackTraceParser = new StackTraceParser();
 			string browserStackTrace = @"TypeError: Cannot read property 'length' of undefined
-    at d (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:75)
-    at c (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:34)
-    at b (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:14)
-    at HTMLButtonElement.<anonymous> (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:332)";
+    at d (http://localhost:19220/crashcauser.min.js:1:75)
+    at c (http://localhost:19220/crashcauser.min.js:1:34)
+    at b (http://localhost:19220/crashcauser.min.js:1:14)
+    at HTMLButtonElement.<anonymous> (http://localhost:19220/crashcauser.min.js:1:332)";
 
 			// Act
 			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
@@ -102,7 +102,7 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		{
 			// Arrange
 			StackTraceParser stackTraceParser = new StackTraceParser();
-			string frame = "    (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:34)";
+			string frame = "    (http://localhost:19220/crashcauser.min.js:1:34)";
 
 			// Act
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
@@ -119,7 +119,7 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		{
 			// Arrange
 			StackTraceParser stackTraceParser = new StackTraceParser();
-			string frame = "    at c (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:8:3)";
+			string frame = "    at c (http://localhost:19220/crashcauser.min.js:8:3)";
 
 			// Act
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
@@ -129,6 +129,23 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			Assert.AreEqual("c", result.MethodName);
 			Assert.AreEqual(7, result.SourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(2, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[TestMethod]
+		public void TryParseSingleStackFrame_ChromeStackFrameWithScriptSubfolder_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = "    at c (http://localhost:19220/o/app_scripts/crashcauser.min.js:9:5)";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.AreEqual("crashcauser.min.js", result.FilePath);
+			Assert.AreEqual("c", result.MethodName);
+			Assert.AreEqual(8, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(4, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
 		[TestMethod]
