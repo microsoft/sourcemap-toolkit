@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackDeminifier.UnitTests", "tests\SourcemapToolkit.CallstackDeminifier.UnitTests\SourcemapToolkit.CallstackDeminifier.UnitTests.csproj", "{9F51324A-632A-45C0-9082-B49D78B12962}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SouremapToolkit.CallstackDeminifier", "src\SourceMapToolkit.CallstackDeminifier\SouremapToolkit.CallstackDeminifier.csproj", "{00F66219-2E6C-4660-9B94-3C30E2B20729}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackDeminifier", "src\SourceMapToolkit.CallstackDeminifier\SourcemapToolkit.CallstackDeminifier.csproj", "{00F66219-2E6C-4660-9B94-3C30E2B20729}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
