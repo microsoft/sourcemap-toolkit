@@ -24,7 +24,7 @@ namespace SourcemapToolkit.SourcemapParser
 	/// This class provides a mechanism for converting a Base64 Variable-length quantity (VLQ)
 	/// into an array of integers.
 	/// </summary>
-	internal class Base64VlqDecoder
+	internal static class Base64VlqDecoder
 	{
 		// A Base64 VLQ digit can represent 5 bits, so it is base-32.
 		private const int VlqBaseShift = 5;
@@ -52,7 +52,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Returns a list of integers corresponding to an input string that is Base64 VLQ encoded
 		/// </summary>
-		internal List<int> Decode(string input)
+		internal static List<int> Decode(string input)
 		{
 			List<int> result = new List<int>();
 			Base64CharProvider charProvider = new Base64CharProvider(input);
@@ -94,7 +94,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Reads characters from the Base64CharProvider until a complete integer value has been extracted.
 		/// </summary>
-		private int DecodeNextInteger(Base64CharProvider charProvider)
+		private static int DecodeNextInteger(Base64CharProvider charProvider)
 		{
 			int result = 0;
 			bool continuation;
