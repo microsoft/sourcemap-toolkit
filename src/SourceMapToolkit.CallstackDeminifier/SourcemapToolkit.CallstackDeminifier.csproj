@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FunctionFinderVisitor.cs" />
+    <Compile Include="FunctionMapConsumer.cs" />
     <Compile Include="FunctionMapEntry.cs" />
     <Compile Include="FunctionMapGenerator.cs" />
     <Compile Include="SourcePosition.cs" />

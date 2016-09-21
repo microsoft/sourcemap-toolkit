@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FunctionMapConsumerUnitTests.cs" />
     <Compile Include="FunctionMapGeneratorUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
     <Compile Include="StackTraceParserUnitTests.cs" />
