@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FunctionFinderVisitor.cs" />
+    <Compile Include="FunctionMapEntry.cs" />
+    <Compile Include="FunctionMapGenerator.cs" />
     <Compile Include="SourcePosition.cs" />
     <Compile Include="StackFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
