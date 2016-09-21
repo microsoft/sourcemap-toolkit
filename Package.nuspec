@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SourceMapToolkit</id>
+    <version>$version$</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <projectUrl>https://github.com/Microsoft/sourcemap-toolkit</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A C# library that allows for the consumption of source maps and the deminification of JavaScript stack traces</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>sourcemap callstack stackframe deminify</tags>
+    <dependencies>
+      <dependency id="AjaxMin" version="5.14.5506.26202" />
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\SourceMapToolkit.CallstackDeminifier\bin\Release\SourcemapToolkit.CallstackDeminifier.dll" target="lib\net40" />
+    <file src="src\SourcemapToolkit.SourcemapParser\bin\Release\SourcemapToolkit.SourcemapParser.dll" target="lib\net40" />
+  </files>
+</package>
