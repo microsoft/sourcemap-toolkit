@@ -12,3 +12,5 @@ The source map parsing implementation and the relevant comments were based on th
 The source map parser uses [Json.NET](http://www.newtonsoft.com/json) which is licensed under the [MIT License](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md).
 
 The call stack deminifier and test app both use [Ajax Min](http://ajaxmin.codeplex.com/) which is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+The unit tests for this library leverage the functionality provided by [Rhino Mocks](https://www.hibernatingrhinos.com/oss/rhino-mocks). Rhino Mocks is Open Source and released under the [BSD license](http://www.opensource.org/licenses/bsd-license.php).

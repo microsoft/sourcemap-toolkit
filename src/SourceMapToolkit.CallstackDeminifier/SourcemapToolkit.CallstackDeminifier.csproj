@@ -50,6 +50,7 @@
     <Compile Include="FunctionMapGenerator.cs" />
     <Compile Include="IGeneratedSourceCodeProvider.cs" />
     <Compile Include="ISourceMapProvider.cs" />
+    <Compile Include="KeyValueCache.cs" />
     <Compile Include="SourcePosition.cs" />
     <Compile Include="StackFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

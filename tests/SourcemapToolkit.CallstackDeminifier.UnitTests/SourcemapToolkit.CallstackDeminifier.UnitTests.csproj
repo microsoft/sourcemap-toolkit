@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -52,6 +56,7 @@
   <ItemGroup>
     <Compile Include="FunctionMapConsumerUnitTests.cs" />
     <Compile Include="FunctionMapGeneratorUnitTests.cs" />
+    <Compile Include="KeyValueCacheUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
     <Compile Include="StackTraceParserUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +66,9 @@
       <Project>{00F66219-2E6C-4660-9B94-3C30E2B20729}</Project>
       <Name>SourcemapToolkit.CallstackDeminifier</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
