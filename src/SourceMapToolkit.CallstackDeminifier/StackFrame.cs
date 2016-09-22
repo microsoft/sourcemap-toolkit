@@ -1,4 +1,6 @@
-﻿namespace SourcemapToolkit.CallstackDeminifier
+﻿using SourcemapToolkit.SourcemapParser;
+
+namespace SourcemapToolkit.CallstackDeminifier
 {
 	/// <summary>
 	/// Represents a single entry in a JavaScript stack frame. 

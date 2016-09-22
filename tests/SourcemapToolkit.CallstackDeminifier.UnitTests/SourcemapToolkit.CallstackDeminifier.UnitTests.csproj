@@ -57,7 +57,6 @@
     <Compile Include="FunctionMapConsumerUnitTests.cs" />
     <Compile Include="FunctionMapGeneratorUnitTests.cs" />
     <Compile Include="KeyValueCacheUnitTests.cs" />
-    <Compile Include="SourcePositionUnitTests.cs" />
     <Compile Include="StackTraceParserUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +64,10 @@
     <ProjectReference Include="..\..\src\SourceMapToolkit.CallstackDeminifier\SourcemapToolkit.CallstackDeminifier.csproj">
       <Project>{00F66219-2E6C-4660-9B94-3C30E2B20729}</Project>
       <Name>SourcemapToolkit.CallstackDeminifier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">
+      <Project>{69FD1EB5-32F2-4759-9187-9A8E25927BCA}</Project>
+      <Name>SourcemapToolkit.SourcemapParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

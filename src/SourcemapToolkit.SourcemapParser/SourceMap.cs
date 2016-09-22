@@ -35,39 +35,26 @@ namespace SourcemapToolkit.SourcemapParser
 		public List<MappingEntry> ParsedMappings;
 	}
 
-	/// <summary>
-	/// Corresponds to a single parsed entry in the source map mapping string
-	/// </summary>
 	public class MappingEntry
 	{
 		/// <summary>
-		/// The zero-based line number in the generated code that corresponds to this mapping segment.
+		/// The location of the line of code in the transformed code
 		/// </summary>
-		public int GeneratedLineNumber;
+		public SourcePosition GeneratedSourcePosition;
 
 		/// <summary>
-		/// The zero-based column number in the generated code that corresponds to this mapping segment.
+		/// The location of the code in the original source code
 		/// </summary>
-		public int GeneratedColumnNumber;
+		public SourcePosition OriginalSourcePosition;
 
 		/// <summary>
-		/// The zero-based index into the sources array that corresponds to this mapping segment.
+		/// The original name of the code referenced by this mapping entry
 		/// </summary>
-		public int? OriginalSourceFileIndex;
+		public string OriginalName;
 
 		/// <summary>
-		/// The zero-based line number in the source code that corresponds to this mapping segment.
+		/// The name of the file that originally contained this code
 		/// </summary>
-		public int? OriginalLineNumber;
-
-		/// <summary>
-		/// The zero-based line number in the source code that corresponds to this mapping segment.
-		/// </summary>
-		public int? OriginalColumnNumber;
-
-		/// <summary>
-		/// The zero-based index into the names array that can be used to identify names associated with this object.
-		/// </summary>
-		public int? OriginalNameIndex;
+		public string OriginalFileName;
 	}
 }

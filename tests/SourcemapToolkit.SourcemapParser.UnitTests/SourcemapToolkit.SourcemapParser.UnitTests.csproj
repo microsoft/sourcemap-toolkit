@@ -54,9 +54,11 @@
   <ItemGroup>
     <Compile Include="Base64ConverterUnitTests.cs" />
     <Compile Include="Base64VlqDecoderUnitTests.cs" />
+    <Compile Include="NumericMappingEntryUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MappingsListParserUnitTests.cs" />
     <Compile Include="SourceMapParserUnitTests.cs" />
+    <Compile Include="SourcePositionUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">

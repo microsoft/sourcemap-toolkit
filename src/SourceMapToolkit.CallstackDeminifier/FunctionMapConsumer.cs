@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
