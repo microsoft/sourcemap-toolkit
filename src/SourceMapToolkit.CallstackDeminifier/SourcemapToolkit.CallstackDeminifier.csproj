@@ -48,6 +48,8 @@
     <Compile Include="FunctionMapConsumer.cs" />
     <Compile Include="FunctionMapEntry.cs" />
     <Compile Include="FunctionMapGenerator.cs" />
+    <Compile Include="IGeneratedSourceCodeProvider.cs" />
+    <Compile Include="ISourceMapProvider.cs" />
     <Compile Include="SourcePosition.cs" />
     <Compile Include="StackFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
