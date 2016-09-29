@@ -67,7 +67,6 @@ namespace SourcemapToolkit.SourcemapParser
 				}
 				catch (IndexOutOfRangeException e)
 				{
-					
 					throw new IndexOutOfRangeException("Source map contains original name index that is outside the range of the provided names array" ,e);
 				}
 
@@ -81,7 +80,6 @@ namespace SourcemapToolkit.SourcemapParser
 				}
 				catch (IndexOutOfRangeException e)
 				{
-
 					throw new IndexOutOfRangeException("Source map contains original source index that is outside the range of the provided sources array", e);
 				}
 			}

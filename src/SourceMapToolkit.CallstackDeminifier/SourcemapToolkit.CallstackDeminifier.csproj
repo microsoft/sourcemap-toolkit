@@ -49,6 +49,9 @@
     <Compile Include="FunctionMapEntry.cs" />
     <Compile Include="FunctionMapGenerator.cs" />
     <Compile Include="FunctionMapStore.cs" />
+    <Compile Include="IFunctionMapConsumer.cs" />
+    <Compile Include="IFunctionMapGenerator.cs" />
+    <Compile Include="IFunctionMapStore.cs" />
     <Compile Include="ISourceCodeProvider.cs" />
     <Compile Include="ISourceMapProvider.cs" />
     <Compile Include="KeyValueCache.cs" />

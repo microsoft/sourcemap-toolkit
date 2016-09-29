@@ -2,11 +2,6 @@
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
-	internal interface IFunctionMapStore
-	{
-		List<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl);
-	}
-
 	/// <summary>
 	/// This class is responsible for providing function maps for the JavaScript code corresponding to a URL.
 	/// </summary>
