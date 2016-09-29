@@ -34,7 +34,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
 
-	    public MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+	    public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
 	    {
 	        if (ParsedMappings == null)
 	        {
