@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SourcemapToolkit.CallstackDeminifier.UnitTests
+namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
 	[TestClass]
 	public class SourcePositionUnitTests

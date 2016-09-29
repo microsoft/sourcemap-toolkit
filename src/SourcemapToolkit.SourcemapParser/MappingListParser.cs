@@ -4,6 +4,91 @@ using System.Collections.Generic;
 namespace SourcemapToolkit.SourcemapParser
 {
 	/// <summary>
+	/// Corresponds to a single parsed entry in the source map mapping string that is used internally by the parser.
+	/// The public API exposes the MappingEntry object, which is more useful to consumers of the library.
+	/// </summary>
+	internal class NumericMappingEntry
+	{
+		/// <summary>
+		/// The zero-based line number in the generated code that corresponds to this mapping segment.
+		/// </summary>
+		public int GeneratedLineNumber;
+
+		/// <summary>
+		/// The zero-based column number in the generated code that corresponds to this mapping segment.
+		/// </summary>
+		public int GeneratedColumnNumber;
+
+		/// <summary>
+		/// The zero-based index into the sources array that corresponds to this mapping segment.
+		/// </summary>
+		public int? OriginalSourceFileIndex;
+
+		/// <summary>
+		/// The zero-based line number in the source code that corresponds to this mapping segment.
+		/// </summary>
+		public int? OriginalLineNumber;
+
+		/// <summary>
+		/// The zero-based line number in the source code that corresponds to this mapping segment.
+		/// </summary>
+		public int? OriginalColumnNumber;
+
+		/// <summary>
+		/// The zero-based index into the names array that can be used to identify names associated with this object.
+		/// </summary>
+		public int? OriginalNameIndex;
+
+		public MappingEntry ToMappingEntry(List<string> names, List<string> sources)
+		{
+			MappingEntry result = new MappingEntry
+			{
+				GeneratedSourcePosition = new SourcePosition
+				{
+					ZeroBasedColumnNumber = GeneratedColumnNumber,
+					ZeroBasedLineNumber = GeneratedLineNumber
+				}
+			};
+
+			if (OriginalColumnNumber.HasValue && OriginalLineNumber.HasValue)
+			{
+				result.OriginalSourcePosition = new SourcePosition
+				{
+					ZeroBasedColumnNumber = OriginalColumnNumber.Value,
+					ZeroBasedLineNumber = OriginalLineNumber.Value
+				};
+			}
+
+			if (OriginalNameIndex.HasValue)
+			{
+				try
+				{
+					result.OriginalName = names[OriginalNameIndex.Value];
+				}
+				catch (IndexOutOfRangeException e)
+				{
+					throw new IndexOutOfRangeException("Source map contains original name index that is outside the range of the provided names array" ,e);
+				}
+
+			}
+
+			if (OriginalSourceFileIndex.HasValue)
+			{
+				try
+				{
+					result.OriginalFileName = sources[OriginalSourceFileIndex.Value];
+				}
+				catch (IndexOutOfRangeException e)
+				{
+					throw new IndexOutOfRangeException("Source map contains original source index that is outside the range of the provided sources array", e);
+				}
+			}
+
+			return result;
+		}
+	}
+
+	/// <summary>
 	/// The various fields within a segment of the Mapping parser are relative to the previous value we parsed.
 	/// This class tracks this state throughout the parsing process. 
 	/// </summary>
@@ -47,7 +132,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <param name="segmentFields">The integer values for the segment fields</param>
 		/// <param name="mappingsParserState">The current state of the state variables for the parser</param>
 		/// <returns></returns>
-		internal MappingEntry ParseSingleMappingSegment(List<int> segmentFields, MappingsParserState mappingsParserState)
+		internal NumericMappingEntry ParseSingleMappingSegment(List<int> segmentFields, MappingsParserState mappingsParserState)
 		{
 			if (segmentFields == null)
 			{
@@ -59,7 +144,7 @@ namespace SourcemapToolkit.SourcemapParser
 				throw new ArgumentOutOfRangeException(nameof(segmentFields));
 			}
 
-			MappingEntry mappingEntry = new MappingEntry
+			NumericMappingEntry numericMappingEntry = new NumericMappingEntry
 			{
 				GeneratedLineNumber = mappingsParserState.CurrentGeneratedLineNumber,
 				GeneratedColumnNumber = mappingsParserState.CurrentGeneratedColumnBase + segmentFields[0]
@@ -90,24 +175,24 @@ namespace SourcemapToolkit.SourcemapParser
 			 */
 			if (segmentFields.Count > 1)
 			{
-				mappingEntry.OriginalSourceFileIndex = mappingsParserState.SourcesListIndexBase + segmentFields[1];
-				mappingEntry.OriginalLineNumber = mappingsParserState.OriginalSourceStartingLineBase + segmentFields[2];
-				mappingEntry.OriginalColumnNumber = mappingsParserState.OriginalSourceStartingColumnBase + segmentFields[3];
+				numericMappingEntry.OriginalSourceFileIndex = mappingsParserState.SourcesListIndexBase + segmentFields[1];
+				numericMappingEntry.OriginalLineNumber = mappingsParserState.OriginalSourceStartingLineBase + segmentFields[2];
+				numericMappingEntry.OriginalColumnNumber = mappingsParserState.OriginalSourceStartingColumnBase + segmentFields[3];
 			}
 
 			if (segmentFields.Count >= 5)
 			{
-				mappingEntry.OriginalNameIndex = mappingsParserState.NamesListIndexBase + segmentFields[4];
+				numericMappingEntry.OriginalNameIndex = mappingsParserState.NamesListIndexBase + segmentFields[4];
 			}
 
-			return mappingEntry;
+			return numericMappingEntry;
 		}
 
 		/// <summary>
 		/// Top level API that should be called for decoding the MappingsString element. It will convert the string containing Base64 
 		/// VLQ encoded segments into a list of MappingEntries.
 		/// </summary>
-		internal List<MappingEntry> ParseMappings(string mappingString)
+		internal List<MappingEntry> ParseMappings(string mappingString, List<string> names, List<string> sources)
 		{
 			List<MappingEntry> mappingEntries = new List<MappingEntry>();
 			MappingsParserState currentMappingsParserState = new MappingsParserState();
@@ -124,16 +209,16 @@ namespace SourcemapToolkit.SourcemapParser
 
 				foreach (string segment in segmentsForLine)
 				{
-					MappingEntry mappingEntry = ParseSingleMappingSegment(Base64VlqDecoder.Decode(segment), currentMappingsParserState);
-					mappingEntries.Add(mappingEntry);
+					NumericMappingEntry numericMappingEntry = ParseSingleMappingSegment(Base64VlqDecoder.Decode(segment), currentMappingsParserState);
+					mappingEntries.Add(numericMappingEntry.ToMappingEntry(names, sources));
 
 					// Update the current MappingParserState based on the generated MappingEntry
 					currentMappingsParserState = new MappingsParserState(currentMappingsParserState,
-						newGeneratedColumnBase: mappingEntry.GeneratedColumnNumber,
-						newSourcesListIndexBase: mappingEntry.OriginalSourceFileIndex,
-						newOriginalSourceStartingLineBase: mappingEntry.OriginalLineNumber,
-						newOriginalSourceStartingColumnBase: mappingEntry.OriginalColumnNumber,
-						newNamesListIndexBase: mappingEntry.OriginalNameIndex);
+						newGeneratedColumnBase: numericMappingEntry.GeneratedColumnNumber,
+						newSourcesListIndexBase: numericMappingEntry.OriginalSourceFileIndex,
+						newOriginalSourceStartingLineBase: numericMappingEntry.OriginalLineNumber,
+						newOriginalSourceStartingColumnBase: numericMappingEntry.OriginalColumnNumber,
+						newNamesListIndexBase: numericMappingEntry.OriginalNameIndex);
 				}
 			}
 			return mappingEntries;

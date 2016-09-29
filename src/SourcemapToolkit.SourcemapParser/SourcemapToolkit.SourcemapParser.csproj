@@ -50,6 +50,7 @@
     <Compile Include="SourceMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceMapParser.cs" />
+    <Compile Include="SourcePosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

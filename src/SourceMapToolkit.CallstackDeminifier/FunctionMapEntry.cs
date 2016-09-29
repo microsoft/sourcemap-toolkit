@@ -1,4 +1,6 @@
-﻿namespace SourcemapToolkit.CallstackDeminifier
+﻿using SourcemapToolkit.SourcemapParser;
+
+namespace SourcemapToolkit.CallstackDeminifier
 {
 	/// <summary>
 	/// Contains information regarding the location of a particular function in a JavaScript file

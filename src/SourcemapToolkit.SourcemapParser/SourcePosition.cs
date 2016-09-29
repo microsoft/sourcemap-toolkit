@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourcemapToolkit.CallstackDeminifier
+namespace SourcemapToolkit.SourcemapParser
 {
 	/// <summary>
 	/// Identifies the location of a piece of code in a JavaScript file

@@ -69,7 +69,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			List<int> segmentFields = new List<int> { 16 };
 
 			// Act 
-			MappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+			NumericMappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
 
 			// Assert
 			Assert.AreEqual(0, result.GeneratedLineNumber);
@@ -89,7 +89,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			List<int> segmentFields = new List<int> { 1, 1, 2, 4 };
 
 			// Act 
-			MappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+			NumericMappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
 
 			// Assert
 			Assert.AreEqual(0, result.GeneratedLineNumber);
@@ -109,7 +109,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			List<int> segmentFields = new List<int> { 1, 3, 6, 10, 15 };
 
 			// Act 
-			MappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+			NumericMappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
 
 			// Assert
 			Assert.AreEqual(0, result.GeneratedLineNumber);
@@ -133,7 +133,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 				List <int> segmentFields = new List<int> { 1, 2, 3, 4, 5 };
 
 			// Act 
-			MappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
+			NumericMappingEntry result = mappingsListParser.ParseSingleMappingSegment(segmentFields, mappingsParserState);
 
 			// Assert
 			Assert.AreEqual(0, result.GeneratedLineNumber);
@@ -149,27 +149,17 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			MappingsListParser mappingsListParser = new MappingsListParser();
-			string mappingsString = "AAaAA,CAACC;";
+			string mappingsString = "ktC,2iB;";
+			List<string> names = new List<string>();
+			List<string> sources = new List<string>();
 
 			// Act
-			List<MappingEntry> mappingsList = mappingsListParser.ParseMappings(mappingsString);
+			List<MappingEntry> mappingsList = mappingsListParser.ParseMappings(mappingsString, names, sources);
 
 			// Assert
 			Assert.AreEqual(2, mappingsList.Count);
-
-			Assert.AreEqual(0, mappingsList[0].GeneratedLineNumber);
-			Assert.AreEqual(0, mappingsList[0].GeneratedColumnNumber);
-			Assert.AreEqual(0, mappingsList[0].OriginalSourceFileIndex);
-			Assert.AreEqual(13, mappingsList[0].OriginalLineNumber);
-			Assert.AreEqual(0, mappingsList[0].OriginalColumnNumber);
-			Assert.AreEqual(0, mappingsList[0].OriginalNameIndex);
-
-			Assert.AreEqual(0, mappingsList[1].GeneratedLineNumber);
-			Assert.AreEqual(1, mappingsList[1].GeneratedColumnNumber);
-			Assert.AreEqual(0, mappingsList[1].OriginalSourceFileIndex);
-			Assert.AreEqual(13, mappingsList[1].OriginalLineNumber);
-			Assert.AreEqual(1, mappingsList[1].OriginalColumnNumber);
-			Assert.AreEqual(1, mappingsList[1].OriginalNameIndex);
+			Assert.AreEqual(0, mappingsList[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(0, mappingsList[1].GeneratedSourcePosition.ZeroBasedLineNumber);
 		}
 
 		[TestMethod]
@@ -177,27 +167,17 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			MappingsListParser mappingsListParser = new MappingsListParser();
-			string mappingsString = "CEGegB;CACf;";
+			string mappingsString = "ktC;2iB;";
+			List<string> names = new List<string>();
+			List<string> sources = new List<string>();
 
 			// Act
-			List<MappingEntry> mappingsList = mappingsListParser.ParseMappings(mappingsString);
+			List<MappingEntry> mappingsList = mappingsListParser.ParseMappings(mappingsString, names, sources);
 
 			// Assert
 			Assert.AreEqual(2, mappingsList.Count);
-
-			Assert.AreEqual(0, mappingsList[0].GeneratedLineNumber);
-			Assert.AreEqual(1, mappingsList[0].GeneratedColumnNumber);
-			Assert.AreEqual(2, mappingsList[0].OriginalSourceFileIndex);
-			Assert.AreEqual(3, mappingsList[0].OriginalLineNumber);
-			Assert.AreEqual(15, mappingsList[0].OriginalColumnNumber);
-			Assert.AreEqual(16, mappingsList[0].OriginalNameIndex);
-
-			Assert.AreEqual(1, mappingsList[1].GeneratedLineNumber);
-			Assert.AreEqual(1, mappingsList[1].GeneratedColumnNumber);
-			Assert.AreEqual(2, mappingsList[1].OriginalSourceFileIndex);
-			Assert.AreEqual(4, mappingsList[1].OriginalLineNumber);
-			Assert.AreEqual(0, mappingsList[1].OriginalColumnNumber);
-			Assert.IsFalse(mappingsList[1].OriginalNameIndex.HasValue);
+			Assert.AreEqual(0, mappingsList[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(1, mappingsList[1].GeneratedSourcePosition.ZeroBasedLineNumber);
 		}
 	}
 }
