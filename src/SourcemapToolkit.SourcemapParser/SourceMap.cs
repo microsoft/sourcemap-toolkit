@@ -33,6 +33,24 @@ namespace SourcemapToolkit.SourcemapParser
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
+
+	    public MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+	    {
+	        if (ParsedMappings == null)
+	        {
+	            return null;
+	        }
+
+            foreach (MappingEntry mappingEntry in ParsedMappings)
+            {
+                if (mappingEntry.GeneratedSourcePosition.CompareTo(generatedSourcePosition) == 0)
+                {
+                    return mappingEntry;
+                }
+            }
+
+	        return null;
+	    }
 	}
 
 	public class MappingEntry
