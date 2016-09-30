@@ -33,28 +33,23 @@ namespace SourcemapToolkit.SourcemapParser
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
-	}
 
-	public class MappingEntry
-	{
-		/// <summary>
-		/// The location of the line of code in the transformed code
-		/// </summary>
-		public SourcePosition GeneratedSourcePosition;
+	    public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+	    {
+	        if (ParsedMappings == null)
+	        {
+	            return null;
+	        }
 
-		/// <summary>
-		/// The location of the code in the original source code
-		/// </summary>
-		public SourcePosition OriginalSourcePosition;
+            foreach (MappingEntry mappingEntry in ParsedMappings)
+            {
+                if (mappingEntry.GeneratedSourcePosition.CompareTo(generatedSourcePosition) == 0)
+                {
+                    return mappingEntry;
+                }
+            }
 
-		/// <summary>
-		/// The original name of the code referenced by this mapping entry
-		/// </summary>
-		public string OriginalName;
-
-		/// <summary>
-		/// The name of the file that originally contained this code
-		/// </summary>
-		public string OriginalFileName;
+	        return null;
+	    }
 	}
 }

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Base64Converter.cs" />
     <Compile Include="Base64VlqDecoder.cs" />
+    <Compile Include="MappingEntry.cs" />
     <Compile Include="MappingListParser.cs" />
     <Compile Include="SourceMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
