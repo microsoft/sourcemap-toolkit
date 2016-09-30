@@ -143,11 +143,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
             string filePath = "http://localhost/file.js";
             functionMapStore.Stub(x => x.GetFunctionMapForSourceCode(filePath)).Return(functionMap);
             IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStrictMock<IFunctionMapConsumer>();
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry();
+	        FunctionMapEntry functionMapEntry = new FunctionMapEntry {FunctionNameSourcePosition = new SourcePosition()};
             functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(functionMapEntry);
             ISourceMapStore sourceMapStore = MockRepository.GenerateStrictMock<ISourceMapStore>();
             SourceMap sourceMap = MockRepository.GenerateStrictMock<SourceMap>();
-            sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition)).Return(null);
+            sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(functionMapEntry.FunctionNameSourcePosition)).Return(null);
             sourceMapStore.Stub(x => x.GetSourceMapForUrl(filePath)).Return(sourceMap);
             StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
             StackFrame stackFrame = new StackFrame
@@ -179,12 +179,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
             string filePath = "http://localhost/file.js";
             functionMapStore.Stub(x => x.GetFunctionMapForSourceCode(filePath)).Return(functionMap);
             IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStrictMock<IFunctionMapConsumer>();
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry();
+	        FunctionMapEntry functionMapEntry = new FunctionMapEntry {StartSourcePosition = new SourcePosition()};
             functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(functionMapEntry);
             ISourceMapStore sourceMapStore = MockRepository.GenerateStrictMock<ISourceMapStore>();
             SourceMap sourceMap = MockRepository.GenerateStrictMock<SourceMap>();
             SourcePosition originalSourcePosition = new SourcePosition{ZeroBasedColumnNumber = 44, ZeroBasedLineNumber = 88};
-            sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition)).Return(new MappingEntry
+            sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(functionMapEntry.FunctionNameSourcePosition)).Return(new MappingEntry
             {
                 OriginalSourcePosition = originalSourcePosition,
                 OriginalName = "realmethodname",
