@@ -6,7 +6,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 	{
 		/// <summary>
 		/// Returns a FunctionMap describing the locations of every funciton in the source code.
-		/// The functions are to be sorted by start position.
+		/// The functions are to be sorted in decreasing order by start position.
 		/// </summary>
 		List<FunctionMapEntry> GenerateFunctionMap(string sourceCode);
 	}
