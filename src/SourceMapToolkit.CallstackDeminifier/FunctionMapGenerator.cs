@@ -7,7 +7,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 	{
 		/// <summary>
 		/// Returns a FunctionMap describing the locations of every funciton in the source code.
-		/// The functions are to be sorted by start position.
+		/// The functions are to be sorted descending by start position.
 		/// </summary>
 		public List<FunctionMapEntry> GenerateFunctionMap(string sourceCode)
 		{
@@ -20,8 +20,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			FunctionFinderVisitor functionFinderVisitor = new FunctionFinderVisitor();
 			functionFinderVisitor.Visit(block);
-
-			functionFinderVisitor.FunctionMap.Sort((x, y) => x.StartSourcePosition.CompareTo(y.StartSourcePosition));
+			
+			// Sort in descending order by start position
+			functionFinderVisitor.FunctionMap.Sort((x, y) => y.StartSourcePosition.CompareTo(x.StartSourcePosition));
 			return functionFinderVisitor.FunctionMap;
 		}
 	}

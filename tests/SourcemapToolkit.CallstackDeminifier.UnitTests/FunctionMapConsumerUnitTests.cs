@@ -111,5 +111,38 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(functionMapEntry2, wrappingFunction);
 		}
+
+		[TestMethod]
+		public void GetWrappingFunctionForSourceLocation_MultipleFunctionMapEntriesMultipleRelevantFunctionMapEntry_ReturnClosestWrappingFunction()
+		{
+			// Arrange
+			SourcePosition sourcePosition = new SourcePosition
+			{
+				ZeroBasedLineNumber = 10,
+				ZeroBasedColumnNumber = 25
+			};
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry
+			{
+				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 10 },
+				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 30 }
+			};
+			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry
+			{
+				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 9, ZeroBasedColumnNumber = 0 },
+				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 15, ZeroBasedColumnNumber = 2 }
+			};
+			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
+			{
+				functionMapEntry2,
+				functionMapEntry
+			};
+			IFunctionMapConsumer functionMapConsumer = new FunctionMapConsumer();
+
+			// Act
+			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
+
+			// Assert
+			Assert.AreEqual(functionMapEntry2, wrappingFunction);
+		}
 	}
 }
