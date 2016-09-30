@@ -49,7 +49,7 @@ namespace SourcemapToolkit.CallstackDeminifier
                     if (sourceMap != null)
                     {
                         MappingEntry mappingentry =
-                            sourceMap.GetMappingEntryForGeneratedSourcePosition(stackFrame.SourcePosition);
+                            sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
 
                         if (mappingentry != null)
                         {
