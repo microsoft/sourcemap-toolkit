@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser;
@@ -26,6 +27,20 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
             }
 
             return new StackFrameDeminifier(sourceMapStore, functionMapStore, functionMapConsumer);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DeminifyStackFrame_NullInputStackFrame_ThrowsException()
+        {
+            // Arrange
+            IFunctionMapStore functionMapStore = MockRepository.GenerateStrictMock<IFunctionMapStore>();
+            functionMapStore.Stub(x => x.GetFunctionMapForSourceCode("http://localhost/file.js")).Return(null);
+            StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore);
+            StackFrame stackFrame = null;
+
+            // Act
+            StackFrame deminifiedStackFrame = stackFrameDeminifier.DeminifyStackFrame(stackFrame);
         }
 
         [TestMethod]
