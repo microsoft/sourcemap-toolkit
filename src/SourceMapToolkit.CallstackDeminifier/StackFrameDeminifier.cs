@@ -7,7 +7,7 @@ namespace SourcemapToolkit.CallstackDeminifier
     /// <summary>
     /// Class responsible for deminifying a single stack frame in a minified stack trace.
     /// </summary>
-    internal class StackFrameDeminifier
+    internal class StackFrameDeminifier : IStackFrameDeminifier
     {
         private readonly IFunctionMapConsumer _functionMapConsumer;
         private readonly IFunctionMapStore _functionMapStore;

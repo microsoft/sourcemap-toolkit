@@ -54,6 +54,8 @@
     <Compile Include="IFunctionMapStore.cs" />
     <Compile Include="ISourceCodeProvider.cs" />
     <Compile Include="ISourceMapProvider.cs" />
+    <Compile Include="IStackFrameDeminifier.cs" />
+    <Compile Include="IStackTraceParser.cs" />
     <Compile Include="KeyValueCache.cs" />
     <Compile Include="SourceMapStore.cs" />
     <Compile Include="StackFrame.cs" />
