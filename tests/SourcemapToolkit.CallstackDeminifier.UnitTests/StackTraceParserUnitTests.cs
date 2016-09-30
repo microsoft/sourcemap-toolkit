@@ -12,7 +12,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void ParseStackTrace_NullInput_ThrowsArgumentNullException()
 		{
 			// Arrange
-			StackTraceParser stackTraceParser = new StackTraceParser();
+			IStackTraceParser stackTraceParser = new StackTraceParser();
 			string browserStackTrace = null;
 
 			// Act
@@ -23,7 +23,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void ParseStackTrace_ChromeCallstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
-			StackTraceParser stackTraceParser = new StackTraceParser();
+			IStackTraceParser stackTraceParser = new StackTraceParser();
 			string browserStackTrace = @"TypeError: Cannot read property 'length' of undefined
     at d (http://localhost:19220/crashcauser.min.js:1:75)
     at c (http://localhost:19220/crashcauser.min.js:1:34)
@@ -41,7 +41,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void ParseStackTrace_FireFoxCallstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
-			StackTraceParser stackTraceParser = new StackTraceParser();
+			IStackTraceParser stackTraceParser = new StackTraceParser();
 			string browserStackTrace = @"d @http://localhost:19220/crashcauser.min.js:1:68
 c@http://localhost:19220/crashcauser.min.js:1:34
 b@http://localhost:19220/crashcauser.min.js:1:14
@@ -58,7 +58,7 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		public void ParseStackTrace_InternetExplorer11Callstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
-			StackTraceParser stackTraceParser = new StackTraceParser();
+			IStackTraceParser stackTraceParser = new StackTraceParser();
 			string browserStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
    at d (http://localhost:19220/crashcauser.min.js:1:55)
    at c (http://localhost:19220/crashcauser.min.js:1:34)

@@ -11,7 +11,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// Class used to parse a JavaScript stack trace 
 	/// string into a list of StackFrame objects
 	/// </summary>
-	public class StackTraceParser
+	public class StackTraceParser : IStackTraceParser
 	{
 		private readonly Regex _lineNumberRegex = new Regex(@"([^/]*\.js)[^/]*:([0-9]+):([0-9]+)[^/]*$", RegexOptions.Compiled);
 
@@ -24,7 +24,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <returns>
 		/// Returns a list of StackFrame objects corresponding to the stackTraceString.
 		/// Any parts of the stack trace that could not be parsed are excluded from
-		/// the result.
+		/// the result. Does not ever return null.
 		/// </returns>
 		public List<StackFrame> ParseStackTrace(string stackTraceString)
 		{

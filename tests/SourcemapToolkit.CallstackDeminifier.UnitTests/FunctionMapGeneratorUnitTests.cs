@@ -34,6 +34,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
 			Assert.AreEqual("foo", functionMap[0].FunctionName);
+			Assert.AreEqual(0, functionMap[0].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(9, functionMap[0].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(14, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
@@ -54,6 +56,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
 			Assert.AreEqual("foo", functionMap[0].FunctionName);
+			Assert.AreEqual(0, functionMap[0].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(9, functionMap[0].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(1, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(3, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
@@ -73,17 +77,21 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
 
-			Assert.AreEqual("foo", functionMap[0].FunctionName);
+			Assert.AreEqual("bar", functionMap[0].FunctionName);
+			Assert.AreEqual(0, functionMap[0].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(31, functionMap[0].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(14, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(36, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(44, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("bar", functionMap[1].FunctionName);
+			Assert.AreEqual("foo", functionMap[1].FunctionName);
+			Assert.AreEqual(0, functionMap[1].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(9, functionMap[1].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(36, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(44, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
 		[TestMethod]
@@ -99,17 +107,21 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
 
-			Assert.AreEqual("foo", functionMap[0].FunctionName);
+			Assert.AreEqual("bar", functionMap[0].FunctionName);
+			Assert.AreEqual(0, functionMap[0].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(24, functionMap[0].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(14, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(38, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(29, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(37, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("bar", functionMap[1].FunctionName);
+			Assert.AreEqual("foo", functionMap[1].FunctionName);
+			Assert.AreEqual(0, functionMap[1].FunctionNameSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(9, functionMap[1].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(29, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(37, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(38, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 	}
 }

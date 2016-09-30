@@ -13,6 +13,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public string FunctionName { get; set; }
 
 		/// <summary>
+		/// The location of the function name declaration
+		/// </summary>
+		public SourcePosition FunctionNameSourcePosition { get; set; }
+
+		/// <summary>
 		/// Denotes the location of the beginning of this function
 		/// </summary>
 		public SourcePosition StartSourcePosition { get; set; }
