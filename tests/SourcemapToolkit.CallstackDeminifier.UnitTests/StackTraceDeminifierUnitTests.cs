@@ -45,10 +45,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			List<DeminifyStackFrameResult> result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(0, result.Count);
+			Assert.AreEqual(0, result.DeminifiedStackFrames.Count);
 		}
 
 		[TestMethod]
@@ -66,12 +66,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			List<DeminifyStackFrameResult> result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(1, result.Count);
-			Assert.AreEqual(result[0].MinifiedStackFrame, minifiedStackFrames[0]);
-			Assert.IsNull(result[0].DeminifiedStackFrame);
+			Assert.AreEqual(1, result.DeminifiedStackFrames.Count);
+			Assert.AreEqual(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
+			Assert.IsNull(result.DeminifiedStackFrames[0]);
 		}
 
 		[TestMethod]
@@ -90,12 +90,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			List<DeminifyStackFrameResult> result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(1, result.Count);
-			Assert.AreEqual(minifiedStackFrames[0], result[0].MinifiedStackFrame);
-			Assert.AreEqual(deminifiedStackFrame, result[0].DeminifiedStackFrame);
+			Assert.AreEqual(1, result.DeminifiedStackFrames.Count);
+			Assert.AreEqual(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
+			Assert.AreEqual(deminifiedStackFrame, result.DeminifiedStackFrames[0]);
 		}
 	}
 }

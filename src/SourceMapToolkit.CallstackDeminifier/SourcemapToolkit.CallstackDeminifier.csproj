@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeminifyStackFrameResult.cs" />
+    <Compile Include="DeminifyStackTraceResult.cs" />
     <Compile Include="FunctionFinderVisitor.cs" />
     <Compile Include="FunctionMapConsumer.cs" />
     <Compile Include="FunctionMapEntry.cs" />

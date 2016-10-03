@@ -34,15 +34,15 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
     at HTMLButtonElement.< anonymous > (http://localhost:11323/crashcauser.min.js:1:326)";
 
 			// Act
-			List<DeminifyStackFrameResult> results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
+			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
 
 			// Assert
-			Assert.AreEqual(5, results.Count);
-			Assert.AreEqual("level3", results[0].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level2", results[1].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level1", results[2].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("causeCrash", results[3].DeminifiedStackFrame.MethodName);
-			Assert.IsNull(results[4].DeminifiedStackFrame);
+			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
+			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
+			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
+			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
+			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
+			Assert.IsNull(results.DeminifiedStackFrames[4]);
 		}
 
 		[TestMethod]
@@ -57,15 +57,16 @@ causeCrash@http://localhost:11323/crashcauser.min.js:1:222
 window.onload/<@http://localhost:11323/crashcauser.min.js:1:326";
 
 			// Act
-			List<DeminifyStackFrameResult> results = stackTraceDeminifier.DeminifyStackTrace(fireFoxStackTrace);
+
+			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(fireFoxStackTrace);
 
 			// Assert
-			Assert.AreEqual(5, results.Count);
-			Assert.AreEqual("level3", results[0].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level2", results[1].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level1", results[2].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("causeCrash", results[3].DeminifiedStackFrame.MethodName);
-			Assert.IsNull(results[4].DeminifiedStackFrame);
+			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
+			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
+			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
+			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
+			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
+			Assert.IsNull(results.DeminifiedStackFrames[4]);
 		}
 
 		[TestMethod]
@@ -81,15 +82,16 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:326";
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:326)";
 
 			// Act
-			List<DeminifyStackFrameResult> results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
+			// Act
+			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
 
 			// Assert
-			Assert.AreEqual(5, results.Count);
-			Assert.AreEqual("level3", results[0].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level2", results[1].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level1", results[2].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("causeCrash", results[3].DeminifiedStackFrame.MethodName);
-			Assert.IsNull(results[4].DeminifiedStackFrame);
+			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
+			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
+			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
+			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
+			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
+			Assert.IsNull(results.DeminifiedStackFrames[4]);
 		}
 	}
 }

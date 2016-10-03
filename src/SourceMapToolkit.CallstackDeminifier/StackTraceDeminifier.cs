@@ -39,18 +39,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 			_stackTraceParser = stackTraceParser;
 		}
 
-		public List<DeminifyStackFrameResult> DeminifyStackTrace(string stackTraceString)
+		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString)
 		{
-			List<DeminifyStackFrameResult> result = new List<DeminifyStackFrameResult>();
-			List<StackFrame> minifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString);
+			DeminifyStackTraceResult result = new DeminifyStackTraceResult();
+			result.MinifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString);
+			result.DeminifiedStackFrames = new List<StackFrame>();
 
-			foreach (StackFrame minifiedStackFrame in minifiedStackFrames)
+			foreach (StackFrame minifiedStackFrame in result.MinifiedStackFrames)
 			{
-				result.Add(new DeminifyStackFrameResult
-				{
-					MinifiedStackFrame = minifiedStackFrame,
-					DeminifiedStackFrame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame)
-				});
+				result.DeminifiedStackFrames.Add(_stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame));
 			}
 
 			return result;
