@@ -39,6 +39,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 			_stackTraceParser = stackTraceParser;
 		}
 
+		/// <summary>
+		/// Parses and deminifies a string containing a minified stack trace.
+		/// </summary>
 		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString)
 		{
 			DeminifyStackTraceResult result = new DeminifyStackTraceResult();
