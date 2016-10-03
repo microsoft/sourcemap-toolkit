@@ -35,4 +35,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("SourcemapToolkit.SourcemapParser.UnitTests")]
+[assembly: InternalsVisibleTo("SourcemapToolkit.SourcemapParser.UnitTests, PublicKey = 0024000004800000940000000602000000240000525341310004000001000100fb6b178a31a5d56c14ad5de5e8f471e4b37ef4291eb74544d7477a42ba0769e04230fada2df8722623a26b018ca2aeb66b01e5a456dc56194f0e9826837151906ca02f3158111e41c3dd770ca307825402ff75d9602929b5594fe9a91aff9093d19cb2b35313452b48ab8ef3b7a997a09ee5f8c7c5285c327a30e3f16ef422a4")]
