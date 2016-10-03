@@ -21,22 +21,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			return new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
 		}
 
-		[TestMethod]
-		public void DeminifyStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
+		private static void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)
 		{
-			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string chromeStackTrace = @"TypeError: Cannot read property 'length' of undefined
-	at i (http://localhost:11323/crashcauser.min.js:1:113)
-    at t (http://localhost:11323/crashcauser.min.js:1:75)
-    at n (http://localhost:11323/crashcauser.min.js:1:50)
-    at causeCrash (http://localhost:11323/crashcauser.min.js:1:222)
-    at HTMLButtonElement.< anonymous > (http://localhost:11323/crashcauser.min.js:1:326)";
-
-			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
-
-			// Assert
 			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
 			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
 			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
@@ -46,27 +32,40 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[TestMethod]
+		public void DeminifyStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
+		{
+			// Arrange
+			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			string chromeStackTrace = @"TypeError: Cannot read property 'length' of undefined
+    at i (http://localhost:11323/crashcauser.min.js:1:113)
+    at t (http://localhost:11323/crashcauser.min.js:1:75)
+    at n (http://localhost:11323/crashcauser.min.js:1:50)
+    at causeCrash (http://localhost:11323/crashcauser.min.js:1:222)
+    at HTMLButtonElement.<anonymous> (http://localhost:11323/crashcauser.min.js:1:326)";
+
+			// Act
+			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
+
+			// Assert
+			ValidateDeminifyStackTraceResults(results);
+		}
+
+		[TestMethod]
 		public void DeminifyStackTrace_FireFoxStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
 			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string fireFoxStackTrace = @"i@http://localhost:11323/crashcauser.min.js:1:100
+			string fireFoxStackTrace = @"i @http://localhost:11323/crashcauser.min.js:1:100
 t@http://localhost:11323/crashcauser.min.js:1:75
 n@http://localhost:11323/crashcauser.min.js:1:50
 causeCrash@http://localhost:11323/crashcauser.min.js:1:222
 window.onload/<@http://localhost:11323/crashcauser.min.js:1:326";
 
 			// Act
-
 			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(fireFoxStackTrace);
 
 			// Assert
-			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
-			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
-			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
-			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
-			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
-			Assert.IsNull(results.DeminifiedStackFrames[4]);
+			ValidateDeminifyStackTraceResults(results);
 		}
 
 		[TestMethod]
@@ -82,16 +81,10 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:326";
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:326)";
 
 			// Act
-			// Act
 			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
 
 			// Assert
-			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
-			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
-			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
-			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
-			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
-			Assert.IsNull(results.DeminifiedStackFrames[4]);
+			ValidateDeminifyStackTraceResults(results);
 		}
 	}
 }
