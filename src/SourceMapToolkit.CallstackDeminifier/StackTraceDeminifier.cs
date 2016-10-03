@@ -10,14 +10,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 	{
 		private readonly IStackFrameDeminifier _stackFrameDeminifier;
 		private readonly IStackTraceParser _stackTraceParser;
-		
+
 		/// <summary>
 		/// This class is responsible for parsing a callstack string into
 		/// a list of StackFrame objects and providing the deminified version
 		/// of the stack frame.
 		/// </summary>
-		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file</param>
-		/// <param name="generatedCodeProvider">Consumers of the API should implement this interface, which provides the contents of a JavaScript file</param>
+		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
+		/// <param name="generatedCodeProvider">Consumers of the API should implement this interface, which provides the contents of a JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
 		public StackTraceDeminifier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
 			: this(new StackFrameDeminifier(new SourceMapStore(sourceMapProvider),
 				new FunctionMapStore(generatedCodeProvider), new FunctionMapConsumer()), new StackTraceParser())
