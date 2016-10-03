@@ -9,7 +9,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	[TestClass]
 	public class StackFrameDeminifierUnitTests
 	{
-		private StackFrameDeminifier GetStackFrameDeminifierWithMockDependencies(ISourceMapStore sourceMapStore = null, IFunctionMapStore functionMapStore = null, IFunctionMapConsumer functionMapConsumer = null)
+		private IStackFrameDeminifier GetStackFrameDeminifierWithMockDependencies(ISourceMapStore sourceMapStore = null, IFunctionMapStore functionMapStore = null, IFunctionMapConsumer functionMapConsumer = null)
 		{
 			if (sourceMapStore == null)
 			{
@@ -36,7 +36,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStrictMock<IFunctionMapStore>();
 			functionMapStore.Stub(x => x.GetFunctionMapForSourceCode("http://localhost/file.js")).Return(null);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore);
 			StackFrame stackFrame = null;
 
 			// Act
@@ -49,7 +49,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStrictMock<IFunctionMapStore>();
 			functionMapStore.Stub(x => x.GetFunctionMapForSourceCode("http://localhost/file.js")).Return(null);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore);
 			StackFrame stackFrame = new StackFrame
 			{
 				FilePath = "http://localhost/file.js",
@@ -79,7 +79,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			functionMapStore.Stub(x => x.GetFunctionMapForSourceCode("http://localhost/file.js")).Return(functionMap);
 			IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStrictMock<IFunctionMapConsumer>();
 			functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(null);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore, functionMapConsumer: functionMapConsumer);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore, functionMapConsumer: functionMapConsumer);
 			StackFrame stackFrame = new StackFrame
 			{
 				FilePath = "http://localhost/file.js",
@@ -113,7 +113,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(functionMapEntry);
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStrictMock<ISourceMapStore>();
 			sourceMapStore.Stub(x => x.GetSourceMapForUrl(filePath)).Return(null);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
 			StackFrame stackFrame = new StackFrame
 			{
 				FilePath = filePath,
@@ -149,7 +149,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = MockRepository.GenerateStrictMock<SourceMap>();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(functionMapEntry.FunctionNameSourcePosition)).Return(null);
 			sourceMapStore.Stub(x => x.GetSourceMapForUrl(filePath)).Return(sourceMap);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
 			StackFrame stackFrame = new StackFrame
 			{
 				FilePath = filePath,
@@ -191,7 +191,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				OriginalFileName = "http://localhost/originalfoo.js"
 			});
 			sourceMapStore.Stub(x => x.GetSourceMapForUrl(filePath)).Return(sourceMap);
-			StackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
 			StackFrame stackFrame = new StackFrame
 			{
 				FilePath = filePath,
