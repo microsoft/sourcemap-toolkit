@@ -13,10 +13,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		private StackTraceDeminifier GetStackTraceDeminifierWithDependencies()
 		{
 			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
-			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("crashcauser.min.js")).Return(SourceMapString);
+			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/crashcauser.min.js")).Return(SourceMapString);
 
 			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
-			sourceCodeProvider.Stub(x => x.GetSourceCode("crashcauser.min.js")).Return(GeneratedCodeString);
+			sourceCodeProvider.Stub(x => x.GetSourceCode("http://localhost:11323/crashcauser.min.js")).Return(GeneratedCodeString);
 
 			return new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
 		}
