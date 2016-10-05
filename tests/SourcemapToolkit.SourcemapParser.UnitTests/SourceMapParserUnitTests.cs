@@ -6,6 +6,20 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 	public class SourceMapParserUnitTests
 	{
 		[TestMethod]
+		public void ParseSourceMap_NullSourceMapString_ReturnsNull()
+		{
+			// Arrange
+			SourceMapParser sourceMapParser = new SourceMapParser();
+			string input = null;
+
+			// Act
+			SourceMap output = sourceMapParser.ParseSourceMap(input);
+
+			// Assert
+			Assert.IsNull(output);
+		}
+
+		[TestMethod]
 		public void ParseSourceMap_SimpleSourceMap_CorrectlyParsed()
 		{
 			// Arrange
