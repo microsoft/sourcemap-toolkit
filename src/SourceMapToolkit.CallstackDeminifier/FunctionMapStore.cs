@@ -15,7 +15,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			_sourceCodeProvider = sourceCodeProvider;
 			_functionMapGenerator = new FunctionMapGenerator();
-			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>();
+			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
+				_sourceCodeProvider.GetSourceCode(sourceCodeUrl)));
 		}
 
 		/// <summary>
@@ -26,9 +27,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="sourceCodeUrl">The URL of the file for which a function map is required</param>
 		public List<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl)
 		{
-			return _functionMapCache.GetValue(sourceCodeUrl,
-				() => _functionMapGenerator.GenerateFunctionMap(
-						_sourceCodeProvider.GetSourceCode(sourceCodeUrl)));
+			return _functionMapCache.GetValue(sourceCodeUrl);
 		}
 	}
 }
