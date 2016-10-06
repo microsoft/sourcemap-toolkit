@@ -16,6 +16,11 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public SourceMap ParseSourceMap(string sourceMapString)
 		{
+			if (sourceMapString == null)
+			{
+				return null;
+			}
+
 			SourceMap result = JsonConvert.DeserializeObject<SourceMap>(sourceMapString);
 			result.ParsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
 			return result;
