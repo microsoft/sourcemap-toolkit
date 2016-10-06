@@ -20,7 +20,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			_sourceMapProvider = sourceMapProvider;
 			_sourceMapParser = new SourceMapParser();
-			_sourceMapCache = new KeyValueCache<string, SourceMap>();
+			_sourceMapCache = new KeyValueCache<string, SourceMap>(sourceCodeUrl => _sourceMapParser.ParseSourceMap(_sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
 		}
 
 		/// <summary>
@@ -31,8 +31,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="sourceCodeUrl">The URL of the file for which a function map is required</param>
 		public SourceMap GetSourceMapForUrl(string sourceCodeUrl)
 		{
-			return _sourceMapCache.GetValue(sourceCodeUrl,
-				() => _sourceMapParser.ParseSourceMap(_sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
+			return _sourceMapCache.GetValue(sourceCodeUrl);
 		}
 	}
 }

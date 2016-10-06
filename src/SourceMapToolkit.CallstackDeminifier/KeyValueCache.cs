@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
 	internal class KeyValueCache<TKey, TValue> where TValue : class
 	{
-		private readonly Dictionary<TKey, TValue> _cache;
-		public KeyValueCache()
+		private readonly ConcurrentDictionary<TKey, TValue> _cache;
+		private readonly Func<TKey, TValue> _valueGetter;
+		public KeyValueCache(Func<TKey, TValue> valueGetter)
 		{
-			_cache = new Dictionary<TKey, TValue>();
+			_cache = new ConcurrentDictionary<TKey, TValue>();
+			_valueGetter = valueGetter;
 		}
 
 		/// <summary>
@@ -16,15 +18,19 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// If it is not found in the cache, it gets it from the valueGetter function provided
 		/// and stores it in the cache for future calls.
 		/// </summary>
-		public TValue GetValue(TKey key, Func<TValue> valueGetter)
+		public TValue GetValue(TKey key)
 		{
 			TValue value = null;
-			_cache.TryGetValue(key, out value);
-
-			if (value == null)
+			if (!_cache.TryGetValue(key, out value))
 			{
-				value = valueGetter();
-				_cache[key] = value;
+				value = _cache.GetOrAdd(key, _valueGetter);
+			}
+			else if (value == null)
+			{
+				// If the value stored in the cache is null, we should see if we can now get a 
+				// non-null value from the value getter
+				_cache.TryUpdate(key, _valueGetter(key), null);
+				_cache.TryGetValue(key, out value);
 			}
 
 			return value;
