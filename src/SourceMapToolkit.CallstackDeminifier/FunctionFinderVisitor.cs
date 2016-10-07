@@ -16,17 +16,25 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public override void Visit(FunctionObject node)
 		{
 			base.Visit(node);
-
+			string functionName = null;
+			SourcePosition functionNameSourcePosition = null;
 			if (node.Binding != null)
+			{
+				functionName = node.Binding.Name;
+				functionNameSourcePosition = new SourcePosition
+				{
+					ZeroBasedLineNumber = node.Binding.Context.StartLineNumber - 1,
+					// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+					ZeroBasedColumnNumber = node.Binding.Context.StartColumn
+				};
+			}
+
+			if (functionNameSourcePosition != null)
 			{
 				FunctionMapEntry functionMapEntry = new FunctionMapEntry
 				{
-					FunctionName = node.Binding.Name,
-					FunctionNameSourcePosition = new SourcePosition
-					{
-						ZeroBasedLineNumber = node.Binding.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						ZeroBasedColumnNumber = node.Binding.Context.StartColumn
-					},
+					FunctionName = functionName,
+					FunctionNameSourcePosition = functionNameSourcePosition,
 					StartSourcePosition = new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
@@ -40,7 +48,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				};
 
 				FunctionMap.Add(functionMapEntry);
-			}
+			}	
 		}
 	}
 }
