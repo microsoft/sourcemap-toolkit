@@ -199,13 +199,13 @@ namespace SourcemapToolkit.SourcemapParser
 
 			// The V3 source map format calls for all Base64 VLQ segments to be seperated by commas.
 			// Each line of generated code is separated using semicolons. The count of semicolons encountered gives the current line number.
-			string[] lines = mappingString.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = mappingString.Split(';');
 
 			for (int lineNumber = 0; lineNumber < lines.Length; lineNumber += 1)
 			{
 				// The only value that resets when encountering a semicolon is the starting column.
 				currentMappingsParserState = new MappingsParserState(currentMappingsParserState, newGeneratedLineNumber:lineNumber, newGeneratedColumnBase: 0);
-				string[] segmentsForLine = lines[lineNumber].Split(',');
+				string[] segmentsForLine = lines[lineNumber].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
 				foreach (string segment in segmentsForLine)
 				{
