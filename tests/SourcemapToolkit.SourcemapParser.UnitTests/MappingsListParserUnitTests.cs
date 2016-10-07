@@ -179,5 +179,23 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.AreEqual(0, mappingsList[0].GeneratedSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(1, mappingsList[1].GeneratedSourcePosition.ZeroBasedLineNumber);
 		}
+
+		[TestMethod]
+		public void ParseMappings_BackToBackSemiColons_GeneratedLineNumberIncremented()
+		{
+			// Arrange
+			MappingsListParser mappingsListParser = new MappingsListParser();
+			string mappingsString = "ktC;;2iB";
+			List<string> names = new List<string>();
+			List<string> sources = new List<string>();
+
+			// Act
+			List<MappingEntry> mappingsList = mappingsListParser.ParseMappings(mappingsString, names, sources);
+
+			// Assert
+			Assert.AreEqual(2, mappingsList.Count);
+			Assert.AreEqual(0, mappingsList[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(2, mappingsList[1].GeneratedSourcePosition.ZeroBasedLineNumber);
+		}
 	}
 }
