@@ -18,14 +18,22 @@ namespace SourcemapToolkit.CallstackDeminifier
 			base.Visit(node);
 			string functionName = null;
 			SourcePosition functionNameSourcePosition = null;
-			if (node.Binding != null)
+
+			BindingIdentifier bindingIdentifier = node.Binding;
+
+			if (bindingIdentifier == null && node.Parent is VariableDeclaration)
 			{
-				functionName = node.Binding.Name;
+				bindingIdentifier = ((VariableDeclaration)node.Parent).Binding as BindingIdentifier;
+			}
+
+			if (bindingIdentifier != null)
+			{
+				functionName = bindingIdentifier.Name;
 				functionNameSourcePosition = new SourcePosition
 				{
-					ZeroBasedLineNumber = node.Binding.Context.StartLineNumber - 1,
+					ZeroBasedLineNumber = bindingIdentifier.Context.StartLineNumber - 1,
 					// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-					ZeroBasedColumnNumber = node.Binding.Context.StartColumn
+					ZeroBasedColumnNumber = bindingIdentifier.Context.StartColumn
 				};
 			}
 
