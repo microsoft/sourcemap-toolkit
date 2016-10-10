@@ -27,7 +27,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
 			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
 			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
-			Assert.IsNull(results.DeminifiedStackFrames[4]);
+			Assert.AreEqual("window", results.DeminifiedStackFrames[4].MethodName);
 		}
 
 		[TestMethod]

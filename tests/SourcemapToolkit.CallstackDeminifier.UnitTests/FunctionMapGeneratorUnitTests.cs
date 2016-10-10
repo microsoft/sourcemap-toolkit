@@ -164,8 +164,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.AreEqual(23, functionMap[0].FunctionNameSourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(45, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(53, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(44, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(54, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
 			Assert.AreEqual("foo", functionMap[1].FunctionName);
 			Assert.AreEqual(0, functionMap[1].FunctionNameSourcePosition.ZeroBasedLineNumber);
