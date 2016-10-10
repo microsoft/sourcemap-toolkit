@@ -22,6 +22,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			BindingIdentifier bindingIdentifier = node.Binding;
 
 			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
+			ObjectLiteralProperty parentObjectLiteralProperty = node.Parent as ObjectLiteralProperty;
 
 			if (bindingIdentifier == null && node.Parent is VariableDeclaration)
 			{
@@ -45,6 +46,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 				{
 					ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
 					ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
+				};
+			}
+			else if (parentObjectLiteralProperty != null)
+			{
+				functionName = parentObjectLiteralProperty.Name.Name;
+				functionNameSourcePosition = new SourcePosition
+				{
+					ZeroBasedLineNumber = parentObjectLiteralProperty.Context.StartLineNumber - 1,
+					ZeroBasedColumnNumber = parentObjectLiteralProperty.Context.StartColumn
 				};
 			}
 
