@@ -17,6 +17,8 @@
   </metadata>
   <files>
     <file src="src\SourceMapToolkit.CallstackDeminifier\bin\Release\SourcemapToolkit.CallstackDeminifier.dll" target="lib\net40" />
+    <file src="src\SourceMapToolkit.CallstackDeminifier\bin\Release\SourcemapToolkit.CallstackDeminifier.pdb" target="lib\net40" />
     <file src="src\SourcemapToolkit.SourcemapParser\bin\Release\SourcemapToolkit.SourcemapParser.dll" target="lib\net40" />
+    <file src="src\SourcemapToolkit.SourcemapParser\bin\Release\SourcemapToolkit.SourcemapParser.pdb" target="lib\net40" />
   </files>
 </package>
