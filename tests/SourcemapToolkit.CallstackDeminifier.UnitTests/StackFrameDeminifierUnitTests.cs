@@ -93,6 +93,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Asset
 			Assert.IsNull(deminifiedStackFrame);
 			functionMapStore.VerifyAllExpectations();
+			functionMapConsumer.VerifyAllExpectations();
 		}
 
 		[TestMethod]
@@ -127,10 +128,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Asset
 			Assert.IsNull(deminifiedStackFrame);
 			functionMapStore.VerifyAllExpectations();
+			functionMapConsumer.VerifyAllExpectations();
+			sourceMapStore.VerifyAllExpectations();
 		}
 
 		[TestMethod]
-		public void DeminifyStackFrame_MatchingMappingEntry_ReturnsStackFrame()
+		public void DeminifyStackFrame_NullMatchingMappingEntry_ReturnsNull()
 		{
 			// Arrange
 			SourcePosition generatedSourcePosition = new SourcePosition
@@ -163,10 +166,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Asset
 			Assert.IsNull(deminifiedStackFrame);
 			functionMapStore.VerifyAllExpectations();
+			functionMapConsumer.VerifyAllExpectations();
+			sourceMapStore.VerifyAllExpectations();
+			sourceMap.VerifyAllExpectations();
 		}
 
 		[TestMethod]
-		public void DeminifyStackFrame_NullMatchingMappingEntry_ReturnsNull()
+		public void DeminifyStackFrame_MatchingMappingEntry_ReturnsStackFrame()
 		{
 			// Arrange
 			SourcePosition generatedSourcePosition = new SourcePosition
@@ -179,7 +185,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string filePath = "http://localhost/file.js";
 			functionMapStore.Stub(x => x.GetFunctionMapForSourceCode(filePath)).Return(functionMap);
 			IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStrictMock<IFunctionMapConsumer>();
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry {StartSourcePosition = new SourcePosition()};
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry {FunctionNameSourcePosition = new SourcePosition()};
 			functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(functionMapEntry);
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStrictMock<ISourceMapStore>();
 			SourceMap sourceMap = MockRepository.GenerateStrictMock<SourceMap>();
@@ -207,6 +213,62 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.AreEqual(originalSourcePosition, deminifiedStackFrame.SourcePosition);
 			Assert.AreEqual("http://localhost/originalfoo.js", deminifiedStackFrame.FilePath);
 			functionMapStore.VerifyAllExpectations();
+			functionMapConsumer.VerifyAllExpectations();
+			sourceMapStore.VerifyAllExpectations();
+			sourceMap.VerifyAllExpectations();
+		}
+
+		[TestMethod]
+		public void DeminifyStackFrame_NoExactMatchingMappingEntryMatchingNearbyMappingEntry_ReturnsNearbyStackFrame()
+		{
+			// Arrange
+			SourcePosition generatedSourcePosition = new SourcePosition
+			{
+				ZeroBasedColumnNumber = 23,
+				ZeroBasedLineNumber = 43
+			};
+			SourcePosition wrappingFunctionNameSourcePosition = new SourcePosition
+			{
+				ZeroBasedColumnNumber = 10,
+				ZeroBasedLineNumber = 40
+			};
+
+			IFunctionMapStore functionMapStore = MockRepository.GenerateStrictMock<IFunctionMapStore>();
+			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>();
+			string filePath = "http://localhost/file.js";
+			functionMapStore.Stub(x => x.GetFunctionMapForSourceCode(filePath)).Return(functionMap);
+			IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStrictMock<IFunctionMapConsumer>();
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry { FunctionNameSourcePosition = wrappingFunctionNameSourcePosition };
+			functionMapConsumer.Stub(x => x.GetWrappingFunctionForSourceLocation(generatedSourcePosition, functionMap)).Return(functionMapEntry);
+			ISourceMapStore sourceMapStore = MockRepository.GenerateStrictMock<ISourceMapStore>();
+			SourceMap sourceMap = MockRepository.GenerateStrictMock<SourceMap>();
+			SourcePosition originalSourcePosition = new SourcePosition { ZeroBasedColumnNumber = 44, ZeroBasedLineNumber = 88 };
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Matches(y => y.ZeroBasedColumnNumber == 10))).Return(null);
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Matches(y => y.ZeroBasedColumnNumber == 9))).Return(new MappingEntry
+			{
+				OriginalSourcePosition = originalSourcePosition,
+				OriginalName = "realmethodname",
+				OriginalFileName = "http://localhost/originalfoo.js"
+			});
+			sourceMapStore.Stub(x => x.GetSourceMapForUrl(filePath)).Return(sourceMap);
+			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore, functionMapStore, functionMapConsumer);
+			StackFrame stackFrame = new StackFrame
+			{
+				FilePath = filePath,
+				MethodName = "foobar",
+				SourcePosition = generatedSourcePosition
+			};
+
+			// Act
+			StackFrame deminifiedStackFrame = stackFrameDeminifier.DeminifyStackFrame(stackFrame);
+
+			// Asset
+			Assert.AreEqual("realmethodname", deminifiedStackFrame.MethodName);
+			Assert.AreEqual(originalSourcePosition, deminifiedStackFrame.SourcePosition);
+			Assert.AreEqual("http://localhost/originalfoo.js", deminifiedStackFrame.FilePath);
+			functionMapStore.VerifyAllExpectations();
+			sourceMapStore.VerifyAllExpectations();
+			sourceMap.VerifyAllExpectations();
 		}
 	}
 }
