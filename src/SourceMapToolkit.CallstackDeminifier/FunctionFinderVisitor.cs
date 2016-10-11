@@ -51,7 +51,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		private FunctionNameInformation GetFunctionNameInformation(FunctionObject node)
 		{
-			// Gets the name of an object property that a function is bound to, like foo in the example "object.foo = function () {}"
+			// Gets the name of an object property that a function is bound to, like the static method foo in the example "object.foo = function () {}"
 			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
 			if (parentBinaryOperator != null)
 			{
@@ -66,7 +66,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				};
 			}
 
-			// Gets the name of an object property that a function is bound to against the prototype, like foo in the example "object.prototype = {foo: function () {}}"
+			// Gets the name of an object property that a function is bound to against the prototype, like the instance method foo in the example "object.prototype = {foo: function () {}}"
 			ObjectLiteralProperty parentObjectLiteralProperty = node.Parent as ObjectLiteralProperty;
 			if (parentObjectLiteralProperty != null)
 			{

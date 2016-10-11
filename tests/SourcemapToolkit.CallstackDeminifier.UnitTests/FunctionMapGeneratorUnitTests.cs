@@ -147,7 +147,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[TestMethod]
-		public void GenerateFunctionMap_FunctionAssignedToObjectProperty_FunctionMapEntryGenerated()
+		public void GenerateFunctionMap_StaticMethod_FunctionMapEntryGenerated()
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
@@ -177,7 +177,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[TestMethod]
-		public void GenerateFunctionMap_FunctionAssignedToObjectPrototype_FunctionMapEntryGenerated()
+		public void GenerateFunctionMap_InstanceMethod_FunctionMapEntryGenerated()
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
@@ -229,7 +229,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[TestMethod]
-		public void GenerateFunctionMap_FunctionAssignedToObjectPropertyAndHasName_FunctionMapEntryGeneratedForPropertyName()
+		public void GenerateFunctionMap_StaticMethodAndFunctionHasName_FunctionMapEntryGeneratedForPropertyName()
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
@@ -259,7 +259,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[TestMethod]
-		public void GenerateFunctionMap_FunctionAssignedToObjectPrototypeAndHasName_FunctionMapEntryGeneratedForObjectPrototype()
+		public void GenerateFunctionMap_InstanceMethodAndFunctionHasName_FunctionMapEntryGeneratedForObjectPrototype()
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
