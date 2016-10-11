@@ -16,13 +16,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public override void Visit(FunctionObject node)
 		{
 			base.Visit(node);
-			BindingInformation bindingInformation = GetBindingInformation(node);
+			List<BindingInformation> bindings = GetBindings(node);
 
-			if (bindingInformation != null)
+			if (bindings != null)
 			{
 				FunctionMapEntry functionMapEntry = new FunctionMapEntry
 				{
-					Bindings = new List<BindingInformation> { bindingInformation},
+					Bindings = bindings,
 					StartSourcePosition = new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
@@ -42,36 +42,41 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Gets the name and location information related to the function name binding for a FunctionObject node
 		/// </summary>
-		private BindingInformation GetBindingInformation(FunctionObject node)
+		private List<BindingInformation> GetBindings(FunctionObject node)
 		{
+			List<BindingInformation> result = new List<BindingInformation>();
 			// Gets the name of an object property that a function is bound to, like the static method foo in the example "object.foo = function () {}"
 			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
 			if (parentBinaryOperator != null)
 			{
-				return new BindingInformation
-				{
-					Name = parentBinaryOperator.Operand1.Context.Code,
-					SourcePosition = new SourcePosition
+				result.Add(
+					new BindingInformation
 					{
-						ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
-						ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
-					}
-				};
+						Name = parentBinaryOperator.Operand1.Context.Code,
+						SourcePosition = new SourcePosition
+						{
+							ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
+							ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
+						}
+					});
+				return result;
 			}
 
 			// Gets the name of an object property that a function is bound to against the prototype, like the instance method foo in the example "object.prototype = {foo: function () {}}"
 			ObjectLiteralProperty parentObjectLiteralProperty = node.Parent as ObjectLiteralProperty;
 			if (parentObjectLiteralProperty != null)
 			{
-				return new BindingInformation
-				{
-					Name = parentObjectLiteralProperty.Name.Name,
-					SourcePosition = new SourcePosition
+				result.Add(
+					new BindingInformation
 					{
-						ZeroBasedLineNumber = parentObjectLiteralProperty.Context.StartLineNumber - 1,
-						ZeroBasedColumnNumber = parentObjectLiteralProperty.Context.StartColumn
-					}
-				};
+						Name = parentObjectLiteralProperty.Name.Name,
+						SourcePosition = new SourcePosition
+						{
+							ZeroBasedLineNumber = parentObjectLiteralProperty.Context.StartLineNumber - 1,
+							ZeroBasedColumnNumber = parentObjectLiteralProperty.Context.StartColumn
+						}
+					});
+				return result;
 			}
 
 			BindingIdentifier bindingIdentifier = null;
@@ -90,15 +95,18 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			if (bindingIdentifier != null)
 			{
-				return new BindingInformation
-				{
-					Name = bindingIdentifier.Name,
-					SourcePosition = new SourcePosition
+				result.Add(
+					new BindingInformation
 					{
-						ZeroBasedLineNumber = bindingIdentifier.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						ZeroBasedColumnNumber = bindingIdentifier.Context.StartColumn
-					}
-				};
+						Name = bindingIdentifier.Name,
+						SourcePosition = new SourcePosition
+						{
+							ZeroBasedLineNumber = bindingIdentifier.Context.StartLineNumber - 1,
+							// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+							ZeroBasedColumnNumber = bindingIdentifier.Context.StartColumn
+						}
+					});
+				return result;
 			}
 
 			return null;
