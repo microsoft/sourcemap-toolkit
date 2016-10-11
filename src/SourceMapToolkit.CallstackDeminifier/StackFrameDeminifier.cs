@@ -51,6 +51,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 						MappingEntry mappingentry =
 							sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
 
+						// Sometimes the mapping entries are off by one, if we don't have a match see if the column before has a match
+						if (mappingentry == null && wrappingFunction.FunctionNameSourcePosition.ZeroBasedColumnNumber > 0)
+						{
+							wrappingFunction.FunctionNameSourcePosition.ZeroBasedColumnNumber -= 1;
+							mappingentry = sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
+						}
+
 						if (mappingentry != null)
 						{
 							result = new StackFrame

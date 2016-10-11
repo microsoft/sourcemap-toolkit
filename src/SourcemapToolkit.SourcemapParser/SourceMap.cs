@@ -41,15 +41,15 @@ namespace SourcemapToolkit.SourcemapParser
 	            return null;
 	        }
 
-            foreach (MappingEntry mappingEntry in ParsedMappings)
-            {
-                if (mappingEntry.GeneratedSourcePosition.CompareTo(generatedSourcePosition) == 0)
-                {
-                    return mappingEntry;
-                }
-            }
+		    MappingEntry mappingEntryToFind = new MappingEntry
+		    {
+			    GeneratedSourcePosition = generatedSourcePosition
+		    };
 
-	        return null;
+		    int index = ParsedMappings.BinarySearch(mappingEntryToFind,
+			    Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
+
+		    return index >= 0 ? ParsedMappings[index] : null;
 	    }
 	}
 }

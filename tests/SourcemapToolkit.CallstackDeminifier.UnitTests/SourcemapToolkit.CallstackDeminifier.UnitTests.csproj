@@ -65,6 +65,7 @@
     <Compile Include="FunctionMapConsumerUnitTests.cs" />
     <Compile Include="FunctionMapGeneratorUnitTests.cs" />
     <Compile Include="KeyValueCacheUnitTests.cs" />
+    <Compile Include="StackTraceDeminifierClosureEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierUnitTests.cs" />
     <Compile Include="StackTraceParserUnitTests.cs" />
