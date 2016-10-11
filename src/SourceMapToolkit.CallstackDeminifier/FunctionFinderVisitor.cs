@@ -11,12 +11,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// </summary>
 	internal class FunctionFinderVisitor : TreeVisitor
 	{
-		private class FunctionNameInformation
-		{
-			public string FunctionName;
-			public SourcePosition FunctionNameSourcePosition;
-		}
-
 		internal readonly List<FunctionMapEntry> FunctionMap = new List<FunctionMapEntry>();
 
 		public override void Visit(FunctionObject node)
@@ -28,8 +22,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			{
 				FunctionMapEntry functionMapEntry = new FunctionMapEntry
 				{
-					FunctionName = functionNameInformation.FunctionName,
-					FunctionNameSourcePosition = functionNameInformation.FunctionNameSourcePosition,
+					FunctionNameInformation = functionNameInformation,
 					StartSourcePosition = new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
