@@ -1,4 +1,6 @@
-﻿using SourcemapToolkit.SourcemapParser;
+﻿using System.Collections.Generic;
+using Microsoft.Ajax.Utilities;
+using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
@@ -24,7 +26,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// </summary>
 	internal class FunctionMapEntry
 	{
-		public BindingInformation BindingInformation { get; set; }
+		/// <summary>
+		/// A list of bindings that are associated with this function map entry.
+		/// To get the complete name of the function associated with this mapping entry
+		/// append the names of each bindings with a "."
+		/// </summary>
+		public List<BindingInformation> Bindings { get; set; } 
 
 		/// <summary>
 		/// Denotes the location of the beginning of this function

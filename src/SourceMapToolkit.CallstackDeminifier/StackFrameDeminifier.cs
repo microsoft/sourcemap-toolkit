@@ -49,13 +49,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 					if (sourceMap != null)
 					{
 						MappingEntry mappingentry =
-							sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.BindingInformation.SourcePosition);
+							sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
 
 						// Sometimes the mapping entries are off by one, if we don't have a match see if the column before has a match
-						if (mappingentry == null && wrappingFunction.BindingInformation.SourcePosition.ZeroBasedColumnNumber > 0)
+						if (mappingentry == null && wrappingFunction.Bindings[0].SourcePosition.ZeroBasedColumnNumber > 0)
 						{
-							wrappingFunction.BindingInformation.SourcePosition.ZeroBasedColumnNumber -= 1;
-							mappingentry = sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.BindingInformation.SourcePosition);
+							wrappingFunction.Bindings[0].SourcePosition.ZeroBasedColumnNumber -= 1;
+							mappingentry = sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
 						}
 
 						if (mappingentry != null)

@@ -22,7 +22,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			{
 				FunctionMapEntry functionMapEntry = new FunctionMapEntry
 				{
-					BindingInformation = bindingInformation,
+					Bindings = new List<BindingInformation> { bindingInformation},
 					StartSourcePosition = new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
