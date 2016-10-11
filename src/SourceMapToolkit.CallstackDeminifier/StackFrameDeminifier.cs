@@ -48,16 +48,22 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 					if (sourceMap != null)
 					{
-						MappingEntry mappingentry =
+						MappingEntry mappingEntry =
 							sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
 
-						if (mappingentry != null)
+						if (mappingEntry == null)
+						{
+							wrappingFunction.FunctionNameSourcePosition.ZeroBasedColumnNumber -= 1;
+							mappingEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
+						}
+
+						if (mappingEntry != null)
 						{
 							result = new StackFrame
 								{
-									FilePath = mappingentry.OriginalFileName,
-									MethodName = mappingentry.OriginalName,
-									SourcePosition = mappingentry.OriginalSourcePosition
+									FilePath = mappingEntry.OriginalFileName,
+									MethodName = mappingEntry.OriginalName,
+									SourcePosition = mappingEntry.OriginalSourcePosition
 								};
 						}
 					}
