@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="closurecrashcauser.js" />
     <Content Include="crashcauser.js" />
     <Content Include="Index.html" />
     <Content Include="packages.config" />
