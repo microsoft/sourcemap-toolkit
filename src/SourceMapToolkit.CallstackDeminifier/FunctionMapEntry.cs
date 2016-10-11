@@ -2,17 +2,21 @@
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
-	internal class FunctionNameInformation
+	/// <summary>
+	/// Describes information regarding a binding that can be used for minification.
+	/// Examples include methods, functions, and object declarations.
+	/// </summary>
+	internal class BindingInformation
 	{
 		/// <summary>
-		/// The name of the method
+		/// The name of the method or class
 		/// </summary>
-		public string FunctionName;
+		public string Name;
 
 		/// <summary>
-		/// The location of the function name declaration
+		/// The location of the function name or class declaration
 		/// </summary>
-		public SourcePosition FunctionNameSourcePosition;
+		public SourcePosition SourcePosition;
 	}
 
 	/// <summary>
@@ -20,7 +24,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// </summary>
 	internal class FunctionMapEntry
 	{
-		public FunctionNameInformation FunctionNameInformation { get; set; }
+		public BindingInformation BindingInformation { get; set; }
 
 		/// <summary>
 		/// Denotes the location of the beginning of this function
