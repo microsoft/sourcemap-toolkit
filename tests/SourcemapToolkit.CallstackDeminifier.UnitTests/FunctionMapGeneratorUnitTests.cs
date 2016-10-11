@@ -190,9 +190,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
 
-			Assert.AreEqual("bar", functionMap[0].Bindings[0].Name);
+			Assert.AreEqual("foo.prototype", functionMap[0].Bindings[0].Name);
 			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(41, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual("bar", functionMap[0].Bindings[1].Name);
+			Assert.AreEqual(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(58, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
@@ -272,9 +275,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
 
-			Assert.AreEqual("bar", functionMap[0].Bindings[0].Name);
+			Assert.AreEqual("foo.prototype", functionMap[0].Bindings[0].Name);
 			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(41, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual("bar", functionMap[0].Bindings[1].Name);
+			Assert.AreEqual(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
 			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(76, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);

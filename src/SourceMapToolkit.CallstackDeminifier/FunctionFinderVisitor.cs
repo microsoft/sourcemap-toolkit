@@ -49,16 +49,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
 			if (parentBinaryOperator != null)
 			{
-				result.Add(
-					new BindingInformation
-					{
-						Name = parentBinaryOperator.Operand1.Context.Code,
-						SourcePosition = new SourcePosition
-						{
-							ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
-							ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
-						}
-					});
+				result.Add(ExtractBindingsFromBinaryOperator(parentBinaryOperator));
 				return result;
 			}
 
@@ -66,6 +57,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 			ObjectLiteralProperty parentObjectLiteralProperty = node.Parent as ObjectLiteralProperty;
 			if (parentObjectLiteralProperty != null)
 			{
+				// See if we can get the name of the object that this method belongs to
+				ObjectLiteral objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
+				if (objectLiteralParent != null && objectLiteralParent.Parent is BinaryOperator)
+				{
+					result.Add(ExtractBindingsFromBinaryOperator((BinaryOperator)objectLiteralParent.Parent));
+				}
+				
 				result.Add(
 					new BindingInformation
 					{
@@ -110,6 +108,19 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			return null;
+		}
+
+		private BindingInformation ExtractBindingsFromBinaryOperator(BinaryOperator parentBinaryOperator)
+		{
+			return new BindingInformation
+			{
+				Name = parentBinaryOperator.Operand1.Context.Code,
+				SourcePosition = new SourcePosition
+				{
+					ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
+					ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
+				}
+			};
 		}
 	}
 }
