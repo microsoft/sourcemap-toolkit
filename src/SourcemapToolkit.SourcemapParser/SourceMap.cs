@@ -34,22 +34,48 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
 
+		/// <summary>
+		/// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt 
+		/// to return a nearby mapping that should map to the same piece of code.
+		/// </summary>
+		/// <param name="generatedSourcePosition"></param>
+		/// <returns></returns>
 	    public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
-	    {
-	        if (ParsedMappings == null)
+		{
+			if (ParsedMappings == null)
 	        {
 	            return null;
 	        }
 
-		    MappingEntry mappingEntryToFind = new MappingEntry
-		    {
-			    GeneratedSourcePosition = generatedSourcePosition
-		    };
+			MappingEntry result = MappingEntryForGeneratedSourcePositionExact(generatedSourcePosition);
 
-		    int index = ParsedMappings.BinarySearch(mappingEntryToFind,
-			    Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
+			// Attempt to find a nearby result if there is no exact match.
+			if (result == null)
+			{
+				// The mappings from Google Closure Advanced mode often have column numbers that are off by 1 
+				result =
+					MappingEntryForGeneratedSourcePositionExact(new SourcePosition
+					{
+						ZeroBasedColumnNumber = generatedSourcePosition.ZeroBasedColumnNumber - 1,
+						ZeroBasedLineNumber = generatedSourcePosition.ZeroBasedLineNumber
+					});
 
-		    return index >= 0 ? ParsedMappings[index] : null;
-	    }
+			}
+
+			return result;
+		}
+
+		private MappingEntry MappingEntryForGeneratedSourcePositionExact(SourcePosition generatedSourcePosition)
+		{
+			MappingEntry mappingEntryToFind = new MappingEntry
+			{
+				GeneratedSourcePosition = generatedSourcePosition
+			};
+
+			int index = ParsedMappings.BinarySearch(mappingEntryToFind,
+				Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
+
+			return index >= 0 ? ParsedMappings[index] : null;
+		}
 	}
 }

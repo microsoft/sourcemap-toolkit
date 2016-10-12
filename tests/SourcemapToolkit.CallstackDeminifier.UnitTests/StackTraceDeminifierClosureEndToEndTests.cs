@@ -26,7 +26,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			Assert.AreEqual(4, results.DeminifiedStackFrames.Count);
 			Assert.AreEqual("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrames[0].MethodName);
-			Assert.AreEqual("prototypeMethodLevel1", results.DeminifiedStackFrames[1].MethodName);
+			Assert.AreEqual("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrames[1].MethodName);
 			Assert.AreEqual("GlobalFunction", results.DeminifiedStackFrames[2].MethodName);
 			Assert.AreEqual("window", results.DeminifiedStackFrames[3].MethodName);
 		}
