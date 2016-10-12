@@ -11,6 +11,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		public List<FunctionMapEntry> GenerateFunctionMap(string sourceCode)
 		{
+			if (sourceCode == null)
+			{
+				return null;
+			}
+
 			JSParser jsParser = new JSParser();
 
 			// We just want the AST, don't let AjaxMin do any optimizations

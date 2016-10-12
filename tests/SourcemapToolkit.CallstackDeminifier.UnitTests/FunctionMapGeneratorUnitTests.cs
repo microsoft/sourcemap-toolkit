@@ -9,6 +9,19 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	public class FunctionMapGeneratorUnitTests
 	{
 		[TestMethod]
+		public void GenerateFunctionMap_NullInput_ReturnsNull()
+		{
+			// Arrange
+			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
+
+			// Act
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(null);
+
+			// Assert
+			Assert.IsNull(functionMap);
+		}
+
+		[TestMethod]
 		public void GenerateFunctionMap_NoFunctionsInSource_EmptyFunctionList()
 		{
 			// Arrange
