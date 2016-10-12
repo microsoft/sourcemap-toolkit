@@ -40,12 +40,12 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		/// <param name="generatedSourcePosition"></param>
 		/// <returns></returns>
-	    public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+		public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
 		{
 			if (ParsedMappings == null)
-	        {
-	            return null;
-	        }
+			{
+				return null;
+			}
 
 			MappingEntry result = MappingEntryForGeneratedSourcePositionExact(generatedSourcePosition);
 
