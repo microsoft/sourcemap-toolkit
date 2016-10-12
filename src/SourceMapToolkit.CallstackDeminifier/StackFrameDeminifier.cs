@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
@@ -48,26 +49,52 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 					if (sourceMap != null)
 					{
-						MappingEntry mappingentry =
-							sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
+						result = ExtractFrameInformationFromSourceMap(wrappingFunction, sourceMap);
+					}
+				}
+			}
 
-						// Sometimes the mapping entries are off by one, if we don't have a match see if the column before has a match
-						if (mappingentry == null && wrappingFunction.FunctionNameSourcePosition.ZeroBasedColumnNumber > 0)
+			return result;
+		}
+
+		internal static StackFrame ExtractFrameInformationFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap)
+		{
+			StackFrame result = null;
+
+			if (wrappingFunction.Bindings != null && wrappingFunction.Bindings.Count > 0)
+			{
+				string methodName = null;
+				if (wrappingFunction.Bindings.Count == 2)
+				{
+					MappingEntry objectProtoypeMappingEntry =
+						sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
+
+					methodName = objectProtoypeMappingEntry?.OriginalName;
+				}
+
+				MappingEntry mappingEntry =
+					sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
+
+				if (mappingEntry != null)
+				{
+					if (mappingEntry.OriginalName != null)
+					{
+						if (methodName != null)
 						{
-							wrappingFunction.FunctionNameSourcePosition.ZeroBasedColumnNumber -= 1;
-							mappingentry = sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.FunctionNameSourcePosition);
+							methodName = methodName + "." + mappingEntry.OriginalName;
 						}
-
-						if (mappingentry != null)
+						else
 						{
-							result = new StackFrame
-								{
-									FilePath = mappingentry.OriginalFileName,
-									MethodName = mappingentry.OriginalName,
-									SourcePosition = mappingentry.OriginalSourcePosition
-								};
+							methodName = mappingEntry.OriginalName;
 						}
 					}
+
+					result = new StackFrame
+					{
+						FilePath = mappingEntry.OriginalFileName,
+						MethodName = methodName,
+						SourcePosition = mappingEntry.OriginalSourcePosition
+					};
 				}
 			}
 

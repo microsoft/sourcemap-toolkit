@@ -1,21 +1,37 @@
-﻿using SourcemapToolkit.SourcemapParser;
+﻿using System.Collections.Generic;
+using Microsoft.Ajax.Utilities;
+using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
+	/// <summary>
+	/// Describes information regarding a binding that can be used for minification.
+	/// Examples include methods, functions, and object declarations.
+	/// </summary>
+	internal class BindingInformation
+	{
+		/// <summary>
+		/// The name of the method or class
+		/// </summary>
+		public string Name;
+
+		/// <summary>
+		/// The location of the function name or class declaration
+		/// </summary>
+		public SourcePosition SourcePosition;
+	}
+
 	/// <summary>
 	/// Contains information regarding the location of a particular function in a JavaScript file
 	/// </summary>
 	internal class FunctionMapEntry
 	{
 		/// <summary>
-		/// The name of the method
+		/// A list of bindings that are associated with this function map entry.
+		/// To get the complete name of the function associated with this mapping entry
+		/// append the names of each bindings with a "."
 		/// </summary>
-		public string FunctionName { get; set; }
-
-		/// <summary>
-		/// The location of the function name declaration
-		/// </summary>
-		public SourcePosition FunctionNameSourcePosition { get; set; }
+		public List<BindingInformation> Bindings { get; set; } 
 
 		/// <summary>
 		/// Denotes the location of the beginning of this function
