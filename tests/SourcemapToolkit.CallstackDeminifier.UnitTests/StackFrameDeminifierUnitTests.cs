@@ -138,9 +138,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourcePosition generatedSourcePosition = new SourcePosition();
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap);
+			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
 			Assert.IsNull(deminifiedStackFrame);
@@ -165,8 +166,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
 
+			SourcePosition generatedSourcePosition = new SourcePosition();
+
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap);
+			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
 			Assert.IsNull(deminifiedStackFrame);
@@ -189,6 +192,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 					}
 			};
 
+			SourcePosition generatedSourcePosition = new SourcePosition
+			{
+				ZeroBasedColumnNumber = 25,
+				ZeroBasedLineNumber = 85
+			};
+
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(
 				x =>
@@ -197,11 +206,16 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				.Return(new MappingEntry
 				{
 					OriginalName = "foo",
-					OriginalSourcePosition = new SourcePosition { ZeroBasedColumnNumber = 10, ZeroBasedLineNumber = 20}
 				});
 
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition)).Return(new MappingEntry
+			{
+				OriginalSourcePosition = new SourcePosition {ZeroBasedColumnNumber = 10, ZeroBasedLineNumber = 20}
+			});
+
+
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap);
+			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
 			Assert.AreEqual("foo", deminifiedStackFrame.MethodName);
@@ -229,6 +243,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 					}
 			};
 
+			SourcePosition generatedSourcePosition = new SourcePosition {ZeroBasedColumnNumber = 39, ZeroBasedLineNumber = 31};
+
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(
 				x =>
@@ -246,11 +262,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				.Return(new MappingEntry
 				{
 					OriginalName = "baz",
-					OriginalSourcePosition = new SourcePosition { ZeroBasedColumnNumber = 20, ZeroBasedLineNumber = 30 }
 				});
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition)).Return(new MappingEntry
+			{
+				OriginalSourcePosition = new SourcePosition { ZeroBasedColumnNumber = 20, ZeroBasedLineNumber = 30 }
+			});
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap);
+			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
 			Assert.AreEqual("bar.baz", deminifiedStackFrame.MethodName);
