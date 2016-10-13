@@ -132,6 +132,23 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		}
 
 		[TestMethod]
+		public void TryParseSingleStackFrame_ChromeStackFrameWithNoMethodName_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = " at http://localhost:19220/crashcauser.min.js:10:13";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.IsNull(result.MethodName);
+			Assert.AreEqual(9, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(12, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[TestMethod]
 		public void TryParseSingleStackFrame_ChromeStackFrameWithScriptSubfolder_CorrectStackFrame()
 		{
 			// Arrange
@@ -180,6 +197,23 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			Assert.AreEqual("c", result.MethodName);
 			Assert.AreEqual(2, result.SourcePosition.ZeroBasedLineNumber);
 			Assert.AreEqual(16, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[TestMethod]
+		public void TryParseSingleStackFrame_IE11StackFrameWithAnonymousFunction_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = "   at Anonymous function (http://localhost:19220/crashcauser.min.js:5:25)";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.AreEqual("Anonymous function", result.MethodName);
+			Assert.AreEqual(4, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(24, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 	}
 }
