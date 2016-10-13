@@ -13,7 +13,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// </summary>
 	public class StackTraceParser : IStackTraceParser
 	{
-		private readonly Regex _lineNumberRegex = new Regex(@"([^@(]*\.js)[^/]*:([0-9]+):([0-9]+)[^/]*$", RegexOptions.Compiled);
+		private readonly Regex _lineNumberRegex = new Regex(@"([^@( ]*\.js)[^/]*:([0-9]+):([0-9]+)[^/]*$", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Generates a list of StackFrame objects based on the input stack trace.

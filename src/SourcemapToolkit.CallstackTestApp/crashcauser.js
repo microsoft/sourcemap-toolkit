@@ -12,8 +12,10 @@
     }
 
     function level3(input) {
-        var x;
-        console.log(x.length + input);
+        (function() {
+            var x;
+            console.log(x.length + input);
+        }());
     }
 
     window.onerror = function (message, source, lineno, colno, error) {
