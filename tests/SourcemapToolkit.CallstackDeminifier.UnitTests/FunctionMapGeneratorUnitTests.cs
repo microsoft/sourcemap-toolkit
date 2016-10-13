@@ -195,6 +195,36 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
+			string sourceCode = "var foo = function(){} foo.prototype.bar = function () { baz(); }";
+
+			// Act
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+
+			// Assert
+			Assert.AreEqual(2, functionMap.Count);
+
+			Assert.AreEqual("foo.prototype.bar", functionMap[0].Bindings[0].Name);
+			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(55, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(65, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+
+			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
+			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[TestMethod]
+		public void GenerateFunctionMap_InstanceMethodInObjectInitializer_FunctionMapEntryGenerated()
+		{
+			// Arrange
+			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function () { baz(); } }";
 
 			// Act
@@ -277,6 +307,36 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		[TestMethod]
 		public void GenerateFunctionMap_InstanceMethodAndFunctionHasName_FunctionMapEntryGeneratedForObjectPrototype()
+		{
+			// Arrange
+			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
+			string sourceCode = "var foo = function(){} foo.prototype.bar = function myCoolFunctionName() { baz(); } }";
+
+			// Act
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+
+			// Assert
+			Assert.AreEqual(2, functionMap.Count);
+
+			Assert.AreEqual("foo.prototype.bar", functionMap[0].Bindings[0].Name);
+			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(73, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(83, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+
+			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
+			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[TestMethod]
+		public void GenerateFunctionMap_InstanceMethodWithObjectInitializerAndFunctionHasName_FunctionMapEntryGeneratedForObjectPrototype()
 		{
 			// Arrange
 			IFunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
