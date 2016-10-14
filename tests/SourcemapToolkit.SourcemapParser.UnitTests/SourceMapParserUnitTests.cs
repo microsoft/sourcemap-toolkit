@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
@@ -6,11 +7,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 	public class SourceMapParserUnitTests
 	{
 		[TestMethod]
-		public void ParseSourceMap_NullSourceMapString_ReturnsNull()
+		public void ParseSourceMap_NullInputStream_ReturnsNull()
 		{
 			// Arrange
 			SourceMapParser sourceMapParser = new SourceMapParser();
-			string input = null;
+			StreamReader input = null;
 
 			// Act
 			SourceMap output = sourceMapParser.ParseSourceMap(input);
@@ -27,7 +28,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			string input = "{ \"version\":3, \"file\":\"CommonIntl\", \"lineCount\":65, \"mappings\":\"AACAA,aAAA,CAAc\", \"sources\":[\"input/CommonIntl.js\"], \"names\":[\"CommonStrings\",\"afrikaans\"]}";
 
 			// Act
-			SourceMap output = sourceMapParser.ParseSourceMap(input);
+			SourceMap output = sourceMapParser.ParseSourceMap(UnitTestUtils.StreamReaderFromString(input));
 
 			// Assert
 			Assert.AreEqual(3, output.Version);

@@ -1,4 +1,6 @@
-﻿namespace SourcemapToolkit.CallstackDeminifier
+﻿using System.IO;
+
+namespace SourcemapToolkit.CallstackDeminifier
 {
 	/// <summary>
 	/// This class is to be implemented by the consumer of the source map library.
@@ -11,6 +13,6 @@
 		/// the contents of that file.
 		/// </summary>
 		/// <param name="sourceCodeUrl">The url from a callstack stackframe that caused us to invoke this method</param>
-		string GetSourceCode(string sourceCodeUrl);
+		StreamReader GetSourceCode(string sourceCodeUrl);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
+using SourcemapToolkit.SourcemapParser.UnitTests;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
@@ -14,10 +15,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		private StackTraceDeminifier GetStackTraceDeminifierWithDependencies()
 		{
 			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
-			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/crashcauser.js")).Return(SourceMapString);
+			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/crashcauser.js")).Return(UnitTestUtils.StreamReaderFromString(SourceMapString));
 
 			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
-			sourceCodeProvider.Stub(x => x.GetSourceCode("http://localhost:11323/crashcauser.js")).Return(GeneratedCodeString);
+			sourceCodeProvider.Stub(x => x.GetSourceCode("http://localhost:11323/crashcauser.js")).Return(UnitTestUtils.StreamReaderFromString(GeneratedCodeString));
 
 			return new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
 		}

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SourcemapToolkit.SourcemapParser;
+using SourcemapToolkit.SourcemapParser.UnitTests;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
@@ -29,7 +29,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "bar();";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(0, functionMap.Count);
@@ -43,7 +43,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "function foo(){bar();}";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
@@ -65,7 +65,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 								Environment.NewLine + "}";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
@@ -86,7 +86,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "function foo(){bar();}function bar(){baz();}";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -116,7 +116,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "function foo(){function bar(){baz();}}";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -146,7 +146,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){bar();}";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
@@ -168,7 +168,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){};foo.bar = function() { baz(); }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -198,7 +198,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function () { baz(); }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -228,7 +228,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function () { baz(); } }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -261,7 +261,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function myCoolFunctionName(){ bar(); }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(1, functionMap.Count);
@@ -283,7 +283,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){};foo.bar = function myCoolFunctionName() { baz(); }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -313,7 +313,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function myCoolFunctionName() { baz(); } }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);
@@ -343,7 +343,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function myCoolFunctionName() { baz(); } }";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(sourceCode);
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
 			Assert.AreEqual(2, functionMap.Count);

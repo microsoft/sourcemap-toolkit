@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -12,18 +13,22 @@ namespace SourcemapToolkit.SourcemapParser
 		}
 
 		/// <summary>
-		/// Parses a string representing a source map into a SourceMap object.
+		/// Parses a stream representing a source map into a SourceMap object.
 		/// </summary>
-		public SourceMap ParseSourceMap(string sourceMapString)
+		public SourceMap ParseSourceMap(StreamReader sourceMapStream)
 		{
-			if (sourceMapString == null)
+			if (sourceMapStream == null)
 			{
 				return null;
 			}
+			using (JsonTextReader jsonTextReader = new JsonTextReader(sourceMapStream))
+			{
+				JsonSerializer serializer = new JsonSerializer();
 
-			SourceMap result = JsonConvert.DeserializeObject<SourceMap>(sourceMapString);
-			result.ParsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
-			return result;
+				SourceMap result = serializer.Deserialize<SourceMap>(jsonTextReader);
+				result.ParsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
+				return result;
+			}
 		}
 	}
 }
