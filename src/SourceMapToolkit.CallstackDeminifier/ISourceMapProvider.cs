@@ -13,6 +13,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// This method will be invoked for each unique URL that appears in a stack frame from a callstack.
 		/// It should return the text contents of the sourcemap corresponding to the file in the URL.
 		/// </summary>
+		/// <param name="correspondingCallStackFileUrl">The url from a callstack stackframe that caused us to invoke this method.</param>
+		/// <returns>Returns a StreamReader that can be used to obtain the contents of the source map.</returns>
 		StreamReader GetSourceMapContentsForCallstackUrl(string correspondingCallStackFileUrl);
 	}
 }

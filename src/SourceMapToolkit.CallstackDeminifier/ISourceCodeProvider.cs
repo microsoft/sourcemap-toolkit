@@ -12,7 +12,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// This method will be invoked for each unique genered code URL that appears in a call stack in order to retreieve 
 		/// the contents of that file.
 		/// </summary>
-		/// <param name="sourceCodeUrl">The url from a callstack stackframe that caused us to invoke this method</param>
+		/// <param name="sourceCodeUrl">The url from a callstack stackframe that caused us to invoke this method.</param>
+		/// <returns>Returns a StreamReader that can be used to access the source code for the given URL.</returns>
 		StreamReader GetSourceCode(string sourceCodeUrl);
 	}
 }
