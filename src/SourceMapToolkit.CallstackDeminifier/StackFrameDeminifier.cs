@@ -24,15 +24,16 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// This method will deminify a single stack from from a minified stack trace.
 		/// </summary>
-		/// <returns>Returns a stack trace that has been translated to the original source code. Returns null if it could not be deminified.</returns>
+		/// <returns>Returns a stack trace that has been translated to a best guess of the original source code. Any of the fields in the stack frame may be null</returns>
 		public StackFrame DeminifyStackFrame(StackFrame stackFrame)
 		{
-			StackFrame result = null;
-
 			if (stackFrame == null)
 			{
 				throw new ArgumentNullException(nameof(stackFrame));
 			}
+
+			FunctionMapEntry wrappingFunction = null;
+			SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
 
 			// This code deminifies the stack frame by finding the wrapping function in 
 			// the generated code and then using the source map to find the name and 
@@ -40,28 +41,25 @@ namespace SourcemapToolkit.CallstackDeminifier
 			List<FunctionMapEntry> functionMap = _functionMapStore.GetFunctionMapForSourceCode(stackFrame.FilePath);
 			if (functionMap != null)
 			{
-				FunctionMapEntry wrappingFunction =
+				 wrappingFunction =
 					_functionMapConsumer.GetWrappingFunctionForSourceLocation(stackFrame.SourcePosition, functionMap);
-
-				if (wrappingFunction != null)
-				{
-					SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
-
-					if (sourceMap != null)
-					{
-						result = ExtractFrameInformationFromSourceMap(wrappingFunction, sourceMap);
-					}
-				}
 			}
 
-			return result;
+			return ExtractFrameInformationFromSourceMap(wrappingFunction, sourceMap, stackFrame.SourcePosition);
 		}
 
-		internal static StackFrame ExtractFrameInformationFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap)
+		/// <summary>
+		/// Gets the information necessary for a deminified stack frame from the relevant source map.
+		/// </summary>
+		/// <param name="wrappingFunction">The function that wraps the current stack frame location</param>
+		/// <param name="sourceMap">The relevant source map for this generated code</param>
+		/// <param name="generatedSourcePosition">The location that should be translated to original source code location in the deminified stack frame.</param>
+		/// <returns>Returns a StackFrame object with best guess values for each property. Any of the properties may be null if no match was found.</returns>
+		internal static StackFrame ExtractFrameInformationFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap, SourcePosition generatedSourcePosition)
 		{
-			StackFrame result = null;
+			StackFrame result = new StackFrame();
 
-			if (wrappingFunction.Bindings != null && wrappingFunction.Bindings.Count > 0)
+			if (wrappingFunction?.Bindings != null && wrappingFunction.Bindings.Count > 0)
 			{
 				string methodName = null;
 				if (wrappingFunction.Bindings.Count == 2)
@@ -73,7 +71,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				}
 
 				MappingEntry mappingEntry =
-					sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
+					sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
 
 				if (mappingEntry != null)
 				{
@@ -88,15 +86,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 							methodName = mappingEntry.OriginalName;
 						}
 					}
-
-					result = new StackFrame
-					{
-						FilePath = mappingEntry.OriginalFileName,
-						MethodName = methodName,
-						SourcePosition = mappingEntry.OriginalSourcePosition
-					};
+					result.MethodName = methodName;
 				}
 			}
+
+			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
+			result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+			result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
 
 			return result;
 		}
