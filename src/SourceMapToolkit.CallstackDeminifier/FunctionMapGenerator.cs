@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.Ajax.Utilities;
 
 namespace SourcemapToolkit.CallstackDeminifier
@@ -9,12 +10,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Returns a FunctionMap describing the locations of every funciton in the source code.
 		/// The functions are to be sorted descending by start position.
 		/// </summary>
-		public List<FunctionMapEntry> GenerateFunctionMap(string sourceCode)
+		public List<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader)
 		{
-			if (sourceCode == null)
+			if (sourceCodeStreamReader == null)
 			{
 				return null;
 			}
+
+			string sourceCode = sourceCodeStreamReader.ReadToEnd();
+			sourceCodeStreamReader.Close();
 
 			JSParser jsParser = new JSParser();
 

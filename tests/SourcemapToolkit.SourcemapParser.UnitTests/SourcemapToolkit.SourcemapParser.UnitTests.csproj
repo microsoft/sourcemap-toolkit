@@ -66,6 +66,7 @@
     <Compile Include="SourceMapParserUnitTests.cs" />
     <Compile Include="SourceMapUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
+    <Compile Include="UnitTestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">
