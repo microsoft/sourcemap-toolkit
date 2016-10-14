@@ -27,6 +27,7 @@ namespace SourcemapToolkit.SourcemapParser
 
 				SourceMap result = serializer.Deserialize<SourceMap>(jsonTextReader);
 				result.ParsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
+				sourceMapStream.Close();
 				return result;
 			}
 		}

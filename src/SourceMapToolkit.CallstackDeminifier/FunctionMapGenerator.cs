@@ -18,6 +18,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			string sourceCode = sourceCodeStreamReader.ReadToEnd();
+			sourceCodeStreamReader.Close();
 
 			JSParser jsParser = new JSParser();
 
