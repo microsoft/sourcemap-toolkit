@@ -31,7 +31,7 @@ TypeError: Cannot read property 'length' of undefined
     SourcePosition.ZeroBasedLineNumber: 5
 ```
 ### Usage
-The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `Stream` that can be used to access the contents of the requested JavaScript code or corresponding Source Map. A sample usage of the library is shown below
+The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `StreamReader` that can be used to access the contents of the requested JavaScript code or corresponding Source Map. A sample usage of the library is shown below
 
 ```csharp
 StackTraceDeminifier sourceMapCallstackDeminifier = new StackTraceDeminifier(new SourceMapProvider(), new SourceCodeProvider());
