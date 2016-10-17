@@ -1,5 +1,5 @@
 # Source Map Toolkit
-This is a C# library for working with JavaScript source maps. This library also has a dll that can be used to deminify JavaScript callstacks.
+This is a C# library for working with JavaScript source maps and deminifying JavaScript callstacks.
 
 ## Source Map Parsing
 The `SourcemapToolkit.SourcemapParser.dll` provides an API for parsing a souce map into an object that is easy to work with. The source map class has a method `GetMappingEntryForGeneratedSourcePosition`, which can be used to find a source map mapping entry that likely corresponds to a piece of generated code. 
