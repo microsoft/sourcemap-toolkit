@@ -31,14 +31,14 @@ TypeError: Cannot read property 'length' of undefined
     SourcePosition.ZeroBasedLineNumber: 5
 ```
 ### Usage
-The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `StreamReader` that can be used to access the contents of the requested JavaScript code or corresponding Source Map. A sample usage of the library is shown below
+The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `StreamReader` that can be used to access the contents of the requested JavaScript code or corresponding source map. A sample usage of the library is shown below
 
 ```csharp
 StackTraceDeminifier sourceMapCallstackDeminifier = new StackTraceDeminifier(new SourceMapProvider(), new SourceCodeProvider());
 DeminifyStackTraceResult deminifyStackTraceResult = sourceMapCallstackDeminifier.DeminifyStackTrace(callstack)
 ```
 
-The result of `DeminifyStackTrace` is a `DeminifyStackTraceResult`, which is an object that contains a list of the parsed minified `StackFrame` objects in the `MinifiedStackFrame` property. The `DeminifiedStackFrame` property contains the best guess `StackFrame` object that maps to the `MinifiedStackFrame` element with the same index. Note that any of the properties on a `StackTrace` object may be null if no value could be extracted from the input string or source map.
+The result of `DeminifyStackTrace` is a `DeminifyStackTraceResult`, which is an object that contains a list of the parsed minified `StackFrame` objects in the `MinifiedStackFrame` property. The `DeminifiedStackFrame` property contains the best guess `StackFrame` object that maps to the `MinifiedStackFrame` element with the same index. Note that any of the properties on a `StackTrace` object may be null if no value could be extracted from the input callstack string or source map.
 ## Remarks
 Browsers return one based line and column numbers, while the source map spec calls for zero based line and column numbers. In order to minimize confusion, line and column numbers are normalized to be zero based throughout the library.
 
