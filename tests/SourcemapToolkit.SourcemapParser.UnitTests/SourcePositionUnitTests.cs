@@ -290,5 +290,159 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Assert
 			Assert.IsFalse(result);
 		}
-	}
+
+        [TestMethod]
+        public void IsEqualish_XEqualsY_ReturnTrue()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 13,
+                ZeroBasedColumnNumber = 5
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 13,
+                ZeroBasedColumnNumber = 5
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_XColumnNumberBiggerByOne_ReturnTrue()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 2,
+                ZeroBasedColumnNumber = 8
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 2,
+                ZeroBasedColumnNumber = 7
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_YColumnNumberBiggerByOne_ReturnTrue()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 1,
+                ZeroBasedColumnNumber = 10
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 1,
+                ZeroBasedColumnNumber = 11
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_YColumnNumberBiggerByTwo_ReturnFalse()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 155,
+                ZeroBasedColumnNumber = 100
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 155,
+                ZeroBasedColumnNumber = 102
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_XColumnNumberZeroLineNumbersDifferByOne_ReturnTrue()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 235,
+                ZeroBasedColumnNumber = 0
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 234,
+                ZeroBasedColumnNumber = 102
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_YColumnNumberZeroLineNumbersDifferByOne_ReturnTrue()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 458,
+                ZeroBasedColumnNumber = 13
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 459,
+                ZeroBasedColumnNumber = 0
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsEqualish_YColumnNumberZeroLineNumbersDifferByTwo_ReturnFalse()
+        {
+            // Arrange
+            SourcePosition x = new SourcePosition
+            {
+                ZeroBasedLineNumber = 5456,
+                ZeroBasedColumnNumber = 13
+            };
+            SourcePosition y = new SourcePosition
+            {
+                ZeroBasedLineNumber = 5458,
+                ZeroBasedColumnNumber = 0
+            };
+
+            // Act
+            bool result = x.IsEqualish(y);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+    }
 }

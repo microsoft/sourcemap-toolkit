@@ -47,35 +47,26 @@ namespace SourcemapToolkit.SourcemapParser
 				return null;
 			}
 
-			MappingEntry result = MappingEntryForGeneratedSourcePositionExact(generatedSourcePosition);
+            MappingEntry mappingEntryToFind = new MappingEntry
+            {
+                GeneratedSourcePosition = generatedSourcePosition
+            };
 
-			// Attempt to find a nearby result if there is no exact match.
-			if (result == null)
-			{
-				// The mappings from Google Closure Advanced mode often have column numbers that are off by 1 
-				result =
-					MappingEntryForGeneratedSourcePositionExact(new SourcePosition
-					{
-						ZeroBasedColumnNumber = generatedSourcePosition.ZeroBasedColumnNumber - 1,
-						ZeroBasedLineNumber = generatedSourcePosition.ZeroBasedLineNumber
-					});
+            int index = ParsedMappings.BinarySearch(mappingEntryToFind,
+                Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
 
-			}
+            // If we didn't get an exact match, let's try to return the closest piece of code to the given line
+            if (index < 0)
+            {
+                // The BinarySearch method returns the bitwise complement of the nearest element that is larger than the desired element when there isn't a match.
+                // Based on tests with source maps generated with the Closure Compiler, we should consider the closest source position that is smaller than the target value when we don't have a match.
+                if (~index - 1 >= 0 && ParsedMappings[~index - 1].GeneratedSourcePosition.IsEqualish(generatedSourcePosition))
+                {
+                    index = ~index - 1;
+                }
+            }
 
-			return result;
-		}
-
-		private MappingEntry MappingEntryForGeneratedSourcePositionExact(SourcePosition generatedSourcePosition)
-		{
-			MappingEntry mappingEntryToFind = new MappingEntry
-			{
-				GeneratedSourcePosition = generatedSourcePosition
-			};
-
-			int index = ParsedMappings.BinarySearch(mappingEntryToFind,
-				Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
-
-			return index >= 0 ? ParsedMappings[index] : null;
+            return index >= 0 ? ParsedMappings[index] : null;
 		}
 	}
 }
