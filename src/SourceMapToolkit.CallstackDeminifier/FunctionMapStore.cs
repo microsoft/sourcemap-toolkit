@@ -7,16 +7,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// </summary>
 	internal class FunctionMapStore : IFunctionMapStore
 	{
-		private readonly ISourceCodeProvider _sourceCodeProvider;
 		private readonly IFunctionMapGenerator _functionMapGenerator;
 		private readonly KeyValueCache<string,List<FunctionMapEntry>> _functionMapCache;
 
-		public FunctionMapStore(ISourceCodeProvider sourceCodeProvider)
+		public FunctionMapStore(ISourceCodeProvider sourceCodeProvider, ISourceMapProvider sourceMapProvider)
 		{
-			_sourceCodeProvider = sourceCodeProvider;
 			_functionMapGenerator = new FunctionMapGenerator();
 			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
-				_sourceCodeProvider.GetSourceCode(sourceCodeUrl)));
+				sourceCodeProvider.GetSourceCode(sourceCodeUrl),
+                sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
 		}
 
 		/// <summary>

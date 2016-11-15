@@ -20,7 +20,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="generatedCodeProvider">Consumers of the API should implement this interface, which provides the contents of a JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
 		public StackTraceDeminifier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
 			: this(new StackFrameDeminifier(new SourceMapStore(sourceMapProvider),
-				new FunctionMapStore(generatedCodeProvider), new FunctionMapConsumer()), new StackTraceParser())
+				new FunctionMapStore(generatedCodeProvider, sourceMapProvider), new FunctionMapConsumer()), new StackTraceParser())
 		{
 			if (sourceMapProvider == null)
 			{

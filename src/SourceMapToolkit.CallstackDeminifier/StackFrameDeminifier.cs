@@ -59,37 +59,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			StackFrame result = new StackFrame();
 
-			if (wrappingFunction?.Bindings != null && wrappingFunction.Bindings.Count > 0)
-			{
-				string methodName = null;
-				if (wrappingFunction.Bindings.Count == 2)
-				{
-					MappingEntry objectProtoypeMappingEntry =
-						sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
-
-					methodName = objectProtoypeMappingEntry?.OriginalName;
-				}
-
-				MappingEntry mappingEntry =
-					sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
-
-				if (mappingEntry != null)
-				{
-					if (mappingEntry.OriginalName != null)
-					{
-						if (methodName != null)
-						{
-							methodName = methodName + "." + mappingEntry.OriginalName;
-						}
-						else
-						{
-							methodName = mappingEntry.OriginalName;
-						}
-					}
-					result.MethodName = methodName;
-				}
-			}
-
+		    result.MethodName = wrappingFunction.DeminfifiedMethodName;
 			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
 			result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
 			result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
