@@ -68,7 +68,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilar_ReturnSimilarEntry()
+		public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnSameLine_ReturnSimilarEntry()
 		{
 			// Arrange
 			SourceMap sourceMap = new SourceMap();
@@ -92,5 +92,31 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Asset
 			Assert.AreEqual(matchingMappingEntry, result);
 		}
-	}
+
+        [TestMethod]
+        public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnDifferentLinesLine_ReturnSimilarEntry()
+        {
+            // Arrange
+            SourceMap sourceMap = new SourceMap();
+            MappingEntry matchingMappingEntry = new MappingEntry
+            {
+                GeneratedSourcePosition = new SourcePosition { ZeroBasedLineNumber = 23, ZeroBasedColumnNumber = 15 }
+            };
+            sourceMap.ParsedMappings = new List<MappingEntry>
+            {
+                new MappingEntry
+                {
+                    GeneratedSourcePosition = new SourcePosition {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 0}
+                },
+                matchingMappingEntry
+            };
+            SourcePosition sourcePosition = new SourcePosition { ZeroBasedLineNumber = 24, ZeroBasedColumnNumber = 0 };
+
+            // Act
+            MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+
+            // Asset
+            Assert.AreEqual(matchingMappingEntry, result);
+        }
+    }
 }

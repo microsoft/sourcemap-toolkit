@@ -60,9 +60,9 @@ namespace SourcemapToolkit.SourcemapParser
             {
                 // The BinarySearch method returns the bitwise complement of the nearest element that is larger than the desired element when there isn't a match.
                 // Based on tests with source maps generated with the Closure Compiler, we should consider the closest source position that is smaller than the target value when we don't have a match.
-                if ((~index) - 1 > 0 && ParsedMappings[(~index) - 1].GeneratedSourcePosition.IsEqualish(generatedSourcePosition))
+                if (~index - 1 >= 0 && ParsedMappings[~index - 1].GeneratedSourcePosition.IsEqualish(generatedSourcePosition))
                 {
-                    index = (~index) - 1;
+                    index = ~index - 1;
                 }
             }
 
