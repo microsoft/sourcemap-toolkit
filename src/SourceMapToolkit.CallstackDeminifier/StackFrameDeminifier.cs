@@ -65,7 +65,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				if (wrappingFunction.Bindings.Count == 2)
 				{
 					MappingEntry objectProtoypeMappingEntry =
-						sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
+						sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
 
 					methodName = objectProtoypeMappingEntry?.OriginalName;
 				}
