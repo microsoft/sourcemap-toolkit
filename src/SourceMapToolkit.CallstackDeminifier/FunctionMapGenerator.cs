@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
@@ -61,36 +62,42 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Gets the original name corresponding to a function based on the information provided in the source map.
 		/// </summary>
-		/// <returns></returns>
 		internal static string GetDeminifiedMethodNameFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap)
 		{
+			if (wrappingFunction == null)
+			{
+				throw new ArgumentNullException(nameof(wrappingFunction));
+			}
+
+			if (sourceMap == null)
+			{
+				throw new ArgumentNullException(nameof(sourceMap));
+			}
+
 			string methodName = null;
 
-			if (wrappingFunction?.Bindings != null && wrappingFunction.Bindings.Count > 0)
+			if (wrappingFunction.Bindings != null && wrappingFunction.Bindings.Count > 0)
 			{
 				if (wrappingFunction.Bindings.Count == 2)
 				{
 					MappingEntry objectProtoypeMappingEntry =
-						sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
+						sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
 
 					methodName = objectProtoypeMappingEntry?.OriginalName;
 				}
 
 				MappingEntry mappingEntry =
-					sourceMap?.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
+					sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
 
-				if (mappingEntry != null)
+				if (mappingEntry?.OriginalName != null)
 				{
-					if (mappingEntry.OriginalName != null)
+					if (methodName != null)
 					{
-						if (methodName != null)
-						{
-							methodName = methodName + "." + mappingEntry.OriginalName;
-						}
-						else
-						{
-							methodName = mappingEntry.OriginalName;
-						}
+						methodName = methodName + "." + mappingEntry.OriginalName;
+					}
+					else
+					{
+						methodName = mappingEntry.OriginalName;
 					}
 				}
 			}
