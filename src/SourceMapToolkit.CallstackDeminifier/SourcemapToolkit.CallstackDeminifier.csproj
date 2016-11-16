@@ -65,10 +65,12 @@
     <Compile Include="IStackFrameDeminifier.cs" />
     <Compile Include="IStackTraceParser.cs" />
     <Compile Include="KeyValueCache.cs" />
+    <Compile Include="SimpleStackFrameDeminifier.cs" />
     <Compile Include="SourceMapStore.cs" />
     <Compile Include="StackFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StackFrameDeminifier.cs" />
+    <Compile Include="StackTraceDeminfierFactory.cs" />
     <Compile Include="StackTraceDeminifier.cs" />
     <Compile Include="StackTraceParser.cs" />
   </ItemGroup>

@@ -9,30 +9,6 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	public class StackTraceDeminifierUnitTests
 	{
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StackTraceDeminifier_NullSourceMapProvider_ThrowsException()
-		{
-			// Arrange
-			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
-			ISourceMapProvider sourceMapProvider = null;
-
-			// Act
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StackTraceDeminifier_NullSourceCodeProvider_ThrowsException()
-		{
-			// Arrange
-			ISourceCodeProvider sourceCodeProvider = null;
-			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
-
-			// Act
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
-		}
-
-		[TestMethod]
 		public void DeminifyStackTrace_UnableToParseStackTraceString_ReturnsEmptyList()
 		{
 			// Arrange

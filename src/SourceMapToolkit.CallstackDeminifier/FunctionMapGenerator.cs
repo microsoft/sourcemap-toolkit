@@ -12,17 +12,15 @@ namespace SourcemapToolkit.CallstackDeminifier
         /// Returns a FunctionMap describing the locations of every funciton in the source code.
         /// The functions are to be sorted descending by start position.
         /// </summary>
-        public List<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader, StreamReader sourceMapStreamReader)
+        public List<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
         {
-            if (sourceCodeStreamReader == null || sourceMapStreamReader == null)
+            if (sourceCodeStreamReader == null || sourceMap == null)
             {
                 return null;
             }
 
-            List<FunctionMapEntry> result = ParseSourceCode(sourceMapStreamReader);
+            List<FunctionMapEntry> result = ParseSourceCode(sourceCodeStreamReader);
 
-            SourceMapParser sourceMapParser = new SourceMapParser();
-            SourceMap sourceMap = sourceMapParser.ParseSourceMap(sourceMapStreamReader);
             foreach (FunctionMapEntry functionMapEntry in result)
             {
                 functionMapEntry.DeminfifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);

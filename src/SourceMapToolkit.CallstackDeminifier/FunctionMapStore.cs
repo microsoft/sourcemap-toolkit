@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
@@ -10,12 +12,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 		private readonly IFunctionMapGenerator _functionMapGenerator;
 		private readonly KeyValueCache<string,List<FunctionMapEntry>> _functionMapCache;
 
-		public FunctionMapStore(ISourceCodeProvider sourceCodeProvider, ISourceMapProvider sourceMapProvider)
+		public FunctionMapStore(ISourceCodeProvider sourceCodeProvider, Func<string, SourceMap> sourceMapGetter)
 		{
 			_functionMapGenerator = new FunctionMapGenerator();
 			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
 				sourceCodeProvider.GetSourceCode(sourceCodeUrl),
-                sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
+                sourceMapGetter(sourceCodeUrl)));
 		}
 
 		/// <summary>
