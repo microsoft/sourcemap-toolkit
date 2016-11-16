@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 
@@ -8,30 +7,6 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	[TestClass]
 	public class StackTraceDeminifierUnitTests
 	{
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StackTraceDeminifier_NullSourceMapProvider_ThrowsException()
-		{
-			// Arrange
-			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
-			ISourceMapProvider sourceMapProvider = null;
-
-			// Act
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StackTraceDeminifier_NullSourceCodeProvider_ThrowsException()
-		{
-			// Arrange
-			ISourceCodeProvider sourceCodeProvider = null;
-			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
-
-			// Act
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(sourceMapProvider, sourceCodeProvider);
-		}
-
 		[TestMethod]
 		public void DeminifyStackTrace_UnableToParseStackTraceString_ReturnsEmptyList()
 		{
