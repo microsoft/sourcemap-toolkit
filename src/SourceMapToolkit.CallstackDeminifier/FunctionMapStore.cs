@@ -17,7 +17,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			_functionMapGenerator = new FunctionMapGenerator();
 			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
 				sourceCodeProvider.GetSourceCode(sourceCodeUrl),
-                sourceMapGetter(sourceCodeUrl)));
+				sourceMapGetter(sourceCodeUrl)));
 		}
 
 		/// <summary>

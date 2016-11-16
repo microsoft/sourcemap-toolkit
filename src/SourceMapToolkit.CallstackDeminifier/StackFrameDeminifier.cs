@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
-    /// <summary>
+	/// <summary>
 	/// Class responsible for deminifying a single stack frame in a minified stack trace.
+	/// This method of deminification relies on a source map being available at runtime.
 	/// </summary>
 	internal class StackFrameDeminifier : SimpleStackFrameDeminifier
 	{
@@ -22,21 +22,21 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <returns>Returns a stack trace that has been translated to a best guess of the original source code. Any of the fields in the stack frame may be null</returns>
 		public override StackFrame DeminifyStackFrame(StackFrame stackFrame)
 		{
-            if (stackFrame == null)
-            {
-                throw new ArgumentNullException(nameof(stackFrame));
-            }
+			if (stackFrame == null)
+			{
+				throw new ArgumentNullException(nameof(stackFrame));
+			}
 
-            SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
-		    SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
+			SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
+			SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
 
-		    StackFrame result = base.DeminifyStackFrame(stackFrame);
+			StackFrame result = base.DeminifyStackFrame(stackFrame);
 
-		    MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
-		    result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-		    result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
+			result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+			result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
 
-		    return result;
+			return result;
 		}
 	}
 }

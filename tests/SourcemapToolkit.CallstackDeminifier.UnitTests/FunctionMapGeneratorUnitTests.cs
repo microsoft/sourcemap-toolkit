@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SourcemapToolkit.SourcemapParser.UnitTests;
 using Rhino.Mocks;
@@ -11,22 +10,22 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	[TestClass]
 	public class FunctionMapGeneratorUnitTests
 	{
-        [TestMethod]
-        public void GenerateFunctionMap_NullSourceMap_ReturnsNull()
-        {
-            // Arrange
-            FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
-            string sourceCode = "";
+		[TestMethod]
+		public void GenerateFunctionMap_NullSourceMap_ReturnsNull()
+		{
+			// Arrange
+			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
+			string sourceCode = "";
 
-            // Act
-            List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
+			// Act
+			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
 
-            // Assert
-            Assert.IsNull(functionMap);
-        }
+			// Assert
+			Assert.IsNull(functionMap);
+		}
 
 
-        [TestMethod]
+		[TestMethod]
 		public void ParseSourceCode_NullInput_ReturnsNull()
 		{
 			// Arrange
@@ -386,127 +385,127 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-        [TestMethod]
-        public void GetDeminifiedMethodNameFromSourceMap_NoBinding_ReturnNullMethodName()
-        {
-            // Arrange
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry();
-            SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+		[TestMethod]
+		public void GetDeminifiedMethodNameFromSourceMap_NoBinding_ReturnNullMethodName()
+		{
+			// Arrange
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
+			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 
-            // Act
-            string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			// Act
+			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
-            // Assert
-            Assert.IsNull(result);
-            sourceMap.VerifyAllExpectations();
-        }
+			// Assert
+			Assert.IsNull(result);
+			sourceMap.VerifyAllExpectations();
+		}
 
-        [TestMethod]
-        public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
-        {
-            // Arrange
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry
-            {
-                Bindings =
-                    new List<BindingInformation>
-                    {
-                        new BindingInformation
-                        {
-                            SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
-                        }
-                    }
-            };
+		[TestMethod]
+		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
+		{
+			// Arrange
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry
+			{
+				Bindings =
+					new List<BindingInformation>
+					{
+						new BindingInformation
+						{
+							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
+						}
+					}
+			};
 
-            SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-            sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
+			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
 
-            // Act
-            string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			// Act
+			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
-            // Assert
-            Assert.IsNull(result);
-            sourceMap.VerifyAllExpectations();
-        }
+			// Assert
+			Assert.IsNull(result);
+			sourceMap.VerifyAllExpectations();
+		}
 
-        [TestMethod]
-        public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
-        {
-            // Arrange
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry
-            {
-                Bindings =
-                    new List<BindingInformation>
-                    {
-                        new BindingInformation
-                        {
-                            SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
-                        }
-                    }
-            };
+		[TestMethod]
+		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
+		{
+			// Arrange
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry
+			{
+				Bindings =
+					new List<BindingInformation>
+					{
+						new BindingInformation
+						{
+							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
+						}
+					}
+			};
 
-            SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-            sourceMap.Stub(
-                x =>
-                    x.GetMappingEntryForGeneratedSourcePosition(
-                        Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
-                .Return(new MappingEntry
-                {
-                    OriginalName = "foo",
-                });
+			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			sourceMap.Stub(
+				x =>
+					x.GetMappingEntryForGeneratedSourcePosition(
+						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
+				.Return(new MappingEntry
+				{
+					OriginalName = "foo",
+				});
 
-            // Act
-            string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			// Act
+			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
-            // Assert
-            Assert.AreEqual("foo", result);
-            sourceMap.VerifyAllExpectations();
-        }
+			// Assert
+			Assert.AreEqual("foo", result);
+			sourceMap.VerifyAllExpectations();
+		}
 
-        [TestMethod]
-        public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
-        {
-            // Arrange
-            FunctionMapEntry functionMapEntry = new FunctionMapEntry
-            {
-                Bindings =
-                    new List<BindingInformation>
-                    {
-                        new BindingInformation
-                        {
-                            SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
-                        },
-                        new BindingInformation
-                        {
-                            SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
-                        }
-                    }
-            };
+		[TestMethod]
+		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
+		{
+			// Arrange
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry
+			{
+				Bindings =
+					new List<BindingInformation>
+					{
+						new BindingInformation
+						{
+							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
+						},
+						new BindingInformation
+						{
+							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
+						}
+					}
+			};
 
-            SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-            sourceMap.Stub(
-                x =>
-                    x.GetMappingEntryForGeneratedSourcePosition(
-                        Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
-                .Return(new MappingEntry
-                {
-                    OriginalName = "bar"
-                });
+			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			sourceMap.Stub(
+				x =>
+					x.GetMappingEntryForGeneratedSourcePosition(
+						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
+				.Return(new MappingEntry
+				{
+					OriginalName = "bar"
+				});
 
-            sourceMap.Stub(
-                x =>
-                    x.GetMappingEntryForGeneratedSourcePosition(
-                        Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
-                .Return(new MappingEntry
-                {
-                    OriginalName = "baz",
-                });
+			sourceMap.Stub(
+				x =>
+					x.GetMappingEntryForGeneratedSourcePosition(
+						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
+				.Return(new MappingEntry
+				{
+					OriginalName = "baz",
+				});
 
-            // Act
-            string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			// Act
+			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
-            // Assert
-            Assert.AreEqual("bar.baz", result);
-            sourceMap.VerifyAllExpectations();
-        }
-    }
+			// Assert
+			Assert.AreEqual("bar.baz", result);
+			sourceMap.VerifyAllExpectations();
+		}
+	}
 }
