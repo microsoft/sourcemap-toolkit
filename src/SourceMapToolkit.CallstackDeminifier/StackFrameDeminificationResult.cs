@@ -9,7 +9,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// <summary>
 	/// Enum indicating if there were any errors encountered when attempting to deminify the StakFrame.
 	/// </summary>
-	public enum DeminificationError
+	[Flags]
+	public enum  DeminificationError
 	{
 		/// <summary>
 		/// No error was encountered durring deminification of the StackFrame.

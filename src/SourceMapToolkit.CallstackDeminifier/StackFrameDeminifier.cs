@@ -32,32 +32,30 @@ namespace SourcemapToolkit.CallstackDeminifier
 			SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
 			SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
 
-			StackFrame result = base.DeminifyStackFrame(stackFrame);
-			StackFrame deobfuscatedFrame = new StackFrame();
-				else if (sourceMap == null)
+			StackFrameDeminificationResult result = base.DeminifyStackFrame(stackFrame);
+
+			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
+
+			if (generatedSourcePositionMappingEntry == null)
+			{
+				if (sourceMap == null)
 				{
-					deminificationResult.DeminificationError = DeminificationError.NoSourceMap;
+					result.DeminificationError |= DeminificationError.NoSourceMap;
 				}
 				else if (sourceMap.ParsedMappings == null)
 				{
-					deminificationResult.DeminificationError = DeminificationError.SourceMapFailedToParse;
+					result.DeminificationError |= DeminificationError.SourceMapFailedToParse;
 				}
 				else
 				{
-					deminificationResult.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
+					result.DeminificationError |= DeminificationError.NoMatchingMapingInSourceMap;
 				}
-
 			}
-			else
-			{
-				deminificationResult.DeminificationError = DeminificationError.NoWrapingFunction;
 
-			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
-			deobfuscatedFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-			deobfuscatedFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
-			deminificationResult.DeminifiedStackFrame = deobfuscatedFrame;
+			result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+			result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
 
-			return deminificationResult;
+			return result;
 		}
 	}
 }
