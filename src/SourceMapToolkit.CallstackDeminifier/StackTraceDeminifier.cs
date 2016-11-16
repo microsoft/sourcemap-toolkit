@@ -46,11 +46,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			DeminifyStackTraceResult result = new DeminifyStackTraceResult();
 			result.MinifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString);
-			result.DeminifiedStackFrames = new List<StackFrame>();
+			result.DeminifiedStackFrameResults = new List<StackFrameDeminificationResult>();
 
 			foreach (StackFrame minifiedStackFrame in result.MinifiedStackFrames)
 			{
-				result.DeminifiedStackFrames.Add(_stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame));
+				result.DeminifiedStackFrameResults.Add(_stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame));
 			}
 
 			return result;

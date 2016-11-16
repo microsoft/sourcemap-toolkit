@@ -25,7 +25,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// This method will deminify a single stack from from a minified stack trace.
 		/// </summary>
 		/// <returns>Returns a stack trace that has been translated to a best guess of the original source code. Any of the fields in the stack frame may be null</returns>
-		public StackFrame DeminifyStackFrame(StackFrame stackFrame)
+		public StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame)
 		{
 			if (stackFrame == null)
 			{
@@ -54,10 +54,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="wrappingFunction">The function that wraps the current stack frame location</param>
 		/// <param name="sourceMap">The relevant source map for this generated code</param>
 		/// <param name="generatedSourcePosition">The location that should be translated to original source code location in the deminified stack frame.</param>
-		/// <returns>Returns a StackFrame object with best guess values for each property. Any of the properties may be null if no match was found.</returns>
-		internal static StackFrame ExtractFrameInformationFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap, SourcePosition generatedSourcePosition)
+		/// <returns>Returns a StackFrameDeminificationResult object with a StackFrame that is the best guess values for each property. Any of the properties on the StackResult may be null if no match was found. The DeminificationError enum will provide information of any error cases hit.</returns>
+		internal static StackFrameDeminificationResult ExtractFrameInformationFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap, SourcePosition generatedSourcePosition)
 		{
-			StackFrame result = new StackFrame();
+			StackFrameDeminificationResult deminificationResult = new StackFrameDeminificationResult { DeminificationError = DeminificationError.None };
+			StackFrame deobfuscatedFrame = new StackFrame();
 
 			if (wrappingFunction?.Bindings != null && wrappingFunction.Bindings.Count > 0)
 			{
@@ -86,15 +87,33 @@ namespace SourcemapToolkit.CallstackDeminifier
 							methodName = mappingEntry.OriginalName;
 						}
 					}
-					result.MethodName = methodName;
+					deobfuscatedFrame.MethodName = methodName;
 				}
+				else if (sourceMap == null)
+				{
+					deminificationResult.DeminificationError = DeminificationError.NoSourceMap;
+				}
+				else if (sourceMap.ParsedMappings == null)
+				{
+					deminificationResult.DeminificationError = DeminificationError.SourceMapFailedToParse;
+				}
+				else
+				{
+					deminificationResult.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
+				}
+
+			}
+			else
+			{
+				deminificationResult.DeminificationError = DeminificationError.NoWrapingFunction;
 			}
 
 			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
-			result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-			result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+			deobfuscatedFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+			deobfuscatedFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+			deminificationResult.DeminifiedStackFrame = deobfuscatedFrame;
 
-			return result;
+			return deminificationResult;
 		}
 	}
 }

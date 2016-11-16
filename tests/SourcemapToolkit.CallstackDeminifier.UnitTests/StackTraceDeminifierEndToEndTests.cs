@@ -23,12 +23,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private static void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)
 		{
-			Assert.AreEqual(5, results.DeminifiedStackFrames.Count);
-			Assert.AreEqual("level3", results.DeminifiedStackFrames[0].MethodName);
-			Assert.AreEqual("level2", results.DeminifiedStackFrames[1].MethodName);
-			Assert.AreEqual("level1", results.DeminifiedStackFrames[2].MethodName);
-			Assert.AreEqual("causeCrash", results.DeminifiedStackFrames[3].MethodName);
-			Assert.AreEqual("window", results.DeminifiedStackFrames[4].MethodName);
+			Assert.AreEqual(5, results.DeminifiedStackFrameResults.Count);
+			Assert.AreEqual(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
+			Assert.AreEqual("level3", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("level2", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("level1", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("causeCrash", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("window", results.DeminifiedStackFrameResults[4].DeminifiedStackFrame.MethodName);
 		}
 
 		[TestMethod]

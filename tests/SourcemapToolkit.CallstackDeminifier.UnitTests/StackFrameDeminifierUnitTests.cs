@@ -38,7 +38,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackFrame stackFrame = null;
 
 			// Act
-			StackFrame deminifiedStackFrame = stackFrameDeminifier.DeminifyStackFrame(stackFrame);
+			StackFrameDeminificationResult stackFrameDeminification = stackFrameDeminifier.DeminifyStackFrame(stackFrame);
 		}
 
 		[TestMethod]
@@ -50,12 +50,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourcePosition generatedSourcePosition = null;
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.IsNull(deminifiedStackFrame.MethodName);
-			Assert.IsNull(deminifiedStackFrame.SourcePosition);
-			Assert.IsNull(deminifiedStackFrame.FilePath);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
 		[TestMethod]
@@ -67,10 +67,44 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourcePosition generatedSourcePosition = new SourcePosition();
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.IsNull(deminifiedStackFrame.MethodName);
+			Assert.AreEqual(DeminificationError.NoWrapingFunction, stackFrameDeminification.DeminificationError);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			sourceMap.VerifyAllExpectations();
+		}
+
+		[TestMethod]
+		public void ExtractFrameInformationFromSourceMap_HasSingleBindingSourceMapNotParsed_ReturnNullMethodName()
+		{
+			// Arrange
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry
+			{
+				Bindings =
+					new List<BindingInformation>
+					{
+						new BindingInformation
+						{
+							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
+						}
+					}
+			};
+
+			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
+			
+			// SourceMap failed to parse
+			sourceMap.ParsedMappings = null;
+
+			SourcePosition generatedSourcePosition = new SourcePosition();
+
+			// Act
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+
+			// Assert
+			Assert.AreEqual(DeminificationError.SourceMapFailedToParse, stackFrameDeminification.DeminificationError);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.MethodName);
 			sourceMap.VerifyAllExpectations();
 		}
 
@@ -92,14 +126,16 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
+			sourceMap.ParsedMappings = new List<MappingEntry>();
 
 			SourcePosition generatedSourcePosition = new SourcePosition();
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.IsNull(deminifiedStackFrame.MethodName);
+			Assert.AreEqual(DeminificationError.NoMatchingMapingInSourceMap, stackFrameDeminification.DeminificationError);
+			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.MethodName);
 			sourceMap.VerifyAllExpectations();
 		}
 
@@ -136,10 +172,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				});
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.AreEqual("foo", deminifiedStackFrame.MethodName);
+			Assert.AreEqual(DeminificationError.None, stackFrameDeminification.DeminificationError);
+			Assert.AreEqual("foo", stackFrameDeminification.DeminifiedStackFrame.MethodName);
 			sourceMap.VerifyAllExpectations();
 		}
 
@@ -185,10 +222,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				});
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.AreEqual("bar.baz", deminifiedStackFrame.MethodName);
+			Assert.AreEqual(DeminificationError.None, stackFrameDeminification.DeminificationError);
+			Assert.AreEqual("bar.baz", stackFrameDeminification.DeminifiedStackFrame.MethodName);
 			sourceMap.VerifyAllExpectations();
 		}
 
@@ -210,11 +248,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			});
 
 			// Act
-			StackFrame deminifiedStackFrame = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
+			StackFrameDeminificationResult stackFrameDeminification = StackFrameDeminifier.ExtractFrameInformationFromSourceMap(functionMapEntry, sourceMap, generatedSourcePosition);
 
 			// Assert
-			Assert.AreEqual(10, deminifiedStackFrame.SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(20, deminifiedStackFrame.SourcePosition.ZeroBasedLineNumber);
+			Assert.AreEqual(DeminificationError.NoWrapingFunction, stackFrameDeminification.DeminificationError);
+			Assert.AreEqual(10, stackFrameDeminification.DeminifiedStackFrame.SourcePosition.ZeroBasedColumnNumber);
+			Assert.AreEqual(20, stackFrameDeminification.DeminifiedStackFrame.SourcePosition.ZeroBasedLineNumber);
 		}
 	}
 }

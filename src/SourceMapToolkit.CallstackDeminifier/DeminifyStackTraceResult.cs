@@ -6,6 +6,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 	{
 		public List<StackFrame> MinifiedStackFrames;
 
-		public List<StackFrame> DeminifiedStackFrames;
+		public List<StackFrameDeminificationResult> DeminifiedStackFrameResults;
 	}
 }
