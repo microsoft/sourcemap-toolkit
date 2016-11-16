@@ -16,7 +16,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 			_functionMapStore = functionMapStore;
 			_functionMapConsumer = functionMapConsumer;
 		}
-
+		/// <summary>
+		/// This method will deminify the method name of a single stack from from a minified stack trace.
+		/// </summary>
 		public virtual StackFrame DeminifyStackFrame(StackFrame stackFrame)
 		{
 			if (stackFrame == null)

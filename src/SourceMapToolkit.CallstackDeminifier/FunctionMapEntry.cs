@@ -32,6 +32,10 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		public List<BindingInformation> Bindings { get; set; }
 		
+		/// <summary>
+		/// If this entry represents a function whose name was minified, this value 
+		/// may contain an associated deminfied name corresponding to the function.
+		/// </summary>
 		public string DeminfifiedMethodName { get; set; } 
 
 		/// <summary>

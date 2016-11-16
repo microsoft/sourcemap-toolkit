@@ -2,12 +2,12 @@
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
-    /// <summary>
-    /// This class is responsible for parsing a callstack string into
-    /// a list of StackFrame objects and providing the deminified version
-    /// of the stack frame.
-    /// </summary>
-    public class StackTraceDeminifier
+	/// <summary>
+	/// This class is responsible for parsing a callstack string into
+	/// a list of StackFrame objects and providing the deminified version
+	/// of the stack frame.
+	/// </summary>
+	public class StackTraceDeminifier
 	{
 		private readonly IStackFrameDeminifier _stackFrameDeminifier;
 		private readonly IStackTraceParser _stackTraceParser;
