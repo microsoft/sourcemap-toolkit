@@ -5,7 +5,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 {
     public class StackTraceDeminfierFactory
     {
-        private void ValidateArguments(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
+        private static void ValidateArguments(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
         {
             if (sourceMapProvider == null)
             {
@@ -23,7 +23,7 @@ namespace SourcemapToolkit.CallstackDeminifier
         /// </summary>
         /// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
         /// <param name="generatedCodeProvider">Consumers of the API should implement this interface, which provides the contents of a JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
-        public StackTraceDeminifier GetStackTraceDeminfier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
+        public static StackTraceDeminifier GetStackTraceDeminfier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
         {
             ValidateArguments(sourceMapProvider, generatedCodeProvider);
 
@@ -41,7 +41,7 @@ namespace SourcemapToolkit.CallstackDeminifier
         /// </summary>
         /// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
         /// <param name="generatedCodeProvider">Consumers of the API should implement this interface, which provides the contents of a JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
-        public StackTraceDeminifier GetMethodNameOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
+        public static StackTraceDeminifier GetMethodNameOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider)
         {
             ValidateArguments(sourceMapProvider, generatedCodeProvider);
 
