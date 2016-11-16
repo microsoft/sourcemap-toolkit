@@ -6,6 +6,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// <summary>
 	/// Class responsible for deminifying a single stack frame in a minified stack trace.
 	/// This method of deminification relies on a source map being available at runtime.
+	/// Since source maps take up a large amount of memory, this class consumes considerably 
+	/// more memory than SimpleStackFrame Deminifier during runtime.
 	/// </summary>
 	internal class StackFrameDeminifier : SimpleStackFrameDeminifier
 	{
