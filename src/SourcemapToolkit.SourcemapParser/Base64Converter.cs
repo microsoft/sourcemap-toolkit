@@ -32,5 +32,18 @@ namespace SourcemapToolkit.SourcemapParser
 
 			return result;
 		}
-	}
+
+        /// <summary>
+        /// Converts a integer to base64 value
+        /// </summary>
+        internal static char ToBase64(int value)
+        {
+            if (value < 0 || value >= Base64Alphabet.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+
+            return Base64Alphabet[value];
+        }
+    }
 }
