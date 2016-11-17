@@ -9,7 +9,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// <summary>
 	/// Enum indicating if there were any errors encountered when attempting to deminify the StakFrame.
 	/// </summary>
-	[Flags]
 	public enum  DeminificationError
 	{
 		/// <summary>
@@ -28,12 +27,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 		NoWrapingFunctionFound,
 
 		/// <summary>
-		/// There was an error when there was not a valid source map returned by ISourceMapProvider.GetSourceMapForUrl.
+		/// There was not a valid source map returned by ISourceMapProvider.GetSourceMapForUrl.
 		/// </summary>
 		NoSourceMap,
 
 		/// <summary>
-		/// There was not a mapping entry found for the source position of the minified stack frame.
+		/// A mapping entry was not found for the source position of the minified stack frame.
 		/// </summary>
 		NoMatchingMapingInSourceMap,
 

@@ -21,7 +21,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// This method will deminify a single stack from from a minified stack trace.
 		/// </summary>
-		/// <returns>Returns a stack trace that has been translated to a best guess of the original source code. Any of the fields in the stack frame may be null</returns>
+		/// <returns>Returns a StackFrameDeminificationEesult that contains a stack trace that has been translated to the original source code. The DeminificationError Property indicates if the StackFrame could not be deminified. DeminifiedStackFrame will not be null, but any properties of DeminifiedStackFrame could be null if the value could not be extracted. </returns>
 		public override StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame)
 		{
 			if (stackFrame == null)
