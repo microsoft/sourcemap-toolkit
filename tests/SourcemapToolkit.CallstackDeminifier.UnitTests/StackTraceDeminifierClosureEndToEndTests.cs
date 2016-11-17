@@ -25,11 +25,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)
 		{
-			Assert.AreEqual(4, results.DeminifiedStackFrames.Count);
-			Assert.AreEqual("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrames[0].MethodName);
-			Assert.AreEqual("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrames[1].MethodName);
-			Assert.AreEqual("GlobalFunction", results.DeminifiedStackFrames[2].MethodName);
-			Assert.AreEqual("window", results.DeminifiedStackFrames[3].MethodName);
+			Assert.AreEqual(4, results.DeminifiedStackFrameResults.Count);
+			Assert.AreEqual(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
+			Assert.AreEqual("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("GlobalFunction", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
+			Assert.AreEqual("window", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
 		}
 
 		[TestMethod]
