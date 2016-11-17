@@ -61,6 +61,7 @@ namespace SourcemapToolkit.SourcemapParser
         /// </summary>
         public string SerializeMapping(SourceMap sourceMap)
         {
+            return SerializeMapping( sourceMap, null /* jsonSerializerSettings */ );
         }
 
         /// <summary>
