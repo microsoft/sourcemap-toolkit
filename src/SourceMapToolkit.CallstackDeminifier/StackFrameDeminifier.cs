@@ -33,27 +33,30 @@ namespace SourcemapToolkit.CallstackDeminifier
 			SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
 
 			StackFrameDeminificationResult result = base.DeminifyStackFrame(stackFrame);
-
-			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
-
-			if (generatedSourcePositionMappingEntry == null)
+			if (result.DeminificationError == DeminificationError.None)
 			{
-				if (sourceMap == null)
-				{
-					result.DeminificationError = DeminificationError.NoSourceMap;
-				}
-				else if (sourceMap.ParsedMappings == null)
-				{
-					result.DeminificationError = DeminificationError.SourceMapFailedToParse;
-				}
-				else
-				{
-					result.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
-				}
-			}
+				MappingEntry generatedSourcePositionMappingEntry =
+					sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
 
-			result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-			result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+				if (generatedSourcePositionMappingEntry == null)
+				{
+					if (sourceMap == null)
+					{
+						result.DeminificationError = DeminificationError.NoSourceMap;
+					}
+					else if (sourceMap.ParsedMappings == null)
+					{
+						result.DeminificationError = DeminificationError.SourceMapFailedToParse;
+					}
+					else
+					{
+						result.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
+					}
+				}
+
+				result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+				result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+			}
 
 			return result;
 		}
