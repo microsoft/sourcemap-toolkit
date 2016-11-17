@@ -40,15 +40,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 			{
 				wrappingFunction =
 					_functionMapConsumer.GetWrappingFunctionForSourceLocation(stackFrame.SourcePosition, functionMap);
+
+				if (wrappingFunction == null)
+				{
+					result.DeminificationError = DeminificationError.NoWrapingFunctionFound;
+				}
 			}
 			else
 			{
-				result.DeminificationError |= DeminificationError.NoWrapingFunction;
-			}
-
-			if (wrappingFunction == null)
-			{
-				result.DeminificationError |= DeminificationError.NoMatchingMapingInSourceMap;
+				result.DeminificationError = DeminificationError.NoFunctionMapProvided;
 			}
 
 			result.DeminifiedStackFrame = new StackFrame {MethodName = wrappingFunction?.DeminfifiedMethodName};
