@@ -80,7 +80,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackFrameDeminificationResult stackFrameDeminification = stackFrameDeminifier.DeminifyStackFrame(stackFrame);
 
 			// Assert
-			Assert.AreEqual(DeminificationError.NoFunctionMapProvided, stackFrameDeminification.DeminificationError);
+			Assert.AreEqual(DeminificationError.NoSourceCodeProvided, stackFrameDeminification.DeminificationError);
 			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.MethodName);
 			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.IsNull(stackFrameDeminification.DeminifiedStackFrame.FilePath);
