@@ -48,16 +48,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 			else
 			{
-				result.DeminificationError = DeminificationError.NoSourceCodeProvided;
-			}
-			else
-			{
-				result.DeminificationError |= DeminificationError.NoWrapingFunction;
-			}
-
-			if (wrappingFunction == null)
-			{
-				result.DeminificationError |= DeminificationError.NoMatchingMapingInSourceMap;
+				result.DeminificationError = DeminificationError.NoFunctionMapProvided;
 			}
 
 			result.DeminifiedStackFrame = new StackFrame {MethodName = wrappingFunction?.DeminfifiedMethodName};

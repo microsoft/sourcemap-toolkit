@@ -18,9 +18,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 		None,
 
 		/// <summary>
+		/// There was no FunctionMap provided by the ISourceCodeProvider.
+		/// </summary>
+		NoFunctionMapProvided,
+
+		/// <summary>
 		/// The function that wraps the minified stack frame could not be determined.
 		/// </summary>
-		NoWrapingFunction,
+		NoWrapingFunctionFound,
 
 		/// <summary>
 		/// There was an error when there was not a valid source map returned by ISourceMapProvider.GetSourceMapForUrl.
