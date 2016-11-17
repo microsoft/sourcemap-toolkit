@@ -40,15 +40,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 			{
 				if (sourceMap == null)
 				{
-					result.DeminificationError |= DeminificationError.NoSourceMap;
+					result.DeminificationError = DeminificationError.NoSourceMap;
 				}
 				else if (sourceMap.ParsedMappings == null)
 				{
-					result.DeminificationError |= DeminificationError.SourceMapFailedToParse;
+					result.DeminificationError = DeminificationError.SourceMapFailedToParse;
 				}
 				else
 				{
-					result.DeminificationError |= DeminificationError.NoMatchingMapingInSourceMap;
+					result.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
 				}
 			}
 

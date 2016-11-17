@@ -17,9 +17,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 		None,
 
 		/// <summary>
-		/// There was no FunctionMap provided by the ISourceCodeProvider.
+		/// There was no source code provided by the ISourceCodeProvider.
 		/// </summary>
-		NoFunctionMapProvided,
+		NoSourceCodeProvided,
 
 		/// <summary>
 		/// The function that wraps the minified stack frame could not be determined.
