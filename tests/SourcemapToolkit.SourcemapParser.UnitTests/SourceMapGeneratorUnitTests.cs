@@ -12,23 +12,23 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
 
-			MappingGenerateState state = new MappingGenerateState( new List<string>() { "Name" }, new List<string>() { "Source" } );
+			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.LastGeneratedPosition.ZeroBasedColumnNumber = 1;
 
 			MappingEntry entry = new MappingEntry()
 			{
 				GeneratedSourcePosition = new SourcePosition() { ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
-				OriginalFileName = state.Sources[ 0 ],
-				OriginalName = state.Names[ 0 ],
+				OriginalFileName = state.Sources[0],
+				OriginalName = state.Names[0],
 				OriginalSourcePosition = new SourcePosition() { ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
 			};
 
 			// Act
 			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry( entry, state, output );
+			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
 
 			// Assert
-			Assert.IsTrue( output.IndexOf( ';' ) >= 0 );
+			Assert.IsTrue(output.IndexOf(';') >= 0);
 		}
 
 		[TestMethod]
@@ -37,7 +37,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
 
-			MappingGenerateState state = new MappingGenerateState( new List<string>() { "Name" }, new List<string>() { "Source" } );
+			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 
 			MappingEntry entry = new MappingEntry()
 			{
@@ -47,10 +47,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 			// Act
 			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry( entry, state, output );
+			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
 
 			// Assert
-			Assert.AreEqual( "U", new string( output.ToArray() ) );
+			Assert.AreEqual("U", new string(output.ToArray()));
 		}
 
 		[TestMethod]
@@ -59,7 +59,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
 
-			MappingGenerateState state = new MappingGenerateState( new List<string>() { "Name" }, new List<string>() { "Source" } );
+			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.IsFirstSegment = false;
 
 			MappingEntry entry = new MappingEntry()
@@ -71,10 +71,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 			// Act
 			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry( entry, state, output );
+			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
 
 			// Assert
-			Assert.AreEqual( ",UAAK", new string( output.ToArray() ) );
+			Assert.AreEqual(",UAAK", new string(output.ToArray()));
 		}
 
 		[TestMethod]
@@ -83,23 +83,23 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
 
-			MappingGenerateState state = new MappingGenerateState( new List<string>() { "Name" }, new List<string>() { "Source" } );
+			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.LastGeneratedPosition.ZeroBasedLineNumber = 1;
 
 			MappingEntry entry = new MappingEntry()
 			{
 				GeneratedSourcePosition = new SourcePosition() { ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 5 },
 				OriginalSourcePosition = new SourcePosition() { ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 6 },
-				OriginalFileName = state.Sources[ 0 ],
-				OriginalName = state.Names[ 0 ],
+				OriginalFileName = state.Sources[0],
+				OriginalName = state.Names[0],
 			};
 
 			// Act
 			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry( entry, state, output );
+			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
 
 			// Assert
-			Assert.AreEqual( "KACMA", new string( output.ToArray() ) );
+			Assert.AreEqual("KACMA", new string(output.ToArray()));
 		}
 
 		[TestMethod]
@@ -110,10 +110,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap input = null;
 
 			// Act
-			string output = sourceMapGenerator.SerializeMapping( input );
+			string output = sourceMapGenerator.SerializeMapping(input);
 
 			// Assert
-			Assert.IsNull( output );
+			Assert.IsNull(output);
 		}
 
 		[TestMethod]
@@ -152,10 +152,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			string output = sourceMapGenerator.SerializeMapping( input );
+			string output = sourceMapGenerator.SerializeMapping(input);
 
 			// Assert
-			Assert.AreEqual( "{\"version\":3,\"file\":\"CommonIntl\",\"mappings\":\"AACAA,aAAA,CAAc;\",\"sources\":[\"input/CommonIntl.js\"],\"names\":[\"CommonStrings\",\"afrikaans\"]}", output );
+			Assert.AreEqual("{\"version\":3,\"file\":\"CommonIntl\",\"mappings\":\"AACAA,aAAA,CAAc;\",\"sources\":[\"input/CommonIntl.js\"],\"names\":[\"CommonStrings\",\"afrikaans\"]}", output);
 		}
 	}
 }

@@ -11,10 +11,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Act
 			List<char> result = new List<char>();
-			Base64VlqEncoder.Encode( result, 15 );
+			Base64VlqEncoder.Encode(result, 15);
 
 			// Assert
-			Assert.AreEqual( "e", new string( result.ToArray() ) );
+			Assert.AreEqual("e", new string(result.ToArray()));
 		}
 
 		[TestMethod]
@@ -22,10 +22,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Act
 			List<char> result = new List<char>();
-			Base64VlqEncoder.Encode( result, 701 );
+			Base64VlqEncoder.Encode(result, 701);
 
 			// Assert
-			Assert.AreEqual( "6rB", new string( result.ToArray() ) );
+			Assert.AreEqual("6rB", new string(result.ToArray()));
 		}
 
 		[TestMethod]
@@ -33,10 +33,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Act
 			List<char> result = new List<char>();
-			Base64VlqEncoder.Encode( result, -15 );
+			Base64VlqEncoder.Encode(result, -15);
 
 			// Assert
-			Assert.AreEqual( "f", new string( result.ToArray() ) );
+			Assert.AreEqual("f", new string(result.ToArray()));
 		}
 
 	}

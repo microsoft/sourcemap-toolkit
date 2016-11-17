@@ -26,24 +26,24 @@ namespace SourcemapToolkit.SourcemapParser
 		{
 			int result;
 			if (!_base64DecodeMap.TryGetValue(base64Value, out result))
-			{ 
+			{
 				throw new ArgumentOutOfRangeException(nameof(base64Value), "Tried to convert an invalid base64 value");
 			}
 
 			return result;
 		}
 
-        /// <summary>
-        /// Converts a integer to base64 value
-        /// </summary>
-        internal static char ToBase64(int value)
-        {
-            if (value < 0 || value >= Base64Alphabet.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value));
-            }
+		/// <summary>
+		/// Converts a integer to base64 value
+		/// </summary>
+		internal static char ToBase64(int value)
+		{
+			if (value < 0 || value >= Base64Alphabet.Length)
+			{
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
 
-            return Base64Alphabet[value];
-        }
-    }
+			return Base64Alphabet[value];
+		}
+	}
 }

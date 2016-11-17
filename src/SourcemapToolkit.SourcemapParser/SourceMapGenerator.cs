@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -10,7 +9,7 @@ namespace SourcemapToolkit.SourcemapParser
 	/// Class to track the internal state during source map serialize
 	/// </summary>
 	internal class MappingGenerateState
-    {
+	{
 		/// <summary>
 		/// Last location of the code in the transformed code
 		/// </summary>
@@ -24,106 +23,106 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// List that contains the symbol names
 		/// </summary>
-        public readonly IList<string> Names;
+		public readonly IList<string> Names;
 
 		/// <summary>
 		/// List that contains the file sources
 		/// </summary>
-        public readonly IList<string> Sources;
+		public readonly IList<string> Sources;
 
 		/// <summary>
 		/// Index of last file source
 		/// </summary>
-        public int LastSourceIndex { get; set; }
+		public int LastSourceIndex { get; set; }
 
 		/// <summary>
 		/// Index of last symbol name
 		/// </summary>
-        public int LastNameIndex { get; set; }
+		public int LastNameIndex { get; set; }
 
 		/// <summary>
 		/// Whether this is the first segment in current line
 		/// </summary>
-        public bool IsFirstSegment { get; set; }
+		public bool IsFirstSegment { get; set; }
 
-        public MappingGenerateState(IList<string> names, IList<string> sources)
-        {
-            Names = names;
-            Sources = sources;
-            IsFirstSegment = true;
-        }
-    }
+		public MappingGenerateState(IList<string> names, IList<string> sources)
+		{
+			Names = names;
+			Sources = sources;
+			IsFirstSegment = true;
+		}
+	}
 
-    public class SourceMapGenerator
-    {
-        /// <summary>
-        /// Serialize SourceMap object to json string
-        /// </summary>
-        public string SerializeMapping(SourceMap sourceMap)
-        {
-            return SerializeMapping( sourceMap, null /* jsonSerializerSettings */ );
-        }
+	public class SourceMapGenerator
+	{
+		/// <summary>
+		/// Serialize SourceMap object to json string
+		/// </summary>
+		public string SerializeMapping(SourceMap sourceMap)
+		{
+			return SerializeMapping(sourceMap, null /* jsonSerializerSettings */ );
+		}
 
-        /// <summary>
-        /// Serialize SourceMap object to json string with given serialize settings
-        /// </summary>
-        public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings)
-        {
-            if (sourceMap == null)
-            {
+		/// <summary>
+		/// Serialize SourceMap object to json string with given serialize settings
+		/// </summary>
+		public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings)
+		{
+			if (sourceMap == null)
+			{
 				return null;
-            }
+			}
 
-            SourceMap mapToSerialize = new SourceMap()
-            {
-                File = sourceMap.File,
-                Names = sourceMap.Names,
-                Sources = sourceMap.Sources,
-                Version = sourceMap.Version,
-            };
+			SourceMap mapToSerialize = new SourceMap()
+			{
+				File = sourceMap.File,
+				Names = sourceMap.Names,
+				Sources = sourceMap.Sources,
+				Version = sourceMap.Version,
+			};
 
-            if (sourceMap.ParsedMappings != null && sourceMap.ParsedMappings.Count > 0)
-            {
-                MappingGenerateState state = new MappingGenerateState(sourceMap.Names, sourceMap.Sources);
-                List<char> output = new List<char>();
+			if (sourceMap.ParsedMappings != null && sourceMap.ParsedMappings.Count > 0)
+			{
+				MappingGenerateState state = new MappingGenerateState(sourceMap.Names, sourceMap.Sources);
+				List<char> output = new List<char>();
 
-                foreach (MappingEntry entry in sourceMap.ParsedMappings)
-                {
-                    SerializeMappingEntry(entry, state, output);
-                }
+				foreach (MappingEntry entry in sourceMap.ParsedMappings)
+				{
+					SerializeMappingEntry(entry, state, output);
+				}
 
-                output.Add(';');
+				output.Add(';');
 
-                mapToSerialize.Mappings = new string(output.ToArray());
-            }
+				mapToSerialize.Mappings = new string(output.ToArray());
+			}
 
-            return JsonConvert.SerializeObject(mapToSerialize,
-                jsonSerializerSettings ?? new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore,
-                });
-        }
+			return JsonConvert.SerializeObject(mapToSerialize,
+				jsonSerializerSettings ?? new JsonSerializerSettings
+				{
+					ContractResolver = new CamelCasePropertyNamesContractResolver(),
+					NullValueHandling = NullValueHandling.Ignore,
+				});
+		}
 
-        /// <summary>
-        /// Convert each mapping entry to VLQ encoded segments
-        /// </summary>
-        internal void SerializeMappingEntry(MappingEntry entry, MappingGenerateState state, ICollection<char> output)
-        {
-            // Each line of generated code is separated using semicolons
-            while (entry.GeneratedSourcePosition.ZeroBasedLineNumber != state.LastGeneratedPosition.ZeroBasedLineNumber)
-            {
-                state.LastGeneratedPosition.ZeroBasedColumnNumber = 0;
-                state.LastGeneratedPosition.ZeroBasedLineNumber++;
-                state.IsFirstSegment = true;
-                output.Add(';');
-            }
+		/// <summary>
+		/// Convert each mapping entry to VLQ encoded segments
+		/// </summary>
+		internal void SerializeMappingEntry(MappingEntry entry, MappingGenerateState state, ICollection<char> output)
+		{
+			// Each line of generated code is separated using semicolons
+			while (entry.GeneratedSourcePosition.ZeroBasedLineNumber != state.LastGeneratedPosition.ZeroBasedLineNumber)
+			{
+				state.LastGeneratedPosition.ZeroBasedColumnNumber = 0;
+				state.LastGeneratedPosition.ZeroBasedLineNumber++;
+				state.IsFirstSegment = true;
+				output.Add(';');
+			}
 
-            // The V3 source map format calls for all Base64 VLQ segments to be seperated by commas.
-            if (!state.IsFirstSegment)
-                output.Add(',');
+			// The V3 source map format calls for all Base64 VLQ segments to be seperated by commas.
+			if (!state.IsFirstSegment)
+				output.Add(',');
 
-            state.IsFirstSegment = false;
+			state.IsFirstSegment = false;
 
 			/*
 			 *	The following description was taken from the Sourcemap V3 spec https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/mobilebasic?pref=2&pli=1
@@ -149,38 +148,38 @@ namespace SourcemapToolkit.SourcemapParser
 			 *     is represented.
 			 */
 
-            Base64VlqEncoder.Encode(output, entry.GeneratedSourcePosition.ZeroBasedColumnNumber - state.LastGeneratedPosition.ZeroBasedColumnNumber);
-            state.LastGeneratedPosition.ZeroBasedColumnNumber = entry.GeneratedSourcePosition.ZeroBasedColumnNumber;
+			Base64VlqEncoder.Encode(output, entry.GeneratedSourcePosition.ZeroBasedColumnNumber - state.LastGeneratedPosition.ZeroBasedColumnNumber);
+			state.LastGeneratedPosition.ZeroBasedColumnNumber = entry.GeneratedSourcePosition.ZeroBasedColumnNumber;
 
-            if (entry.OriginalFileName != null)
-            {
-                int sourceIndex = state.Sources.IndexOf(entry.OriginalFileName);
-                if (sourceIndex < 0)
-                {
+			if (entry.OriginalFileName != null)
+			{
+				int sourceIndex = state.Sources.IndexOf(entry.OriginalFileName);
+				if (sourceIndex < 0)
+				{
 					throw new SerializationException("Source map contains original source that cannot be found in provided sources array");
-                }
+				}
 
-                Base64VlqEncoder.Encode(output, sourceIndex - state.LastSourceIndex);
-                state.LastSourceIndex = sourceIndex;
+				Base64VlqEncoder.Encode(output, sourceIndex - state.LastSourceIndex);
+				state.LastSourceIndex = sourceIndex;
 
-                Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedLineNumber - state.LastOriginalPosition.ZeroBasedLineNumber);
-                state.LastOriginalPosition.ZeroBasedLineNumber = entry.OriginalSourcePosition.ZeroBasedLineNumber;
+				Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedLineNumber - state.LastOriginalPosition.ZeroBasedLineNumber);
+				state.LastOriginalPosition.ZeroBasedLineNumber = entry.OriginalSourcePosition.ZeroBasedLineNumber;
 
-                Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedColumnNumber - state.LastOriginalPosition.ZeroBasedColumnNumber);
-                state.LastOriginalPosition.ZeroBasedColumnNumber = entry.OriginalSourcePosition.ZeroBasedColumnNumber;
+				Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedColumnNumber - state.LastOriginalPosition.ZeroBasedColumnNumber);
+				state.LastOriginalPosition.ZeroBasedColumnNumber = entry.OriginalSourcePosition.ZeroBasedColumnNumber;
 
-                if (entry.OriginalName != null)
-                {
-                    int nameIndex = state.Names.IndexOf(entry.OriginalName);
+				if (entry.OriginalName != null)
+				{
+					int nameIndex = state.Names.IndexOf(entry.OriginalName);
 					if (nameIndex < 0)
 					{
 						throw new SerializationException("Source map contains original name that cannot be found in provided names array");
 					}
 
 					Base64VlqEncoder.Encode(output, nameIndex - state.LastNameIndex);
-                    state.LastNameIndex = nameIndex;
-                }
-            }
-        }
-    }
+					state.LastNameIndex = nameIndex;
+				}
+			}
+		}
+	}
 }
