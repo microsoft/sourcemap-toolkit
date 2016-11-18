@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -56,21 +57,13 @@ namespace SourcemapToolkit.SourcemapParser
 	public class SourceMapGenerator
 	{
 		/// <summary>
-		/// Serialize SourceMap object to json string
-		/// </summary>
-		public string SerializeMapping(SourceMap sourceMap)
-		{
-			return SerializeMapping(sourceMap, null /* jsonSerializerSettings */ );
-		}
-
-		/// <summary>
 		/// Serialize SourceMap object to json string with given serialize settings
 		/// </summary>
-		public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings)
+		public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings = null)
 		{
 			if (sourceMap == null)
 			{
-				return null;
+				throw new ArgumentNullException(nameof(sourceMap));
 			}
 
 			SourceMap mapToSerialize = new SourceMap()
