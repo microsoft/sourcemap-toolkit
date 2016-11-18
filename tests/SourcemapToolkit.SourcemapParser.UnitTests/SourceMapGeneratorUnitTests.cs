@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
@@ -54,7 +55,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void SerializeMappingEntry_WithOriginalFileNameNoOriginalName_FourSegment()
+		public void SerializeMappingEntry_WithOriginalFileNameNoOriginalName_FourSegments()
 		{
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
@@ -78,7 +79,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void SerializeMappingEntry_WithOriginalFileNameAndOriginalName_FiveSegment()
+		public void SerializeMappingEntry_WithOriginalFileNameAndOriginalName_FiveSegments()
 		{
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
@@ -103,7 +104,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		[TestMethod]
-		public void SerializeMapping_NullInput_ReturnsNull()
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void SerializeMapping_NullInput_ThrowsException()
 		{
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
@@ -111,9 +113,6 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 			// Act
 			string output = sourceMapGenerator.SerializeMapping(input);
-
-			// Assert
-			Assert.IsNull(output);
 		}
 
 		[TestMethod]

@@ -4,6 +4,78 @@ This is a C# library for working with JavaScript source maps and deminifying Jav
 ## Source Map Parsing
 The `SourcemapToolkit.SourcemapParser.dll` provides an API for parsing a souce map into an object that is easy to work with and an API for serializing source map object back to json string. 
 The source map class has a method `GetMappingEntryForGeneratedSourcePosition`, which can be used to find a source map mapping entry that likely corresponds to a piece of generated code. 
+### Example
+#### Source map string
+```
+{
+    "version": 3,
+    "file": "CommonIntl",
+    "mappings": "AACAA,aAAA,CAAc",
+    "sources": ["CommonIntl.js"],
+    "names": ["CommonStrings", "afrikaans"]
+}
+```
+#### Sample source map object
+|Name|Value|Type
+|--- | --- | ---
+|map&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|{SourcemapToolkit.SourcemapParser.SourceMap}|SourcemapToolkit.SourcemapParser.SourceMap
+|&nbsp;\|--File|"CommonIntl"|string
+|&nbsp;\|--Mappings|"AACAA,aAAA,CAAc"|string
+|&nbsp;\|--Names|Count=2|System.Collections.Generic.List<string>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[0]|"CommonStrings"|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[1]|"afrikaans"|string
+|&nbsp;\|--ParsedMappings|Count=3|System.Collections.Generic.List<SourcemapToolkit.SourcemapParser.MappingEntry>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[0]|{SourcemapToolkit.SourcemapParser.MappingEntry}|SourcemapToolkit.SourcemapParser.MappingEntry
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--GeneratedSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalFileName|"CommonIntl.js"|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalName|"CommonStrings"|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|1|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[1]|{SourcemapToolkit.SourcemapParser.MappingEntry}|SourcemapToolkit.SourcemapParser.MappingEntry
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--GeneratedSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|13|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalFileName|"CommonIntl.js"|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalName|null|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|1|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[2]|{SourcemapToolkit.SourcemapParser.MappingEntry}|SourcemapToolkit.SourcemapParser.MappingEntry
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--GeneratedSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|14|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|0|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalFileName|"CommonIntl.js"|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalName|null|string
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--OriginalSourcePosition|{SourcemapToolkit.SourcemapParser.SourcePosition}|SourcemapToolkit.SourcemapParser.SourcePosition
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedColumnNumber|14|int
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--ZeroBasedLineNumber|1|int
+|&nbsp;\|--Sources|Count=1|System.Collections.Generic.List<string>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[0]|"CommonIntl.js"|string
+### Usage
+The top level API for source map parsing is the `SourceMapParser.ParseSourceMap` method. The input is a `StreamReader` that can be used to access the contents of the source map.
+The top level API for source map serializing is the `SourceMapGenerator.SerializeMapping` method. The input is a `SourceMap` that to be serialized and an optional JsonSerializerSettings that can be used to control the json serialization.
+A sample usage of the library is shown below.
+
+```csharp
+// Parse the source map from file
+SourceMapParser parser = new SourceMapParser();
+SourceMap sourceMap;
+using (FileStream stream = new FileStream(@"sample.sourcemap", FileMode.Open))
+{
+    sourceMap = parser.ParseSourceMap(new StreamReader(stream));
+}
+
+// Manipulate the source map
+...
+
+// Save to source map to file
+SourceMapGenerator generator = new SourceMapGenerator();
+string serializedMap = generator.SerializeMapping(sourceMap);
+File.WriteAllText(@"updatedSample.sourcemap", serializedMap);
+```
 
 ## Call Stack Deminification
 The `SourcemapToolkit.CallstackDeminifier.dll` allows for the deminification of JavaScript call stacks. 
