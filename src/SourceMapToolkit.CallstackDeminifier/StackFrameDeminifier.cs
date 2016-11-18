@@ -21,8 +21,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// This method will deminify a single stack from from a minified stack trace.
 		/// </summary>
-		/// <returns>Returns a stack trace that has been translated to a best guess of the original source code. Any of the fields in the stack frame may be null</returns>
-		public override StackFrame DeminifyStackFrame(StackFrame stackFrame)
+		/// <returns>Returns a StackFrameDeminificationResult that contains a stack trace that has been translated to the original source code. The DeminificationError Property indicates if the StackFrame could not be deminified. DeminifiedStackFrame will not be null, but any properties of DeminifiedStackFrame could be null if the value could not be extracted. </returns>
+		public override StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame)
 		{
 			if (stackFrame == null)
 			{
@@ -32,11 +32,31 @@ namespace SourcemapToolkit.CallstackDeminifier
 			SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
 			SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
 
-			StackFrame result = base.DeminifyStackFrame(stackFrame);
+			StackFrameDeminificationResult result = base.DeminifyStackFrame(stackFrame);
+			if (result.DeminificationError == DeminificationError.None)
+			{
+				MappingEntry generatedSourcePositionMappingEntry =
+					sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
 
-			MappingEntry generatedSourcePositionMappingEntry = sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
-			result.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-			result.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+				if (generatedSourcePositionMappingEntry == null)
+				{
+					if (sourceMap == null)
+					{
+						result.DeminificationError = DeminificationError.NoSourceMap;
+					}
+					else if (sourceMap.ParsedMappings == null)
+					{
+						result.DeminificationError = DeminificationError.SourceMapFailedToParse;
+					}
+					else
+					{
+						result.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
+					}
+				}
+
+				result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
+				result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
+			}
 
 			return result;
 		}
