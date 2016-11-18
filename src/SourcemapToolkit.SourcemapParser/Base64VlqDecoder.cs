@@ -26,16 +26,6 @@ namespace SourcemapToolkit.SourcemapParser
 	/// </summary>
 	internal static class Base64VlqDecoder
 	{
-		// A Base64 VLQ digit can represent 5 bits, so it is base-32.
-		private const int VlqBaseShift = 5;
-		private const int VlqBase = 1 << VlqBaseShift;
-
-		// A mask of bits for a VLQ digit (11111), 31 decimal.
-		private static readonly int VlqBaseMask = VlqBase - 1;
-
-		// The continuation bit is the 6th bit.
-		private static readonly int VlqContinuationBit = VlqBase;
-
 		/// <summary>
 		/// Converts to a two-complement value from a value where the sign bit is
 		/// is placed in the least significant bit.For example, as decimals:
@@ -103,10 +93,10 @@ namespace SourcemapToolkit.SourcemapParser
 			{
 				char c = charProvider.GetNextCharacter();
 				int digit = Base64Converter.FromBase64(c);
-				continuation = (digit & VlqContinuationBit) != 0;
-				digit &= VlqBaseMask;
+				continuation = (digit & Base64VlqConstants.VlqContinuationBit) != 0;
+				digit &= Base64VlqConstants.VlqBaseMask;
 				result = result + (digit << shift);
-				shift = shift + VlqBaseShift;
+				shift = shift + Base64VlqConstants.VlqBaseShift;
 			} while (continuation);
 
 			return FromVlqSigned(result);

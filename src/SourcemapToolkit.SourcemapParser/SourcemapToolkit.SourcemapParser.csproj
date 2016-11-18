@@ -52,11 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base64Converter.cs" />
+    <Compile Include="Base64VlqConstants.cs" />
     <Compile Include="Base64VlqDecoder.cs" />
+    <Compile Include="Base64VlqEncoder.cs" />
     <Compile Include="MappingEntry.cs" />
     <Compile Include="MappingListParser.cs" />
     <Compile Include="SourceMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceMapGenerator.cs" />
     <Compile Include="SourceMapParser.cs" />
     <Compile Include="SourcePosition.cs" />
   </ItemGroup>

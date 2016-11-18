@@ -33,5 +33,31 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Act
 			Base64Converter.FromBase64('@');
 		}
+
+		[TestMethod]
+		public void ToBase64_ValidIntegerInput61_CorrectBase64Output9()
+		{
+			// Act
+			char value = Base64Converter.ToBase64(61);
+
+			// Assert
+			Assert.AreEqual('9', value);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ToBase64_NegativeIntegerInput_ThrowsException()
+		{
+			// Act
+			Base64Converter.ToBase64(-1);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ToBase64_InvalidIntegerInput_ThrowsException()
+		{
+			// Act
+			Base64Converter.ToBase64(64);
+		}
 	}
 }
