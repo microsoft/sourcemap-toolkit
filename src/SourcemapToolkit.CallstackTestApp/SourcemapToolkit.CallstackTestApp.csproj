@@ -67,9 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="closurecrashcauser.js" />
+    <Content Include="closurecrashcauser.minified.js" />
     <Content Include="crashcauser.js" />
     <Content Include="Index.html" />
     <Content Include="packages.config" />
+    <Content Include="closurecrashcauser.sourcemap" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
