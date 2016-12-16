@@ -19,7 +19,10 @@
     }
 
     window.onerror = function (message, source, lineno, colno, error) {
-        document.getElementById("callstackdisplay").innerText = error.stack;
+        if (error)
+            document.getElementById("callstackdisplay").innerText = error.stack;
+        else if (window.event.error)
+            document.getElementById("callstackdisplay").innerText = window.event.error.stack;
     }
 
     level1();
