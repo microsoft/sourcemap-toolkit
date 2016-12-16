@@ -11,7 +11,7 @@ level1
 causeCrash
 window
 ```
-## Javascript minified using Google Closure (closureCrashCauser.minified.js)
+## Javascript minified using Google Closure (ClosureCrashCauser.minified.js)
 Closurecrashcauser.js is minified with Google Closure. The minified version of the javascript and the sourcemap are generated manually and are part of the source code (closurecrashcauser.minified.js and cclosurecrashcauser.sourcemap). The deminified stackframe should look similar to the following
 
 ```
