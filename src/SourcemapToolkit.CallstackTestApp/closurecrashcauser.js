@@ -13,7 +13,10 @@ window["foo"]["bar2"] = mynamespace.objectWithMethods.propertyMethodLevel2;
 window["bar"] = GlobalFunction;
 
 window.onerror = function (message, source, lineno, colno, error) {
-    document.getElementById("callstackdisplay").innerText = error.stack;
+    if (error)
+        document.getElementById("callstackdisplay").innerText = error.stack;
+    else if (window.event.error)
+        document.getElementById("callstackdisplay").innerText = window.event.error.stack;
 }
 
 window.onload = function (event) {
