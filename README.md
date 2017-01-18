@@ -1,4 +1,4 @@
-# Source Map Toolkit [![Build status](https://ci.appveyor.com/api/projects/status/8ydsci6e4v80n6c0?svg=true)](https://ci.appveyor.com/project/thomabr/sourcemap-toolkit)
+# Source Map Toolkit [![Build status](https://ci.appveyor.com/api/projects/status/e6crgc02lq65bjeg?svg=true)](https://ci.appveyor.com/project/thomabr/sourcemap-toolkit-3tfu6)
 This is a C# library for working with JavaScript source maps and deminifying JavaScript callstacks.
 
 ## Source Map Parsing
