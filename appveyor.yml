@@ -3,6 +3,11 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
+after_build:
+- cmd: nuget pack Package.nuspec -version %APPVEYOR_BUILD_VERSION%
+artifacts:
+- path: '*.nupkg'
+  name: Nuget
 deploy:
   provider: NuGet
   api_key:
