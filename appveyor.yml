@@ -11,6 +11,9 @@ artifacts:
   name: Nuget
 deploy:
   provider: NuGet
+  name: NuGetPublish
+  on:
+    branch: master
   api_key:
     secure: VxJJuMVMYg0P+dDEYt5RkUm9WES+KdcrCNJNdDfImOQCJzZNhEWNty6jALgvgPFC
   artifact: /.*\.nupkg/
