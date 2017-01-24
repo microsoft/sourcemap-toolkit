@@ -1,0 +1,19 @@
+version: 1.0.{build}
+configuration: Release
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+after_build:
+- cmd: nuget pack Package.nuspec -version %APPVEYOR_BUILD_VERSION%
+artifacts:
+- path: '*.nupkg'
+  name: Nuget
+deploy:
+  provider: NuGet
+  name: NuGetPublish
+  on:
+    branch: master
+  api_key:
+    secure: VxJJuMVMYg0P+dDEYt5RkUm9WES+KdcrCNJNdDfImOQCJzZNhEWNty6jALgvgPFC
+  artifact: /.*\.nupkg/
