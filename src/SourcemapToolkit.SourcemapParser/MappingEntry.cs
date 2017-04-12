@@ -34,5 +34,14 @@ namespace SourcemapToolkit.SourcemapParser
                 OriginalName = this.OriginalName
             };
         }
+
+        public Boolean IsValueEqual(MappingEntry anEntry)
+        {
+            return (
+                this.OriginalName == anEntry.OriginalName &&
+                this.OriginalFileName == anEntry.OriginalFileName &&
+                this.GeneratedSourcePosition.CompareTo(anEntry.GeneratedSourcePosition) == 0 &&
+                this.OriginalSourcePosition.CompareTo(anEntry.OriginalSourcePosition) == 0);
+        }
     }
 }
