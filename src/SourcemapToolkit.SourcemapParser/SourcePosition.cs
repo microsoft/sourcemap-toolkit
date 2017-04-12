@@ -2,34 +2,34 @@
 
 namespace SourcemapToolkit.SourcemapParser
 {
-	/// <summary>
-	/// Identifies the location of a piece of code in a JavaScript file
-	/// </summary>
-	public class SourcePosition : IComparable<SourcePosition>
-	{
-		public int ZeroBasedLineNumber;
+    /// <summary>
+    /// Identifies the location of a piece of code in a JavaScript file
+    /// </summary>
+    public class SourcePosition : IComparable<SourcePosition>, ICloneable
+    {
+        public int ZeroBasedLineNumber;
 
-		public int ZeroBasedColumnNumber;
+        public int ZeroBasedColumnNumber;
 
-		public int CompareTo(SourcePosition other)
-		{
-			if (this.ZeroBasedLineNumber == other.ZeroBasedLineNumber)
-			{
-				return this.ZeroBasedColumnNumber.CompareTo(other.ZeroBasedColumnNumber);
-			}
+        public int CompareTo(SourcePosition other)
+        {
+            if (this.ZeroBasedLineNumber == other.ZeroBasedLineNumber)
+            {
+                return this.ZeroBasedColumnNumber.CompareTo(other.ZeroBasedColumnNumber);
+            }
 
-			return this.ZeroBasedLineNumber.CompareTo(other.ZeroBasedLineNumber);
-		}
+            return this.ZeroBasedLineNumber.CompareTo(other.ZeroBasedLineNumber);
+        }
 
-		public static bool operator <(SourcePosition x, SourcePosition y)
-		{
-			return x.CompareTo(y) < 0;
-		}
+        public static bool operator <(SourcePosition x, SourcePosition y)
+        {
+            return x.CompareTo(y) < 0;
+        }
 
-		public static bool operator >(SourcePosition x, SourcePosition y)
-		{
-			return x.CompareTo(y) > 0;
-		}
+        public static bool operator >(SourcePosition x, SourcePosition y)
+        {
+            return x.CompareTo(y) > 0;
+        }
 
         /// <summary>
         /// Returns true if we think that the two source positions are close enough together that they may in fact be the referring to the same piece of code.
@@ -57,5 +57,14 @@ namespace SourcemapToolkit.SourcemapParser
 
             return false;
         }
-	}
+
+        public object Clone()
+        {
+            return new SourcePosition
+            {
+                ZeroBasedLineNumber = this.ZeroBasedLineNumber,
+                ZeroBasedColumnNumber = this.ZeroBasedColumnNumber
+            };
+        }
+    }
 }

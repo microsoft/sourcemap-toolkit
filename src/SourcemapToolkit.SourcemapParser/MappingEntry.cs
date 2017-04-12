@@ -1,6 +1,8 @@
-﻿namespace SourcemapToolkit.SourcemapParser
+﻿using System;
+
+namespace SourcemapToolkit.SourcemapParser
 {
-    public class MappingEntry
+    public class MappingEntry: ICloneable
     {
         /// <summary>
         /// The location of the line of code in the transformed code
@@ -21,5 +23,16 @@
         /// The name of the file that originally contained this code
         /// </summary>
         public string OriginalFileName;
+
+        public object Clone()
+        {
+            return new MappingEntry
+            {
+                GeneratedSourcePosition = this.GeneratedSourcePosition as SourcePosition,
+                OriginalSourcePosition = this.OriginalSourcePosition as SourcePosition,
+                OriginalFileName = this.OriginalFileName,
+                OriginalName = this.OriginalName
+            };
+        }
     }
 }

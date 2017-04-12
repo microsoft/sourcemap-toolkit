@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -38,12 +39,81 @@ namespace SourcemapToolkit.SourcemapParser
         /// Applies the mappings of a sub source map to the current source map
         /// Each mapping to the supplied source file is rewritten using the supplied source map
         /// <param name="submap">The submap to apply</param>
-        /// <param name="sourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
+        /// <param name="aSourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
         /// <returns>A new source map</returns>
         /// </summary>
-        public SourceMap ApplySourceMap(SourceMap submap, string sourceFile = null)
+        public SourceMap ApplySourceMap(SourceMap submap, string aSourceFile = null)
         {
-            return null;
+            if (submap == null)
+            {
+                throw new ArgumentNullException(nameof(submap));
+            }
+
+            string sourceFile = aSourceFile;
+            if (sourceFile == null)
+            {
+                if (submap.File == null)
+                {
+                    throw new Exception("ApplySourceMap expects either the explicit source file to the map, or submap's 'file' property");
+                }
+
+                sourceFile = submap.File;
+            }
+
+            List<string> newSources = new List<string>();
+            List<string> newNames = new List<string>();
+            List<MappingEntry> newMappingEntries = new List<MappingEntry>();
+
+            SourceMap newSourceMap = new SourceMap
+            {
+                File = this.File,
+                Version = this.Version,
+                Sources = newSources,
+                Names = newNames,
+                ParsedMappings = newMappingEntries
+            };
+
+            // transform mappings in this source map
+            foreach (MappingEntry mappingEntry in this.ParsedMappings)
+            {
+                MappingEntry newMappingEntry = mappingEntry.Clone() as MappingEntry;
+                SourcePosition original = mappingEntry.OriginalSourcePosition;
+
+                if (mappingEntry.OriginalFileName == sourceFile && original != null)
+                {
+                    MappingEntry correspondingEntry = submap.GetMappingEntryForGeneratedSourcePosition(original);
+
+                    if (correspondingEntry != null)
+                    {
+                        // Copy the mapping
+                        newMappingEntry = new MappingEntry
+                        {
+                            GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition.Clone() as SourcePosition,
+                            OriginalSourcePosition = correspondingEntry.OriginalSourcePosition.Clone() as SourcePosition,
+                            OriginalName = correspondingEntry.OriginalName?? mappingEntry.OriginalName,
+                            OriginalFileName = correspondingEntry.OriginalFileName?? mappingEntry.OriginalFileName
+                        };
+                    }
+                }
+
+                // Copy into "Sources" and "Names"
+                string originalFileName = newMappingEntry.OriginalFileName;
+                string originalName = newMappingEntry.OriginalName;
+
+                if (originalFileName != null && !newSources.Contains(originalFileName))
+                {
+                    newSources.Add(originalFileName);
+                }
+
+                if (originalName != null && !newNames.Contains(originalName))
+                {
+                    newNames.Add(originalName);
+                }
+
+                newMappingEntries.Add(newMappingEntry);
+            };
+
+            return newSourceMap;
         }
 
         /// <summary>
