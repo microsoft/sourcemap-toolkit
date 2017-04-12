@@ -2,50 +2,62 @@
 
 namespace SourcemapToolkit.SourcemapParser
 {
-	public class SourceMap
-	{
-		/// <summary>
-		/// The version of the source map specification being used
-		/// </summary>
-		public int Version;
+    public class SourceMap
+    {
+        /// <summary>
+        /// The version of the source map specification being used
+        /// </summary>
+        public int Version;
 
-		/// <summary>
-		/// The name of the generated file to which this source map corresponds
-		/// </summary>
-		public string File;
+        /// <summary>
+        /// The name of the generated file to which this source map corresponds
+        /// </summary>
+        public string File;
 
-		/// <summary>
-		/// The raw, unparsed mappings entry of the soure map
-		/// </summary>
-		public string Mappings;
+        /// <summary>
+        /// The raw, unparsed mappings entry of the soure map
+        /// </summary>
+        public string Mappings;
 
-		/// <summary>
-		/// The list of source files that were the inputs used to generate this output file
-		/// </summary>
-		public List<string> Sources;
+        /// <summary>
+        /// The list of source files that were the inputs used to generate this output file
+        /// </summary>
+        public List<string> Sources;
 
-		/// <summary>
-		/// A list of known original names for entries in this file
-		/// </summary>
-		public List<string> Names;
+        /// <summary>
+        /// A list of known original names for entries in this file
+        /// </summary>
+        public List<string> Names;
 
-		/// <summary>
-		/// Parsed version of the mappings string that is used for getting original names and source positions
-		/// </summary>
-		public List<MappingEntry> ParsedMappings;
+        /// <summary>
+        /// Parsed version of the mappings string that is used for getting original names and source positions
+        /// </summary>
+        public List<MappingEntry> ParsedMappings;
 
-		/// <summary>
-		/// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt 
-		/// to return a nearby mapping that should map to the same piece of code.
-		/// </summary>
-		/// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
-		/// <returns>A mapping entry that is a close match for the desired generated code location</returns>
-		public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
-		{
-			if (ParsedMappings == null)
-			{
-				return null;
-			}
+        /// <summary>
+        /// Applies the mappings of a sub source map to the current source map
+        /// Each mapping to the supplied source file is rewritten using the supplied source map
+        /// <param name="submap">The submap to apply</param>
+        /// <param name="sourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
+        /// <returns>A new source map</returns>
+        /// </summary>
+        public SourceMap ApplySourceMap(SourceMap submap, string sourceFile = null)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt
+        /// to return a nearby mapping that should map to the same piece of code.
+        /// </summary>
+        /// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
+        /// <returns>A mapping entry that is a close match for the desired generated code location</returns>
+        public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+        {
+            if (ParsedMappings == null)
+            {
+                return null;
+            }
 
             MappingEntry mappingEntryToFind = new MappingEntry
             {
@@ -67,6 +79,11 @@ namespace SourcemapToolkit.SourcemapParser
             }
 
             return index >= 0 ? ParsedMappings[index] : null;
-		}
-	}
+        }
+
+        public static SourceMap CombineMaps(List<SourceMap> maps)
+        {
+            return null;
+        }
+    }
 }
