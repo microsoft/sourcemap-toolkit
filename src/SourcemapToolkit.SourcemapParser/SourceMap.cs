@@ -38,8 +38,10 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Applies the mappings of a sub source map to the current source map
 		/// Each mapping to the supplied source file is rewritten using the supplied source map
+        /// This is useful in situations where we have a to b to c, with mappings ba.map and cb.map
+        /// Calling cb.ApplySourceMap(ba) will return mappings from c to a (ca)
 		/// <param name="submap">The submap to apply</param>
-		/// <param name="aSourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
+		/// <param name="sourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
 		/// <returns>A new source map</returns>
 		/// </summary>
 		public SourceMap ApplySourceMap(SourceMap submap, string sourceFile = null)
@@ -71,21 +73,21 @@ namespace SourcemapToolkit.SourcemapParser
 			// transform mappings in this source map
 			foreach (MappingEntry mappingEntry in this.ParsedMappings)
 			{
-				MappingEntry newMappingEntry = mappingEntry.Clone() as MappingEntry;
+				MappingEntry newMappingEntry = mappingEntry.Clone();
 
 				if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.OriginalSourcePosition != null)
 				{
-					MappingEntry correspondingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
+					MappingEntry correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
 
-					if (correspondingEntry != null)
+					if (correspondingSubMapMappingEntry != null)
 					{
 						// Copy the mapping
 						newMappingEntry = new MappingEntry
 						{
-							GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition.Clone() as SourcePosition,
-							OriginalSourcePosition = correspondingEntry.OriginalSourcePosition.Clone() as SourcePosition,
-							OriginalName = correspondingEntry.OriginalName?? mappingEntry.OriginalName,
-							OriginalFileName = correspondingEntry.OriginalFileName?? mappingEntry.OriginalFileName
+							GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition.Clone(),
+							OriginalSourcePosition = correspondingSubMapMappingEntry.OriginalSourcePosition.Clone(),
+							OriginalName = correspondingSubMapMappingEntry.OriginalName?? mappingEntry.OriginalName,
+							OriginalFileName = correspondingSubMapMappingEntry.OriginalFileName?? mappingEntry.OriginalFileName
 						};
 					}
 				}

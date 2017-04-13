@@ -5,7 +5,7 @@ namespace SourcemapToolkit.SourcemapParser
     /// <summary>
     /// Identifies the location of a piece of code in a JavaScript file
     /// </summary>
-    public class SourcePosition : IComparable<SourcePosition>, ICloneable
+    public class SourcePosition : IComparable<SourcePosition>
     {
         public int ZeroBasedLineNumber;
 
@@ -58,7 +58,7 @@ namespace SourcemapToolkit.SourcemapParser
             return false;
         }
 
-        public object Clone()
+        public SourcePosition Clone()
         {
             return new SourcePosition
             {

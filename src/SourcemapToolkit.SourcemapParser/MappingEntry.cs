@@ -2,7 +2,7 @@
 
 namespace SourcemapToolkit.SourcemapParser
 {
-	public class MappingEntry: ICloneable
+	public class MappingEntry
 	{
 		/// <summary>
 		/// The location of the line of code in the transformed code
@@ -24,7 +24,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public string OriginalFileName;
 
-		public object Clone()
+		public MappingEntry Clone()
 		{
 			return new MappingEntry
 			{
