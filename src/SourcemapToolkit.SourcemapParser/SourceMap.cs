@@ -42,14 +42,13 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <param name="aSourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
 		/// <returns>A new source map</returns>
 		/// </summary>
-		public SourceMap ApplySourceMap(SourceMap submap, string aSourceFile = null)
+		public SourceMap ApplySourceMap(SourceMap submap, string sourceFile = null)
 		{
 			if (submap == null)
 			{
 				throw new ArgumentNullException(nameof(submap));
 			}
 
-			string sourceFile = aSourceFile;
 			if (sourceFile == null)
 			{
 				if (submap.File == null)
@@ -60,28 +59,23 @@ namespace SourcemapToolkit.SourcemapParser
 				sourceFile = submap.File;
 			}
 
-			List<string> newSources = new List<string>();
-			List<string> newNames = new List<string>();
-			List<MappingEntry> newMappingEntries = new List<MappingEntry>();
-
 			SourceMap newSourceMap = new SourceMap
 			{
 				File = this.File,
 				Version = this.Version,
-				Sources = newSources,
-				Names = newNames,
-				ParsedMappings = newMappingEntries
-			};
+				Sources = new List<string>(),
+				Names = new List<string>(),
+				ParsedMappings = new List<MappingEntry>()
+            };
 
 			// transform mappings in this source map
 			foreach (MappingEntry mappingEntry in this.ParsedMappings)
 			{
 				MappingEntry newMappingEntry = mappingEntry.Clone() as MappingEntry;
-				SourcePosition original = mappingEntry.OriginalSourcePosition;
 
-				if (mappingEntry.OriginalFileName == sourceFile && original != null)
+				if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.OriginalSourcePosition != null)
 				{
-					MappingEntry correspondingEntry = submap.GetMappingEntryForGeneratedSourcePosition(original);
+					MappingEntry correspondingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
 
 					if (correspondingEntry != null)
 					{
@@ -100,17 +94,17 @@ namespace SourcemapToolkit.SourcemapParser
 				string originalFileName = newMappingEntry.OriginalFileName;
 				string originalName = newMappingEntry.OriginalName;
 
-				if (originalFileName != null && !newSources.Contains(originalFileName))
+				if (originalFileName != null && !newSourceMap.Sources.Contains(originalFileName))
 				{
-					newSources.Add(originalFileName);
+                    newSourceMap.Sources.Add(originalFileName);
 				}
 
-				if (originalName != null && !newNames.Contains(originalName))
+				if (originalName != null && !newSourceMap.Names.Contains(originalName))
 				{
-					newNames.Add(originalName);
+                    newSourceMap.Names.Add(originalName);
 				}
 
-				newMappingEntries.Add(newMappingEntry);
+                newSourceMap.ParsedMappings.Add(newMappingEntry);
 			};
 
 			return newSourceMap;
