@@ -217,7 +217,42 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.IsTrue(firstMapping.IsValueEqual(parentMapping));
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public void ApplyMap_NoMatchingMappings_ReturnsSameMap()
+        {
+            // Arrange
+            SourcePosition generated1 = generateSourcePosition(lineNumber: 2, colNumber:2);
+            SourcePosition original1 = generateSourcePosition(lineNumber: 1, colNumber:10);
+            MappingEntry childMapping = getSimpleEntry(generated1, original1, "sourceTwo.js");
+
+            SourceMap childMap = new SourceMap
+            {
+                File = "sourceOne.js",
+                Sources = new List<string> { "sourceTwo.js" },
+                ParsedMappings = new List<MappingEntry> { childMapping }
+            };
+
+            SourcePosition generated2 = generateSourcePosition(lineNumber:3, colNumber:4);
+            SourcePosition original2 = generateSourcePosition(lineNumber:2, colNumber:5);
+            MappingEntry parentMapping = getSimpleEntry(generated2, original2, "sourceOne.js");
+
+            SourceMap parentMap = new SourceMap
+            {
+                File = "generated.js",
+                Sources = new List<string> { "sourceOne.js" },
+                ParsedMappings = new List<MappingEntry> { parentMapping }
+            };
+
+            // Act
+            SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
+
+            // Assert
+            Assert.IsNotNull(combinedMap);
+            MappingEntry firstMapping = combinedMap.ParsedMappings[0];
+            Assert.IsTrue(firstMapping.IsValueEqual(parentMapping));
+        }
+
+        [TestMethod]
 		public void ApplyMap_MatchingSources_ReturnsCorrectMap()
 		{
             // Expect mapping with same source filename as the applied source-map to be replaced
