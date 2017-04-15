@@ -77,6 +77,42 @@ string serializedMap = generator.SerializeMapping(sourceMap);
 File.WriteAllText(@"updatedSample.sourcemap", serializedMap);
 ```
 
+### Chaining source maps
+A common use case when dealing with source maps is multiple mapping layers. You can use `ApplySourceMap` to chain maps together to link back to the source
+
+```csharp
+SourcePosition inOriginal = new SourcePosition { ZeroBasedLineNumber = 34, ZeroBasedColumnNumber = 23 };
+SourcePosition inBundled = new SourcePosition { ZeroBasedLineNumber = 23, ZeroBasedColumnNumber = 12 };
+SourcePosition inMinified = new SourcePosition { ZeroBasedLineNumber = 3, ZeroBasedColumnNumber = 2 };
+
+MappingEntry originalToBundledEntry = new MappingEntry {
+  GeneratedSourcePosition = inBundled,
+  OriginalSourcePosition = inOriginal,
+  OriginalFileName = "original.js"
+};
+
+MappingEntry bundledToMinifiedEntry = new MappingEntry {
+  GeneratedSourcePosition = inMinified,
+  OriginalSourcePosition = inBundled,
+  OriginalFileName = "bundle.js"
+};
+
+SourceMap bundledToOriginal = new SourceMap { 
+  File = "bundled.js",
+  Sources = new List<string> { "original.js" },
+  ParsedMappings = new List<MappingEntry> { originalToBundledEntry } 
+}
+
+SourceMap minifiedToBundled = new SourceMap { 
+  File = "bundled.min.js",
+  Sources = new List<string> { "bundled.js" },
+  ParsedMappings = new List<MappingEntry> { bundledToMinifiedEntry }
+}
+
+// will contain mapping for line 3, column 2 in the minified file to line 34, column 23 in the original file
+SourceMap minifiedToOriginal = minifiedToBundled.ApplySourceMap(bundledToOriginal);
+```
+
 ## Call Stack Deminification
 The `SourcemapToolkit.CallstackDeminifier.dll` allows for the deminification of JavaScript call stacks. 
 ### Example
