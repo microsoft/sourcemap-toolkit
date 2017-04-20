@@ -384,5 +384,97 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
 			Assert.AreEqual(0, rootMapping.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
 		}
-	}
+
+        [TestMethod]
+        public void FlattenMap_ReturnsOnlyLineInformation()
+        {
+            // Arrange
+            SourcePosition generated1 = generateSourcePosition(lineNumber: 1, colNumber: 2);
+            SourcePosition original1 = generateSourcePosition(lineNumber: 2, colNumber: 2);
+            MappingEntry mappingEntry = getSimpleEntry(generated1, original1, "sourceOne.js");
+
+            SourceMap map = new SourceMap
+            {
+                File = "generated.js",
+                Sources = new List<string> { "sourceOne.js" },
+                ParsedMappings = new List<MappingEntry> { mappingEntry }
+            };
+
+            // Act
+            SourceMap linesOnlyMap = map.Flatten();
+
+            // Assert
+            Assert.IsNotNull(linesOnlyMap);
+            Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
+            Assert.AreEqual(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedColumnNumber);
+        }
+
+        [TestMethod]
+        public void FlattenMap_MultipleMappingsSameLine_ReturnsOnlyOneMappingPerLine()
+        {
+            // Arrange
+            SourcePosition generated1 = generateSourcePosition(lineNumber: 1, colNumber: 2);
+            SourcePosition original1 = generateSourcePosition(lineNumber: 2, colNumber: 2);
+            MappingEntry mappingEntry = getSimpleEntry(generated1, original1, "sourceOne.js");
+
+            SourcePosition generated2 = generateSourcePosition(lineNumber: 1, colNumber: 5);
+            SourcePosition original2 = generateSourcePosition(lineNumber: 2, colNumber: 5);
+            MappingEntry mappingEntry2 = getSimpleEntry(generated2, original2, "sourceOne.js");
+
+            SourceMap map = new SourceMap
+            {
+                File = "generated.js",
+                Sources = new List<string> { "sourceOne.js" },
+                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 }
+            };
+
+            // Act
+            SourceMap linesOnlyMap = map.Flatten();
+
+            // Assert
+            Assert.IsNotNull(linesOnlyMap);
+            Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
+            Assert.AreEqual(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedColumnNumber);
+        }
+
+        [TestMethod]
+        public void FlattenMap_MultipleOriginalLineToSameGeneratedLine_ReturnsFirstOriginalLine()
+        {
+            // Arrange
+            SourcePosition generated1 = generateSourcePosition(lineNumber: 1, colNumber: 2);
+            SourcePosition original1 = generateSourcePosition(lineNumber: 2, colNumber: 2);
+            MappingEntry mappingEntry = getSimpleEntry(generated1, original1, "sourceOne.js");
+
+            SourcePosition generated2 = generateSourcePosition(lineNumber: 1, colNumber: 3);
+            SourcePosition original2 = generateSourcePosition(lineNumber: 3, colNumber: 5);
+            MappingEntry mappingEntry2 = getSimpleEntry(generated2, original2, "sourceOne.js");
+
+            SourceMap map = new SourceMap
+            {
+                File = "generated.js",
+                Sources = new List<string> { "sourceOne.js" },
+                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 }
+            };
+
+            // Act
+            SourceMap linesOnlyMap = map.Flatten();
+
+            // Assert
+            Assert.IsNotNull(linesOnlyMap);
+            Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
+            Assert.AreEqual(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);
+            Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedColumnNumber);
+        }
+    }
 }
