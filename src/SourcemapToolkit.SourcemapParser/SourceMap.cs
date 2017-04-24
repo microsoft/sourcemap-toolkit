@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -112,42 +111,6 @@ namespace SourcemapToolkit.SourcemapParser
 
 			return newSourceMap;
 		}
-
-        /// <summary>
-        /// Removes column information from a source map
-        /// This can significantly reduce the size of source maps, if line numbers are correct
-        /// <returns>A new source map</returns>
-        /// </summary>
-        public SourceMap Flatten()
-        {
-            SourceMap newMap = new SourceMap
-            {
-                File = this.File,
-                Version = this.Version,
-                Mappings = this.Mappings == null ? null: this.Mappings.Clone() as string,
-                Sources = this.Sources == null ? null: this.Sources.Select(s => s).ToList(),
-                Names = this.Names == null ? null: this.Names.Select(s => s).ToList(),
-                ParsedMappings = new List<MappingEntry>()
-            };
-
-            HashSet<int> visitedLines = new HashSet<int>();
-
-            foreach (MappingEntry mapping in this.ParsedMappings)
-            {
-                int generatedLine = mapping.GeneratedSourcePosition.ZeroBasedLineNumber;
-
-                if (!visitedLines.Contains(generatedLine))
-                {
-                    visitedLines.Add(generatedLine);
-                    var newMapping = mapping.Clone();
-                    newMapping.GeneratedSourcePosition.ZeroBasedColumnNumber = 0;
-                    newMapping.OriginalSourcePosition.ZeroBasedColumnNumber = 0;
-                    newMap.ParsedMappings.Add(newMapping);
-                }
-            }
-
-            return newMap;
-        }
 
         /// <summary>
         /// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt

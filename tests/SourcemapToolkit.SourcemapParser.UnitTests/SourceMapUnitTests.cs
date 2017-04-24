@@ -401,7 +401,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             };
 
             // Act
-            SourceMap linesOnlyMap = map.Flatten();
+            SourceMap linesOnlyMap = SourceMapTransformer.Flatten(map);
 
             // Assert
             Assert.IsNotNull(linesOnlyMap);
@@ -433,7 +433,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             };
 
             // Act
-            SourceMap linesOnlyMap = map.Flatten();
+            SourceMap linesOnlyMap = SourceMapTransformer.Flatten(map);
 
             // Assert
             Assert.IsNotNull(linesOnlyMap);
@@ -465,7 +465,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             };
 
             // Act
-            SourceMap linesOnlyMap = map.Flatten();
+            SourceMap linesOnlyMap = SourceMapTransformer.Flatten(map);
 
             // Assert
             Assert.IsNotNull(linesOnlyMap);
