@@ -28,8 +28,8 @@ namespace SourcemapToolkit.SourcemapParser
 		{
 			return new MappingEntry
 			{
-				GeneratedSourcePosition = this.GeneratedSourcePosition as SourcePosition,
-				OriginalSourcePosition = this.OriginalSourcePosition as SourcePosition,
+				GeneratedSourcePosition = this.GeneratedSourcePosition.Clone(),
+				OriginalSourcePosition = this.OriginalSourcePosition.Clone(),
 				OriginalFileName = this.OriginalFileName,
 				OriginalName = this.OriginalName
 			};

@@ -112,12 +112,12 @@ namespace SourcemapToolkit.SourcemapParser
 			return newSourceMap;
 		}
 
-		/// <summary>
-		/// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt
-		/// to return a nearby mapping that should map to the same piece of code.
-		/// </summary>
-		/// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
-		/// <returns>A mapping entry that is a close match for the desired generated code location</returns>
+        /// <summary>
+        /// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt
+        /// to return a nearby mapping that should map to the same piece of code.
+        /// </summary>
+        /// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
+        /// <returns>A mapping entry that is a close match for the desired generated code location</returns>
         public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
         {
             if (ParsedMappings == null)
