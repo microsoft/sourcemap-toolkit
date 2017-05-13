@@ -120,41 +120,74 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
-			SourceMap input = new SourceMap()
-			{
-				File = "CommonIntl",
-				Names = new List<string>() { "CommonStrings", "afrikaans" },
-				Sources = new List<string>() { "input/CommonIntl.js" },
-				Version = 3,
-			};
-			input.ParsedMappings = new List<MappingEntry>()
-			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 0 },
-					OriginalFileName = input.Sources[0],
-					OriginalName = input.Names[0],
-					OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
-				},
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 13 },
-					OriginalFileName = input.Sources[0],
-					OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
-				},
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 14 },
-					OriginalFileName = input.Sources[0],
-					OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 14 },
-				},
-			};
+            SourceMap input = this.GetSimpleSourceMap();
 
-			// Act
-			string output = sourceMapGenerator.SerializeMapping(input);
+            // Act
+            string output = sourceMapGenerator.SerializeMapping(input);
 
 			// Assert
 			Assert.AreEqual("{\"version\":3,\"file\":\"CommonIntl\",\"mappings\":\"AACAA,aAAA,CAAc;\",\"sources\":[\"input/CommonIntl.js\"],\"names\":[\"CommonStrings\",\"afrikaans\"]}", output);
 		}
-	}
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SerializeMappingIntoBast64_NullInput_ThrowsException()
+        {
+            // Arrange
+            SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
+            SourceMap input = null;
+
+            // Act
+            string output = sourceMapGenerator.GenerateSourceMapInlineComment(input);
+        }
+
+        [TestMethod]
+        public void SerializeMappingBase64_SimpleSourceMap_CorrectlySerialized()
+        {
+            // Arrange
+            SourceMapGenerator sourceMapGenerator = new SourceMapGenerator();
+            SourceMap input = this.GetSimpleSourceMap();
+
+            // Act
+            string output = sourceMapGenerator.GenerateSourceMapInlineComment(input);
+
+            // Assert
+            Assert.AreEqual("//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29tbW9uSW50bCIsIm1hcHBpbmdzIjoiQUFDQUEsYUFBQSxDQUFjOyIsInNvdXJjZXMiOlsiaW5wdXQvQ29tbW9uSW50bC5qcyJdLCJuYW1lcyI6WyJDb21tb25TdHJpbmdzIiwiYWZyaWthYW5zIl19", output);
+        }
+
+        private SourceMap GetSimpleSourceMap()
+        {
+            SourceMap input = new SourceMap()
+            {
+                File = "CommonIntl",
+                Names = new List<string>() { "CommonStrings", "afrikaans" },
+                Sources = new List<string>() { "input/CommonIntl.js" },
+                Version = 3,
+            };
+            input.ParsedMappings = new List<MappingEntry>()
+            {
+                new MappingEntry
+                {
+                    GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 0 },
+                    OriginalFileName = input.Sources[0],
+                    OriginalName = input.Names[0],
+                    OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
+                },
+                new MappingEntry
+                {
+                    GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 13 },
+                    OriginalFileName = input.Sources[0],
+                    OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 0 },
+                },
+                new MappingEntry
+                {
+                    GeneratedSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 0, ZeroBasedColumnNumber = 14 },
+                    OriginalFileName = input.Sources[0],
+                    OriginalSourcePosition = new SourcePosition() {ZeroBasedLineNumber = 1, ZeroBasedColumnNumber = 14 },
+                },
+            };
+
+            return input;
+        }
+    }
 }

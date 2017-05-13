@@ -56,10 +56,23 @@ namespace SourcemapToolkit.SourcemapParser
 
 	public class SourceMapGenerator
 	{
-		/// <summary>
-		/// Serialize SourceMap object to json string with given serialize settings
-		/// </summary>
-		public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings = null)
+        /// <summary>
+        /// Convenience wrapper around SerializeMapping, but returns a base 64 encoded string instead
+        /// </summary>
+        public string GenerateSourceMapInlineComment(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            string mappings = SerializeMapping(sourceMap, jsonSerializerSettings);
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(mappings);
+            var encoded = Convert.ToBase64String(bytes);
+
+            return @"//# sourceMappingURL=data:application/json;base64," + encoded;
+        }
+
+
+        /// <summary>
+        /// Serialize SourceMap object to json string with given serialize settings
+        /// </summary>
+        public string SerializeMapping(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings = null)
 		{
 			if (sourceMap == null)
 			{
