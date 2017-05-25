@@ -70,6 +70,7 @@
     <Compile Include="MappingsListParserUnitTests.cs" />
     <Compile Include="SourceMapGeneratorUnitTests.cs" />
     <Compile Include="SourceMapParserUnitTests.cs" />
+    <Compile Include="SourceMapTransformerUnitTests.cs" />
     <Compile Include="SourceMapUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
     <Compile Include="UnitTestUtils.cs" />
