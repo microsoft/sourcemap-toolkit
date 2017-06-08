@@ -1,22 +1,7 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 configuration: Release
-install:
-- cmd: appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
-after_build:
-- cmd: nuget pack Package.nuspec -version %APPVEYOR_BUILD_VERSION%
-artifacts:
-- path: '*.nupkg'
-  name: Nuget
-deploy:
-  provider: NuGet
-  name: NuGetPublish
-  on:
-    branch: master
-  api_key:
-    secure: 5zR9ArA5gxPfkSEe61zkt3KgivFXNgXWmyQOctUxnabDmL99xBeLyhanR+bgvMKu
-  artifact: /.*\.nupkg/
