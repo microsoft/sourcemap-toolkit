@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -34,6 +35,19 @@ namespace SourcemapToolkit.SourcemapParser
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
+
+        public SourceMap Clone()
+        {
+            return new SourceMap
+            {
+                Version = this.Version,
+                File = this.File,
+                Mappings = this.Mappings,
+                Sources = new List<string>(this.Sources),
+                Names = new List<string>(this.Names),
+                ParsedMappings = new List<MappingEntry>(this.ParsedMappings.Select(m => m.Clone()))
+            };
+        }
 
 		/// <summary>
 		/// Applies the mappings of a sub source map to the current source map
