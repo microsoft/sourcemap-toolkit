@@ -36,6 +36,11 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public List<MappingEntry> ParsedMappings;
 
+		/// <summary>
+		/// A list of content source files
+		/// </summary>
+		public List<string> SourcesContent;
+		
         public SourceMap Clone()
         {
             return new SourceMap
@@ -45,6 +50,7 @@ namespace SourcemapToolkit.SourcemapParser
                 Mappings = this.Mappings,
                 Sources = new List<string>(this.Sources),
                 Names = new List<string>(this.Names),
+	            SourcesContent = new List<string>(this.SourcesContent),
                 ParsedMappings = new List<MappingEntry>(this.ParsedMappings.Select(m => m.Clone()))
             };
         }
@@ -81,6 +87,7 @@ namespace SourcemapToolkit.SourcemapParser
 				Version = this.Version,
 				Sources = new List<string>(),
 				Names = new List<string>(),
+				SourcesContent = new List<string>(),
 				ParsedMappings = new List<MappingEntry>()
             };
 

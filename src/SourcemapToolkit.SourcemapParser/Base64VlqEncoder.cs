@@ -20,12 +20,14 @@ using System.Collections.Generic;
 
 namespace SourcemapToolkit.SourcemapParser
 {
+	using System.Text;
+
 	/// <summary>
 	/// This class provides a mechanism for converting an interger to Base64 Variable-length quantity (VLQ)
 	/// </summary>
 	internal static class Base64VlqEncoder
 	{
-		public static void Encode(ICollection<char> output, int value)
+		public static void Encode(StringBuilder output, int value)
 		{
 			int vlq = ToVlqSigned(value);
 
@@ -37,7 +39,7 @@ namespace SourcemapToolkit.SourcemapParser
 				{
 					maskResult |= Base64VlqConstants.VlqContinuationBit;
 				}
-				output.Add(Base64Converter.ToBase64(maskResult));
+				output.Append(Base64Converter.ToBase64(maskResult));
 			} while (vlq > 0);
 		}
 

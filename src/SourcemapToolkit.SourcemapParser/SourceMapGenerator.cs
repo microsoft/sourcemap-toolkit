@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 
 namespace SourcemapToolkit.SourcemapParser
 {
+	using System.Linq;
+	using System.Text;
+
 	/// <summary>
 	/// Class to track the internal state during source map serialize
 	/// </summary>
@@ -85,21 +88,22 @@ namespace SourcemapToolkit.SourcemapParser
 				Names = sourceMap.Names,
 				Sources = sourceMap.Sources,
 				Version = sourceMap.Version,
+				SourcesContent = sourceMap.SourcesContent
 			};
 
 			if (sourceMap.ParsedMappings != null && sourceMap.ParsedMappings.Count > 0)
 			{
 				MappingGenerateState state = new MappingGenerateState(sourceMap.Names, sourceMap.Sources);
-				List<char> output = new List<char>();
+				StringBuilder output = new StringBuilder();
 
 				foreach (MappingEntry entry in sourceMap.ParsedMappings)
 				{
 					SerializeMappingEntry(entry, state, output);
 				}
 
-				output.Add(';');
+				output.Append(';');
 
-				mapToSerialize.Mappings = new string(output.ToArray());
+				mapToSerialize.Mappings = output.ToString();
 			}
 
 			return JsonConvert.SerializeObject(mapToSerialize,
@@ -113,20 +117,25 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Convert each mapping entry to VLQ encoded segments
 		/// </summary>
-		internal void SerializeMappingEntry(MappingEntry entry, MappingGenerateState state, ICollection<char> output)
+		internal void SerializeMappingEntry(MappingEntry entry, MappingGenerateState state, StringBuilder output)
 		{
+			if (state.LastGeneratedPosition.ZeroBasedLineNumber > entry.GeneratedSourcePosition.ZeroBasedLineNumber)
+			{
+				throw new InvalidOperationException($"Invalid sourmap detected. Please check the line {entry.GeneratedSourcePosition.ZeroBasedLineNumber}");
+			}
+			
 			// Each line of generated code is separated using semicolons
 			while (entry.GeneratedSourcePosition.ZeroBasedLineNumber != state.LastGeneratedPosition.ZeroBasedLineNumber)
 			{
 				state.LastGeneratedPosition.ZeroBasedColumnNumber = 0;
 				state.LastGeneratedPosition.ZeroBasedLineNumber++;
 				state.IsFirstSegment = true;
-				output.Add(';');
+				output.Append(';');
 			}
 
 			// The V3 source map format calls for all Base64 VLQ segments to be seperated by commas.
 			if (!state.IsFirstSegment)
-				output.Add(',');
+				output.Append(',');
 
 			state.IsFirstSegment = false;
 

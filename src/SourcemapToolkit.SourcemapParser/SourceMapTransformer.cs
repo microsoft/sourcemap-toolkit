@@ -18,6 +18,7 @@ namespace SourcemapToolkit.SourcemapParser
                 Version = sourceMap.Version,
                 Mappings = sourceMap.Mappings,
                 Sources = sourceMap.Sources == null ? null : new List<string>(sourceMap.Sources),
+                SourcesContent = sourceMap.SourcesContent == null ? null : new List<string>(sourceMap.SourcesContent),
                 Names = sourceMap.Names == null ? null : new List<string>(sourceMap.Names),
                 ParsedMappings = new List<MappingEntry>()
             };
