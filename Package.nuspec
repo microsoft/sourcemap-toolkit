@@ -4,11 +4,12 @@
     <id>SourceMapToolkit</id>
     <version>$version$</version>
     <authors>Microsoft</authors>
-    <owners>Microsoft</owners>
+    <owners>Microsoft,Office Online</owners>
     <projectUrl>https://github.com/Microsoft/sourcemap-toolkit</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<licenseUrl>https://github.com/christiango/sourcemap-toolkit/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A C# library that allows for the consumption of source maps and the deminification of JavaScript stack traces</description>
-    <copyright>Copyright 2016</copyright>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
     <tags>sourcemap callstack stackframe deminify</tags>
     <dependencies>
       <dependency id="AjaxMin" version="5.14.5506.26202" />
