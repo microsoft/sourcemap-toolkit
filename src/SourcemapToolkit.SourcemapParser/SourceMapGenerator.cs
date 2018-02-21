@@ -3,11 +3,10 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace SourcemapToolkit.SourcemapParser
 {
-	using System.Linq;
-	using System.Text;
 
 	/// <summary>
 	/// Class to track the internal state during source map serialize

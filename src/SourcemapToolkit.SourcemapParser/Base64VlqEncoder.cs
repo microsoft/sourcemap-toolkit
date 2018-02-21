@@ -16,12 +16,10 @@
  * limitations under the License.
 */
 
-using System.Collections.Generic;
+using System.Text;
 
 namespace SourcemapToolkit.SourcemapParser
 {
-	using System.Text;
-
 	/// <summary>
 	/// This class provides a mechanism for converting an interger to Base64 Variable-length quantity (VLQ)
 	/// </summary>
