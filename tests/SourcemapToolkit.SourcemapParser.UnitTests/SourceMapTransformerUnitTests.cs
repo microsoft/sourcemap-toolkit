@@ -23,7 +23,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             {
                 File = "generated.js",
                 Sources = new List<string> { "sourceOne.js" },
-                ParsedMappings = new List<MappingEntry> { mappingEntry }
+                ParsedMappings = new List<MappingEntry> { mappingEntry },
+                SourcesContent = new List<string>{"var a = b"}
             };
 
             // Act
@@ -32,6 +33,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             // Assert
             Assert.IsNotNull(linesOnlyMap);
             Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.SourcesContent.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
@@ -55,7 +57,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             {
                 File = "generated.js",
                 Sources = new List<string> { "sourceOne.js" },
-                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 }
+                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 },
+                SourcesContent = new List<string>{"var a = b"}
             };
 
             // Act
@@ -64,6 +67,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             // Assert
             Assert.IsNotNull(linesOnlyMap);
             Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.SourcesContent.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
@@ -87,7 +91,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             {
                 File = "generated.js",
                 Sources = new List<string> { "sourceOne.js" },
-                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 }
+                ParsedMappings = new List<MappingEntry> { mappingEntry, mappingEntry2 },
+                SourcesContent = new List<string>{"var a = b"}
             };
 
             // Act
@@ -96,6 +101,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             // Assert
             Assert.IsNotNull(linesOnlyMap);
             Assert.AreEqual(1, linesOnlyMap.Sources.Count);
+            Assert.AreEqual(1, linesOnlyMap.SourcesContent.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings.Count);
             Assert.AreEqual(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.AreEqual(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);

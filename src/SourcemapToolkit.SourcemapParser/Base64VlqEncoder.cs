@@ -16,7 +16,7 @@
  * limitations under the License.
 */
 
-using System.Collections.Generic;
+using System.Text;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -25,7 +25,7 @@ namespace SourcemapToolkit.SourcemapParser
 	/// </summary>
 	internal static class Base64VlqEncoder
 	{
-		public static void Encode(ICollection<char> output, int value)
+		public static void Encode(StringBuilder output, int value)
 		{
 			int vlq = ToVlqSigned(value);
 
@@ -37,7 +37,7 @@ namespace SourcemapToolkit.SourcemapParser
 				{
 					maskResult |= Base64VlqConstants.VlqContinuationBit;
 				}
-				output.Add(Base64Converter.ToBase64(maskResult));
+				output.Append(Base64Converter.ToBase64(maskResult));
 			} while (vlq > 0);
 		}
 

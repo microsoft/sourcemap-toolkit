@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
@@ -25,11 +26,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
+			var result = new StringBuilder();
+			sourceMapGenerator.SerializeMappingEntry(entry, state, result);
 
 			// Assert
-			Assert.IsTrue(output.IndexOf(';') >= 0);
+			Assert.IsTrue(result.ToString().IndexOf(';') >= 0);
 		}
 
 		[TestMethod]
@@ -47,11 +48,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
+			var result = new StringBuilder();
+			sourceMapGenerator.SerializeMappingEntry(entry, state, result);
 
 			// Assert
-			Assert.AreEqual("U", new string(output.ToArray()));
+			Assert.AreEqual("U", result.ToString());
 		}
 
 		[TestMethod]
@@ -71,11 +72,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
+			var result = new StringBuilder();
+			sourceMapGenerator.SerializeMappingEntry(entry, state, result);
 
 			// Assert
-			Assert.AreEqual(",UAAK", new string(output.ToArray()));
+			Assert.AreEqual(",UAAK", result.ToString());
 		}
 
 		[TestMethod]
@@ -96,11 +97,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			List<char> output = new List<char>();
-			sourceMapGenerator.SerializeMappingEntry(entry, state, output);
+			var result = new StringBuilder();
+			sourceMapGenerator.SerializeMappingEntry(entry, state, result);
 
 			// Assert
-			Assert.AreEqual("KACMA", new string(output.ToArray()));
+			Assert.AreEqual("KACMA", result.ToString());
 		}
 
 		[TestMethod]
