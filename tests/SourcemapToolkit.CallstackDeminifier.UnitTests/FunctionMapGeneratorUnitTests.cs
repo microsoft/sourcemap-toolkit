@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using SourcemapToolkit.SourcemapParser.UnitTests;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class FunctionMapGeneratorUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void GenerateFunctionMap_NullSourceMap_ReturnsNull()
 		{
 			// Arrange
@@ -21,11 +21,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
 
 			// Assert
-			Assert.IsNull(functionMap);
+			Assert.Null(functionMap);
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_NullInput_ReturnsNull()
 		{
 			// Arrange
@@ -35,10 +35,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null);
 
 			// Assert
-			Assert.IsNull(functionMap);
+			Assert.Null(functionMap);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_NoFunctionsInSource_EmptyFunctionList()
 		{
 			// Arrange
@@ -49,10 +49,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(0, functionMap.Count);
+			Assert.Equal(0, functionMap.Count);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_SingleLineFunctionInSource_CorrectZeroBasedColumnNumbers()
 		{
 			// Arrange
@@ -63,17 +63,17 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(1, functionMap.Count);
-			Assert.AreEqual("foo", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(14, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(1, functionMap.Count);
+			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(14, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_MultiLineFunctionInSource_CorrectColumnAndZeroBasedLineNumbers()
 		{
 			// Arrange
@@ -85,17 +85,17 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(1, functionMap.Count);
-			Assert.AreEqual("foo", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(1, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(3, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(1, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(1, functionMap.Count);
+			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(1, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(3, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(1, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_TwoSingleLineFunctions_TwoFunctionMapEntries()
 		{
 			// Arrange
@@ -106,26 +106,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(31, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(36, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(44, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(31, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(36, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(44, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(9, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(9, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_TwoNestedSingleLineFunctions_TwoFunctionMapEntries()
 		{
 			// Arrange
@@ -136,26 +136,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(24, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(29, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(37, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(24, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(29, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(37, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(9, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(38, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(9, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(14, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(38, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_FunctionAssignedToVariable_FunctionMapEntryGenerated()
 		{
 			// Arrange
@@ -166,18 +166,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(1, functionMap.Count);
+			Assert.Equal(1, functionMap.Count);
 
-			Assert.AreEqual("foo", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(28, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(28, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_StaticMethod_FunctionMapEntryGenerated()
 		{
 			// Arrange
@@ -188,26 +188,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(44, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(54, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(44, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(54, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_InstanceMethod_FunctionMapEntryGenerated()
 		{
 			// Arrange
@@ -218,26 +218,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.prototype.bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(55, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(65, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.prototype.bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(55, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(65, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_InstanceMethodInObjectInitializer_FunctionMapEntryGenerated()
 		{
 			// Arrange
@@ -248,29 +248,29 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.prototype", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual("bar", functionMap[0].Bindings[1].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(58, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(68, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.prototype", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("bar", functionMap[0].Bindings[1].Name);
+			Assert.Equal(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(58, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(68, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_FunctionAssignedToVariableAndHasName_FunctionMapEntryGeneratedForVariableName()
 		{
 			// Arrange
@@ -281,18 +281,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(1, functionMap.Count);
+			Assert.Equal(1, functionMap.Count);
 
-			Assert.AreEqual("foo", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(39, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(49, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(39, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(49, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_StaticMethodAndFunctionHasName_FunctionMapEntryGeneratedForPropertyName()
 		{
 			// Arrange
@@ -303,26 +303,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(63, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(73, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(63, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(73, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_InstanceMethodAndFunctionHasName_FunctionMapEntryGeneratedForObjectPrototype()
 		{
 			// Arrange
@@ -333,26 +333,26 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.prototype.bar", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(73, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(83, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.prototype.bar", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(73, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(83, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseSourceCode_InstanceMethodWithObjectInitializerAndFunctionHasName_FunctionMapEntryGeneratedForObjectPrototype()
 		{
 			// Arrange
@@ -363,30 +363,29 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.AreEqual(2, functionMap.Count);
+			Assert.Equal(2, functionMap.Count);
 
-			Assert.AreEqual("foo.prototype", functionMap[0].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual("bar", functionMap[0].Bindings[1].Name);
-			Assert.AreEqual(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(76, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(86, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo.prototype", functionMap[0].Bindings[0].Name);
+			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(23, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("bar", functionMap[0].Bindings[1].Name);
+			Assert.Equal(0, functionMap[0].Bindings[1].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(41, functionMap[0].Bindings[1].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[0].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[0].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(76, functionMap[0].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(86, functionMap[0].EndSourcePosition.ZeroBasedColumnNumber);
 
-			Assert.AreEqual("foo", functionMap[1].Bindings[0].Name);
-			Assert.AreEqual(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("foo", functionMap[1].Bindings[0].Name);
+			Assert.Equal(0, functionMap[1].Bindings[0].SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, functionMap[1].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(0, functionMap[1].StartSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(0, functionMap[1].EndSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(20, functionMap[1].StartSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_NullFunctionMapEntry_ThrowsException()
 		{
 			// Arrange
@@ -394,11 +393,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 
 			// Act
-			FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			Assert.Throws<ArgumentNullException>( ()=> FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_NullSourceMap_ThrowsException()
 		{
 			// Arrange
@@ -406,10 +404,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = null;
 
 			// Act
-			FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+			Assert.Throws<ArgumentNullException>( ()=> FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap));
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_NoBinding_ReturnNullMethodName()
 		{
 			// Arrange
@@ -420,11 +418,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
 			// Assert
-			Assert.IsNull(result);
+			Assert.Null(result);
 			sourceMap.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
 		{
 			// Arrange
@@ -447,11 +445,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
 			// Assert
-			Assert.IsNull(result);
+			Assert.Null(result);
 			sourceMap.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
 		{
 			// Arrange
@@ -481,11 +479,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
 			// Assert
-			Assert.AreEqual("foo", result);
+			Assert.Equal("foo", result);
 			sourceMap.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
 		{
 			// Arrange
@@ -525,11 +523,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
 			// Assert
-			Assert.AreEqual("baz", result);
+			Assert.Equal("baz", result);
 			sourceMap.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
 		{
 			// Arrange
@@ -572,7 +570,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 
 			// Assert
-			Assert.AreEqual("bar.baz", result);
+			Assert.Equal("bar.baz", result);
 			sourceMap.VerifyAllExpectations();
 		}
 	}

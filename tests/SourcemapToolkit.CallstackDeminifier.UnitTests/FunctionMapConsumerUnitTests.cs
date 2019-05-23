@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class FunctionMapConsumerUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void GetWrappingFunctionForSourceLocation_EmptyFunctionMap_ReturnNull()
 		{
 			// Arrange
@@ -23,10 +23,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
 
 			// Assert
-			Assert.IsNull(wrappingFunction);
+			Assert.Null(wrappingFunction);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetWrappingFunctionForSourceLocation_SingleIrrelevantFunctionMapEntry_ReturnNull()
 		{
 			// Arrange
@@ -49,10 +49,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
 
 			// Assert
-			Assert.IsNull(wrappingFunction);
+			Assert.Null(wrappingFunction);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetWrappingFunctionForSourceLocation_SingleRelevantFunctionMapEntry_ReturnWrappingFunction()
 		{
 			// Arrange
@@ -76,10 +76,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
 
 			// Assert
-			Assert.AreEqual(functionMapEntry, wrappingFunction);
+			Assert.Equal(functionMapEntry, wrappingFunction);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetWrappingFunctionForSourceLocation_MultipleFunctionMapEntriesSingleRelevantFunctionMapEntry_ReturnWrappingFunction()
 		{
 			// Arrange
@@ -109,10 +109,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
 
 			// Assert
-			Assert.AreEqual(functionMapEntry2, wrappingFunction);
+			Assert.Equal(functionMapEntry2, wrappingFunction);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetWrappingFunctionForSourceLocation_MultipleFunctionMapEntriesMultipleRelevantFunctionMapEntry_ReturnClosestWrappingFunction()
 		{
 			// Arrange
@@ -142,7 +142,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapEntry wrappingFunction = functionMapConsumer.GetWrappingFunctionForSourceLocation(sourcePosition, functionMap);
 
 			// Assert
-			Assert.AreEqual(functionMapEntry2, wrappingFunction);
+			Assert.Equal(functionMapEntry2, wrappingFunction);
 		}
 	}
 }

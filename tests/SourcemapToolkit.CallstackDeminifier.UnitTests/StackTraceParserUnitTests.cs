@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class StackTraceParserUnitTests
 	{
-		[TestMethod]
-		[ExpectedException(typeof (ArgumentNullException))]
+		[Fact]
 		public void ParseStackTrace_NullInput_ThrowsArgumentNullException()
 		{
 			// Arrange
@@ -16,10 +15,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string browserStackTrace = null;
 
 			// Act
-			stackTraceParser.ParseStackTrace(browserStackTrace);
+			Assert.Throws<ArgumentNullException>( ()=> stackTraceParser.ParseStackTrace(browserStackTrace));
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseStackTrace_ChromeCallstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
@@ -34,10 +33,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.AreEqual(stackTrace.Count, 4);
+			Assert.Equal(stackTrace.Count, 4);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseStackTrace_FireFoxCallstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
@@ -51,10 +50,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.AreEqual(stackTrace.Count, 4);
+			Assert.Equal(stackTrace.Count, 4);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ParseStackTrace_InternetExplorer11Callstack_GenerateCorrectNumberOfStackFrames()
 		{
 			// Arrange
@@ -68,11 +67,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.AreEqual(stackTrace.Count, 3);
+			Assert.Equal(stackTrace.Count, 3);
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Fact]
 		public void TryParseSingleStackFrame_NullInput_ThrowsNullArgumentException()
 		{
 			// Arrange
@@ -80,10 +78,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			string frame = null;
 
 			// Act
-			stackTraceParser.TryParseSingleStackFrame(frame);
+			Assert.Throws<ArgumentNullException>( ()=> stackTraceParser.TryParseSingleStackFrame(frame));
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_EmptyString_ReturnNull()
 		{
 			// Arrange
@@ -94,10 +92,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.IsNull(result);
+			Assert.Null(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_NoMethodNameInInput_ReturnsStackFrameWithNullMethod()
 		{
 			// Arrange
@@ -108,13 +106,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.IsNull(result.MethodName);
-			Assert.AreEqual(0, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(33, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Null(result.MethodName);
+			Assert.Equal(0, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(33, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_ChromeStackFrame_CorrectStackFrame()
 		{
 			// Arrange
@@ -125,13 +123,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.AreEqual("c", result.MethodName);
-			Assert.AreEqual(7, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(2, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(7, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(2, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_ChromeStackFrameWithNoMethodName_CorrectStackFrame()
 		{
 			// Arrange
@@ -142,13 +140,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.IsNull(result.MethodName);
-			Assert.AreEqual(9, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(12, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Null(result.MethodName);
+			Assert.Equal(9, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(12, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_ChromeStackFrameWithScriptSubfolder_CorrectStackFrame()
 		{
 			// Arrange
@@ -159,13 +157,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/o/app_scripts/crashcauser.min.js", result.FilePath);
-			Assert.AreEqual("c", result.MethodName);
-			Assert.AreEqual(8, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(4, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/o/app_scripts/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(8, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(4, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_FireFoxStackFrame_CorrectStackFrame()
 		{
 			// Arrange
@@ -176,13 +174,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.AreEqual("c", result.MethodName);
-			Assert.AreEqual(3, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(51, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(3, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(51, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_IE11StackFrame_CorrectStackFrame()
 		{
 			// Arrange
@@ -193,13 +191,13 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.AreEqual("c", result.MethodName);
-			Assert.AreEqual(2, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(16, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(2, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(16, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TryParseSingleStackFrame_IE11StackFrameWithAnonymousFunction_CorrectStackFrame()
 		{
 			// Arrange
@@ -210,10 +208,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
 
 			// Assert
-			Assert.AreEqual("http://localhost:19220/crashcauser.min.js", result.FilePath);
-			Assert.AreEqual("Anonymous function", result.MethodName);
-			Assert.AreEqual(4, result.SourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(24, result.SourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("Anonymous function", result.MethodName);
+			Assert.Equal(4, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(24, result.SourcePosition.ZeroBasedColumnNumber);
 		}
 	}
 }

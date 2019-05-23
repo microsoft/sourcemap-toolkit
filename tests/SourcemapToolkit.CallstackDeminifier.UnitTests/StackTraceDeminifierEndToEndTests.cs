@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser.UnitTests;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class StackTraceDeminifierEndToEndTests
 	{
 		private const string GeneratedCodeString = "function causeCrash(){function n(){var n=16;n+=2;t(n)}function t(n){n=n+2;i(n)}function i(n){(function(){var t;console.log(t.length+n)})()}window.onerror=function(n,t,i,r,u){u?document.getElementById(\"callstackdisplay\").innerText=u.stack:window.event.error&&(document.getElementById(\"callstackdisplay\").innerText=window.event.error.stack)};n()}window.onload=function(){document.getElementById(\"crashbutton\").addEventListener(\"click\",function(){causeCrash()})};";
@@ -24,17 +24,17 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private static void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)
 		{
-			Assert.AreEqual(6, results.DeminifiedStackFrameResults.Count);
-			Assert.AreEqual(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
-            Assert.AreEqual("level3", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
-            Assert.AreEqual("level3", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level2", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("level1", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("causeCrash", results.DeminifiedStackFrameResults[4].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("window", results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.MethodName);
+			Assert.Equal(6, results.DeminifiedStackFrameResults.Count);
+			Assert.Equal(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
+            Assert.Equal("level3", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
+            Assert.Equal("level3", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
+			Assert.Equal("level2", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
+			Assert.Equal("level1", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
+			Assert.Equal("causeCrash", results.DeminifiedStackFrameResults[4].DeminifiedStackFrame.MethodName);
+			Assert.Equal("window", results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.MethodName);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -54,7 +54,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_FireFoxStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -73,7 +73,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_IE11StackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -93,7 +93,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-        [TestMethod]
+        [Fact]
         public void DeminifyStackTrace_EdgeStackTraceString_CorrectDeminificationWhenPossible()
         {
             // Arrange

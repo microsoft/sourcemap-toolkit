@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
-	[TestClass]
+
 	public class SourcePositionUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void CompareTo_SameLineAndColumn_Equal()
 		{
 			// Arrange
@@ -24,10 +24,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			int result = x.CompareTo(y);
 
 			// Assert
-			Assert.AreEqual(0, result);
+			Assert.Equal(0, result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void CompareTo_LargerZeroBasedLineNumber_ReturnLarger()
 		{
 			// Arrange
@@ -46,10 +46,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			int result = x.CompareTo(y);
 
 			// Assert
-			Assert.IsTrue(result > 0);
+			Assert.True(result > 0);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void CompareTo_SmallerZeroBasedLineNumber_ReturnSmaller()
 		{
 			// Arrange
@@ -68,10 +68,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			int result = x.CompareTo(y);
 
 			// Assert
-			Assert.IsTrue(result < 0);
+			Assert.True(result < 0);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void CompareTo_SameLineLargerColumn_ReturnLarger()
 		{
 			// Arrange
@@ -90,10 +90,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			int result = x.CompareTo(y);
 
 			// Assert
-			Assert.IsTrue(result > 0);
+			Assert.True(result > 0);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void CompareTo_SameLineSmallerColumn_ReturnSmaller()
 		{
 			// Arrange
@@ -112,10 +112,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			int result = x.CompareTo(y);
 
 			// Assert
-			Assert.IsTrue(result < 0);
+			Assert.True(result < 0);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void LessThanOverload_SameZeroBasedLineNumberXColumnSmaller_ReturnTrue()
 		{
 			// Arrange
@@ -134,10 +134,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x < y;
 
 			// Assert
-			Assert.IsTrue(result);
+			Assert.True(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void LessThanOverload_XZeroBasedLineNumberSmallerX_ReturnTrue()
 		{
 			// Arrange
@@ -156,10 +156,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x < y;
 
 			// Assert
-			Assert.IsTrue(result);
+			Assert.True(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void LessThanOverload_Equal_ReturnFalse()
 		{
 			// Arrange
@@ -178,10 +178,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x < y;
 
 			// Assert
-			Assert.IsFalse(result);
+			Assert.False(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void LessThanOverload_XColumnLarger_ReturnFalse()
 		{
 			// Arrange
@@ -200,10 +200,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x < y;
 
 			// Assert
-			Assert.IsFalse(result);
+			Assert.False(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GreaterThanOverload_SameLineXColumnLarger_ReturnTrue()
 		{
 			// Arrange
@@ -222,10 +222,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x > y;
 
 			// Assert
-			Assert.IsTrue(result);
+			Assert.True(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GreaterThanOverload_XZeroBasedLineNumberLarger_ReturnTrue()
 		{
 			// Arrange
@@ -244,10 +244,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x > y;
 
 			// Assert
-			Assert.IsTrue(result);
+			Assert.True(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GreaterThanOverload_Equal_ReturnFalse()
 		{
 			// Arrange
@@ -266,10 +266,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x > y;
 
 			// Assert
-			Assert.IsFalse(result);
+			Assert.False(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GreaterThanOverload_XSmaller_ReturnFalse()
 		{
 			// Arrange
@@ -288,10 +288,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			bool result = x > y;
 
 			// Assert
-			Assert.IsFalse(result);
+			Assert.False(result);
 		}
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_XEqualsY_ReturnTrue()
         {
             // Arrange
@@ -310,10 +310,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_XColumnNumberBiggerByOne_ReturnTrue()
         {
             // Arrange
@@ -332,10 +332,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_YColumnNumberBiggerByOne_ReturnTrue()
         {
             // Arrange
@@ -354,10 +354,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_YColumnNumberBiggerByTwo_ReturnFalse()
         {
             // Arrange
@@ -376,10 +376,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_XColumnNumberZeroLineNumbersDifferByOne_ReturnTrue()
         {
             // Arrange
@@ -398,10 +398,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_YColumnNumberZeroLineNumbersDifferByOne_ReturnTrue()
         {
             // Arrange
@@ -420,10 +420,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEqualish_YColumnNumberZeroLineNumbersDifferByTwo_ReturnFalse()
         {
             // Arrange
@@ -442,7 +442,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             bool result = x.IsEqualish(y);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
-	[TestClass]
+
 	public class SourceMapUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void GetMappingEntryForGeneratedSourcePosition_NullMappingList_ReturnNull()
 		{
 			// Arrange
@@ -18,10 +18,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
-			Assert.IsNull(result);
+			Assert.Null(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetMappingEntryForGeneratedSourcePosition_NoMatchingEntryInMappingList_ReturnNull()
 		{
 			// Arrange
@@ -39,10 +39,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
-			Assert.IsNull(result);
+			Assert.Null(result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetMappingEntryForGeneratedSourcePosition_MatchingEntryInMappingList_ReturnMatchingEntry()
 		{
 			// Arrange
@@ -65,10 +65,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
-			Assert.AreEqual(matchingMappingEntry, result);
+			Assert.Equal(matchingMappingEntry, result);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnSameLine_ReturnSimilarEntry()
 		{
 			// Arrange
@@ -91,10 +91,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
-			Assert.AreEqual(matchingMappingEntry, result);
+			Assert.Equal(matchingMappingEntry, result);
 		}
 
-        [TestMethod]
+        [Fact]
         public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnDifferentLinesLine_ReturnSimilarEntry()
         {
             // Arrange
@@ -117,10 +117,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
             // Asset
-            Assert.AreEqual(matchingMappingEntry, result);
+            Assert.Equal(matchingMappingEntry, result);
         }
 
-		[TestMethod]
+		[Fact]
 		public void GetRootMappingEntryForGeneratedSourcePosition_NoChildren_ReturnsSameEntry()
 		{
 			// Arrange
@@ -138,11 +138,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry rootEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(generated1);
 
 			// Assert
-			Assert.AreEqual(rootEntry, mappingEntry);
+			Assert.Equal(rootEntry, mappingEntry);
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Fact]
 		public void ApplyMap_NullSubmap_ThrowsException()
 		{
 			// Arrange
@@ -158,12 +157,12 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			SourceMap combinedMap = map.ApplySourceMap(null);
+			Assert.Throws<ArgumentNullException>(() => map.ApplySourceMap(null));
 
 			// Assert (decorated expected exception)
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ApplyMap_NoMatchingSources_ReturnsSameMap()
 		{
 			// Arrange
@@ -193,12 +192,12 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
 
 			// Assert
-			Assert.IsNotNull(combinedMap);
+			Assert.NotNull(combinedMap);
 			MappingEntry firstMapping = combinedMap.ParsedMappings[0];
-			Assert.IsTrue(firstMapping.IsValueEqual(parentMapping));
+			Assert.True(firstMapping.IsValueEqual(parentMapping));
 		}
 
-        [TestMethod]
+        [Fact]
         public void ApplyMap_NoMatchingMappings_ReturnsSameMap()
         {
             // Arrange
@@ -228,12 +227,12 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
             SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
 
             // Assert
-            Assert.IsNotNull(combinedMap);
+            Assert.NotNull(combinedMap);
             MappingEntry firstMapping = combinedMap.ParsedMappings[0];
-            Assert.IsTrue(firstMapping.IsValueEqual(parentMapping));
+            Assert.True(firstMapping.IsValueEqual(parentMapping));
         }
 
-        [TestMethod]
+        [Fact]
 		public void ApplyMap_MatchingSources_ReturnsCorrectMap()
 		{
             // Expect mapping with same source filename as the applied source-map to be replaced
@@ -265,14 +264,14 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
 
 			// Assert
-			Assert.IsNotNull(combinedMap);
-			Assert.AreEqual(1, combinedMap.ParsedMappings.Count);
-			Assert.AreEqual(1, combinedMap.Sources.Count);
+			Assert.NotNull(combinedMap);
+			Assert.Equal(1, combinedMap.ParsedMappings.Count);
+			Assert.Equal(1, combinedMap.Sources.Count);
 			MappingEntry rootMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
-			Assert.AreEqual(0, rootMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
+			Assert.Equal(0, rootMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ApplyMap_PartialMatchingSources_ReturnsCorrectMap()
 		{
             // Expect mappings with same source filename as the applied source-map to be replaced
@@ -309,16 +308,16 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
 
 			// Assert
-			Assert.IsNotNull(combinedMap);
-			Assert.AreEqual(2, combinedMap.ParsedMappings.Count);
-			Assert.AreEqual(2, combinedMap.Sources.Count);
+			Assert.NotNull(combinedMap);
+			Assert.Equal(2, combinedMap.ParsedMappings.Count);
+			Assert.Equal(2, combinedMap.Sources.Count);
 			MappingEntry firstCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
-			Assert.IsTrue(firstCombinedMapping.IsValueEqual(mapping2));
+			Assert.True(firstCombinedMapping.IsValueEqual(mapping2));
 			MappingEntry secondCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
-			Assert.AreEqual(0, secondCombinedMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
+			Assert.Equal(0, secondCombinedMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ApplyMap_ExactMatchDeep_ReturnsCorrectMappingEntry()
 		{
 			// Arrange
@@ -359,11 +358,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap firstCombinedMap = parentMap.ApplySourceMap(childMap);
 
 			// Assert
-			Assert.IsNotNull(firstCombinedMap);
+			Assert.NotNull(firstCombinedMap);
 			SourceMap secondCombinedMap = firstCombinedMap.ApplySourceMap(grandChildMap);
-			Assert.IsNotNull(secondCombinedMap);
+			Assert.NotNull(secondCombinedMap);
 			MappingEntry rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
-			Assert.AreEqual(0, rootMapping.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
+			Assert.Equal(0, rootMapping.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
 		}
     }
 }
