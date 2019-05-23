@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rhino.Mocks;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class KeyValueCacheUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void GetValue_KeyNotInCache_CallValueGetter()
 		{
 			// Arrange
@@ -19,11 +19,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = keyValueCache.GetValue("bar");
 
 			// Assert
-			Assert.AreEqual("foo", result);
+			Assert.Equal("foo", result);
 
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetValue_CallGetTwice_OnlyCallValueGetterOnce()
 		{
 			// Arrange
@@ -36,11 +36,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = keyValueCache.GetValue("bar");
 
 			// Assert
-			Assert.AreEqual("foo", result);
+			Assert.Equal("foo", result);
 			valueGetter.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetValue_CallGetTwiceValueGetterReturnsNull_CallGetterTwice()
 		{
 			// Arrange
@@ -53,11 +53,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = keyValueCache.GetValue("bar");
 
 			// Assert
-			Assert.AreEqual(null, result);
+			Assert.Equal(null, result);
 			valueGetter.VerifyAllExpectations();
 		}
 
-		[TestMethod]
+		[Fact]
 		public void GetValue_CallGetMultipleTimesFirstGetterReturnsNull_CacheFirstNonNullValue()
 		{
 			// Arrange
@@ -72,7 +72,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = keyValueCache.GetValue("bar");
 
 			// Assert
-			Assert.AreEqual("foo", result);
+			Assert.Equal("foo", result);
 			valueGetter.VerifyAllExpectations();
 		}
 	}

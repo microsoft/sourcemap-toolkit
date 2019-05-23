@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
-	[TestClass]
+
 	public class NumericMappingEntryUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void ToMappingEntry_ContainsGeneratedSourcePosition_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
@@ -22,14 +22,14 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.AreEqual(12, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(13, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.IsNull(mappingEntry.OriginalSourcePosition);
-			Assert.IsNull(mappingEntry.OriginalFileName);
-			Assert.IsNull(mappingEntry.OriginalName);
+			Assert.Equal(12, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(13, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.Null(mappingEntry.OriginalSourcePosition);
+			Assert.Null(mappingEntry.OriginalFileName);
+			Assert.Null(mappingEntry.OriginalName);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ToMappingEntry_ContainsGeneratedAndOriginalSourcePosition_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
@@ -47,15 +47,15 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.AreEqual(2, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(3, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.AreEqual(16, mappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(23, mappingEntry.OriginalSourcePosition.ZeroBasedLineNumber);
-			Assert.IsNull(mappingEntry.OriginalFileName);
-			Assert.IsNull(mappingEntry.OriginalName);
+			Assert.Equal(2, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(3, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(16, mappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(23, mappingEntry.OriginalSourcePosition.ZeroBasedLineNumber);
+			Assert.Null(mappingEntry.OriginalFileName);
+			Assert.Null(mappingEntry.OriginalName);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void ToMappingEntry_ContainsGeneratedPositionNameIndexAndSourcesIndex_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
@@ -73,11 +73,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.AreEqual(8, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.AreEqual(48, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.IsNull(mappingEntry.OriginalSourcePosition);
-			Assert.AreEqual("three", mappingEntry.OriginalFileName);
-			Assert.AreEqual("bar", mappingEntry.OriginalName);
+			Assert.Equal(8, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
+			Assert.Equal(48, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
+			Assert.Null(mappingEntry.OriginalSourcePosition);
+			Assert.Equal("three", mappingEntry.OriginalFileName);
+			Assert.Equal("bar", mappingEntry.OriginalName);
 		}
 	}
 }

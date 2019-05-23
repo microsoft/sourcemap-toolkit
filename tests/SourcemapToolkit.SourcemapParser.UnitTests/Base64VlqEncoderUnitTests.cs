@@ -1,13 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests
 {
-	[TestClass]
+
 	public class Base64VlqEncoderUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void Base64VlqEncoder_SmallValue_ListWithOnlyOneValue()
 		{
 			// Act
@@ -15,10 +15,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Base64VlqEncoder.Encode(result, 15);
 
 			// Assert
-			Assert.AreEqual("e", result.ToString());
+			Assert.Equal("e", result.ToString());
 		}
 
-		[TestMethod]
+		[Fact]
 		public void Base64VlqEncoder_LargeValue_ListWithOnlyMultipleValues()
 		{
 			// Act
@@ -26,10 +26,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Base64VlqEncoder.Encode(result, 701);
 
 			// Assert
-			Assert.AreEqual("6rB", result.ToString());
+			Assert.Equal("6rB", result.ToString());
 		}
 
-		[TestMethod]
+		[Fact]
 		public void Base64VlqEncoder_NegativeValue_ListWithCorrectValue()
 		{
 			// Act
@@ -37,7 +37,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Base64VlqEncoder.Encode(result, -15);
 
 			// Assert
-			Assert.AreEqual("f", result.ToString());
+			Assert.Equal("f", result.ToString());
 		}
 
 	}

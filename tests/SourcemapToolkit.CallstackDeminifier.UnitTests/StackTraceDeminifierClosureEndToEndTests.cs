@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser.UnitTests;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
 
-	[TestClass]
+
 	public class StackTraceDeminifierClosureEndToEndTests
 	{
 		private const string GeneratedCodeString = "function a(){}window.foo=a;a.prototype={b:function(){return a.a(void 0)}};a.a=function(b){return b.length};function c(){return(new a).b()}window.foo.bar=a.b;window.foo.bar2=a.a;window.bar=c;window.onerror=function(b,e,f,g,d){d?document.getElementById(\"callstackdisplay\").innerText=d.stack:window.event.error&&(document.getElementById(\"callstackdisplay\").innerText=window.event.error.stack)};window.onload=function(){document.getElementById(\"crashbutton\").addEventListener(\"click\",function(){console.log(c())})};";
@@ -25,15 +25,15 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)
 		{
-			Assert.AreEqual(4, results.DeminifiedStackFrameResults.Count);
-			Assert.AreEqual(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
-			Assert.AreEqual("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("GlobalFunction", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
-			Assert.AreEqual("window", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
+			Assert.Equal(4, results.DeminifiedStackFrameResults.Count);
+			Assert.Equal(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
+			Assert.Equal("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
+			Assert.Equal("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
+			Assert.Equal("GlobalFunction", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
+			Assert.Equal("window", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyClosureStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -51,7 +51,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyClosureStackTrace_FireFoxStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -68,7 +68,7 @@ window.onload/<@http://localhost:11323/closurecrashcauser.minified.js:1:504";
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyClosureStackTrace_IE11StackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
@@ -86,7 +86,7 @@ window.onload/<@http://localhost:11323/closurecrashcauser.minified.js:1:504";
 			ValidateDeminifyStackTraceResults(results);
 		}
 
-        [TestMethod]
+        [Fact]
         public void DeminifyClosureStackTrace_EdgeStackTraceString_CorrectDeminificationWhenPossible()
         {
             // Arrange

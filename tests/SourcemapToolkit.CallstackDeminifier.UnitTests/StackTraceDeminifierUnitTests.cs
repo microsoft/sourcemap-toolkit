@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rhino.Mocks;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
-	[TestClass]
+
 	public class StackTraceDeminifierUnitTests
 	{
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_UnableToParseStackTraceString_ReturnsEmptyList()
 		{
 			// Arrange
@@ -23,10 +23,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(0, result.DeminifiedStackFrameResults.Count);
+			Assert.Equal(0, result.DeminifiedStackFrameResults.Count);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_UnableToDeminifyStackTrace_ResultContainsNullDeminifiedFrame()
 		{
 			// Arrange
@@ -44,12 +44,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(1, result.DeminifiedStackFrameResults.Count);
-			Assert.AreEqual(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
-			Assert.IsNull(result.DeminifiedStackFrameResults[0]);
+			Assert.Equal(1, result.DeminifiedStackFrameResults.Count);
+			Assert.Equal(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
+			Assert.Null(result.DeminifiedStackFrameResults[0]);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void DeminifyStackTrace_AbleToDeminifyStackTrace_ResultContainsDeminifiedFrame()
 		{
 			// Arrange
@@ -68,9 +68,9 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
-			Assert.AreEqual(1, result.DeminifiedStackFrameResults.Count);
-			Assert.AreEqual(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
-			Assert.AreEqual(stackFrameDeminification, result.DeminifiedStackFrameResults[0]);
+			Assert.Equal(1, result.DeminifiedStackFrameResults.Count);
+			Assert.Equal(minifiedStackFrames[0], result.MinifiedStackFrames[0]);
+			Assert.Equal(stackFrameDeminification, result.DeminifiedStackFrameResults[0]);
 		}
 	}
 }
