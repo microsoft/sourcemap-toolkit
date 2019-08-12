@@ -26,15 +26,42 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Any parts of the stack trace that could not be parsed are excluded from
 		/// the result. Does not ever return null.
 		/// </returns>
+		/// <remarks>
+		/// This override drops the Message out param for backward compatibility
+		/// </remarks>
 		public List<StackFrame> ParseStackTrace(string stackTraceString)
+		{
+			return ParseStackTrace(stackTraceString, out string message);
+		}
+
+		/// <summary>
+		/// Generates a list of StackFrame objects based on the input stack trace.
+		/// This method normalizes differences between different browsers.
+		/// The source positions in the parsed stack frames will be normalized so they
+		/// are zero-based instead of one-based to align with the rest of the library.
+		/// </summary>
+		/// <returns>
+		/// Returns a list of StackFrame objects corresponding to the stackTraceString.
+		/// Any parts of the stack trace that could not be parsed are excluded from
+		/// the result. Does not ever return null.
+		/// </returns>
+		public List<StackFrame> ParseStackTrace(string stackTraceString, out string message)
 		{
 			if (stackTraceString == null)
 			{
 				throw new ArgumentNullException(nameof(stackTraceString));
 			}
 
+			message = null;
 			List<StackFrame> stackTrace = new List<StackFrame>();
 			List<string> stackFrameStrings = stackTraceString.Split('\n').ToList();
+
+			var firstFrame = stackFrameStrings.First();
+			if (!firstFrame.StartsWith(" ") && TryExtractMethodNameFromFrame(firstFrame) == null)
+			{
+				message = firstFrame.Trim();
+				stackFrameStrings.RemoveAt(0);
+			}
 
 			foreach (string frame in stackFrameStrings)
 			{

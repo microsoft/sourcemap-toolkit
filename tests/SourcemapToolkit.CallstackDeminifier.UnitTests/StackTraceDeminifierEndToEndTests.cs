@@ -112,5 +112,33 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
             // Assert
             ValidateDeminifyStackTraceResults(results);
         }
-    }
+
+		[Fact]
+		public void DeminifyResultToString_SuccessfullyDeminified_AllLinesDeminified()
+		{
+			// Arrange
+			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			string ieStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
+   at Anonymous function (http://localhost:11323/crashcauser.min.js:1:112)
+   at i (http://localhost:11323/crashcauser.min.js:1:95)
+   at t (http://localhost:11323/crashcauser.min.js:1:75)
+   at n (http://localhost:11323/crashcauser.min.js:1:50)
+   at causeCrash (http://localhost:11323/crashcauser.min.js:1:341)
+   at Anonymous function (http://localhost:11323/crashcauser.min.js:1:445)";
+			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
+			string exectedResult = @"TypeError: Unable to get property 'length' of undefined or null reference
+  at level3 in crashcauser.js:16:12
+  at level3 in crashcauser.js:14:9
+  at level2 in crashcauser.js:10:8
+  at level1 in crashcauser.js:5:8
+  at causeCrash in crashcauser.js:27:4
+  at window in crashcauser.js:32:8";
+
+			// Act
+			string formatted = results.ToString();
+
+			// Assert
+			Assert.Equal(exectedResult, formatted);
+		}
+	}
 }

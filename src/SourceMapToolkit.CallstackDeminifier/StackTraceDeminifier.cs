@@ -24,7 +24,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString)
 		{
 			DeminifyStackTraceResult result = new DeminifyStackTraceResult();
-			result.MinifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString);
+			result.MinifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out string message);
+			result.Message = message;
 			result.DeminifiedStackFrameResults = new List<StackFrameDeminificationResult>();
 
 			foreach (StackFrame minifiedStackFrame in result.MinifiedStackFrames)

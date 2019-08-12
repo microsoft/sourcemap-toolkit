@@ -21,5 +21,19 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// The zero-based position of this stack entry.
 		/// </summary>
 		public SourcePosition SourcePosition { get; set; }
+
+		public override string ToString()
+		{
+			string output = $"at {(string.IsNullOrWhiteSpace(MethodName) ? "?" : MethodName)}";
+			if (!string.IsNullOrWhiteSpace(FilePath))
+			{
+				output += $" in {FilePath}";
+				if (SourcePosition != null)
+				{
+					output += $":{SourcePosition.ZeroBasedLineNumber}:{SourcePosition.ZeroBasedColumnNumber}";
+				}
+			}
+			return output;
+		}
 	}
 }
