@@ -144,7 +144,8 @@ The top level API for call stack deminification is the `StackTraceDeminifier.Dem
 
 ```csharp
 StackTraceDeminifier sourceMapCallstackDeminifier = StackTraceDeminfierFactory.GetStackTraceDeminfier(new SourceMapProvider(), new SourceCodeProvider());
-DeminifyStackTraceResult deminifyStackTraceResult = sourceMapCallstackDeminifier.DeminifyStackTrace(callstack)
+DeminifyStackTraceResult deminifyStackTraceResult = sourceMapCallstackDeminifier.DeminifyStackTrace(callstack);
+string deminifiedCallstack = deminifyStackTraceResult.ToString();
 ```
 
 The result of `DeminifyStackTrace` is a `DeminifyStackTraceResult`, which is an object that contains a list of `StackFrameDeminificationResults` which contains the parsed minified `StackFrame` objects in the `MinifiedStackFrame` property and an enum indicating if any errors occured when attempting to deminify the `StackFrame`. The `DeminifiedStackFrame` property contains the best guess `StackFrame` object that maps to the `MinifiedStackFrame` element with the same index. Note that any of the properties on a `StackTrace` object may be null if no value could be extracted from the input callstack string or source map.
