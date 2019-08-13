@@ -13,7 +13,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
 			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString)).Return(new List<StackFrame>());
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(new List<StackFrame>()).OutRef("Error example");
 
 			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 
@@ -33,7 +33,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
 			List<StackFrame> minifiedStackFrames = new List<StackFrame> { new StackFrame() };
 			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString)).Return(minifiedStackFrames);
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(minifiedStackFrames).OutRef("Error example");
 
 			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0])).Return(null);
@@ -56,7 +56,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
 			List<StackFrame> minifiedStackFrames = new List<StackFrame> { new StackFrame() };
 			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString)).Return(minifiedStackFrames);
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(minifiedStackFrames).OutRef("Error example");
 
 			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 			StackFrameDeminificationResult stackFrameDeminification = new StackFrameDeminificationResult();

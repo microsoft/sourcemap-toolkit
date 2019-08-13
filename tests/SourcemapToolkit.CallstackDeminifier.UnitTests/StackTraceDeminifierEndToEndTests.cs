@@ -138,7 +138,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 			string formatted = results.ToString();
 
 			// Assert
-			Assert.Equal(exectedResult, formatted);
+			Assert.Equal(exectedResult.Replace("\r", ""), formatted.Replace("\r", ""));
 		}
 	}
 }
