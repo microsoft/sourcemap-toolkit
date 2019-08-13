@@ -8,7 +8,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-name: $(Major).$(Minor).$(rev:.r)
+name: $(Major).$(Minor)$(rev:.r)
 
 trigger: none # Will trigger off CI completion in master
 
