@@ -49,7 +49,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
 			if (parentBinaryOperator != null)
 			{
-				result.Add(ExtractBindingsFromBinaryOperator(parentBinaryOperator));
+				result.AddRange(ExtractBindingsFromBinaryOperator(parentBinaryOperator));
 				return result;
 			}
 
@@ -61,7 +61,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				ObjectLiteral objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
 				if (objectLiteralParent != null && objectLiteralParent.Parent is BinaryOperator)
 				{
-					result.Add(ExtractBindingsFromBinaryOperator((BinaryOperator)objectLiteralParent.Parent));
+					result.AddRange(ExtractBindingsFromBinaryOperator((BinaryOperator)objectLiteralParent.Parent));
 				}
 				
 				result.Add(
@@ -110,15 +110,41 @@ namespace SourcemapToolkit.CallstackDeminifier
 			return null;
 		}
 
-		private BindingInformation ExtractBindingsFromBinaryOperator(BinaryOperator parentBinaryOperator)
+		private IEnumerable<BindingInformation> ExtractBindingsFromBinaryOperator(BinaryOperator parentBinaryOperator)
+		{
+			Member member = parentBinaryOperator.Operand1 as Member;
+			if (member != null)
+			{
+				yield return ExtractBindingsFromNode(member.Root);
+				if (member.Name != "prototype")
+				{
+					int offset = member.NameContext.Code.StartsWith(".") ? 1 : 0;
+					yield return new BindingInformation
+					{
+						Name = member.Name,
+						SourcePosition = new SourcePosition
+						{
+							ZeroBasedLineNumber = member.NameContext.StartLineNumber - 1,
+							ZeroBasedColumnNumber = member.NameContext.StartColumn + offset
+						}
+					};
+				}
+			}
+			else
+			{
+				yield return ExtractBindingsFromNode(parentBinaryOperator.Operand1);
+			}
+		}
+
+		private BindingInformation ExtractBindingsFromNode(AstNode node)
 		{
 			return new BindingInformation
 			{
-				Name = parentBinaryOperator.Operand1.Context.Code,
+				Name = node.Context.Code,
 				SourcePosition = new SourcePosition
 				{
-					ZeroBasedLineNumber = parentBinaryOperator.Operand1.Context.StartLineNumber - 1,
-					ZeroBasedColumnNumber = parentBinaryOperator.Operand1.Context.StartColumn
+					ZeroBasedLineNumber = node.Context.StartLineNumber - 1,
+					ZeroBasedColumnNumber = node.Context.StartColumn
 				}
 			};
 		}

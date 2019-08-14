@@ -97,6 +97,7 @@
     <Compile Include="KeyValueCacheUnitTests.cs" />
     <Compile Include="StackFrameDeminifierUnitTests.cs" />
     <Compile Include="StackTraceDeminifierClosureEndToEndTests.cs" />
+    <Compile Include="StackTraceDeminifierWebpackEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierUnitTests.cs" />
     <Compile Include="StackTraceParserUnitTests.cs" />
@@ -149,6 +150,13 @@
     <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+  </Target>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <TestFiles Include="$(ProjectDir)webpackapp\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(TestFiles)" DestinationFolder="$(OutDir)webpackapp\">
+    </Copy>
   </Target>
   <Import Project="..\..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -267,3 +267,5 @@ __pycache__/
 # Minified JavaScript
 *.min.js
 *.min.js.map
+
+!**/webpackapp/**
