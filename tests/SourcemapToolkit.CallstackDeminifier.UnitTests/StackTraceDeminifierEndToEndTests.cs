@@ -31,7 +31,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.Equal("level2", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
 			Assert.Equal("level1", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
 			Assert.Equal("causeCrash", results.DeminifiedStackFrameResults[4].DeminifiedStackFrame.MethodName);
-			Assert.Equal("window", results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.MethodName);
+			Assert.Equal("window.onload", results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.MethodName);
 		}
 
 		[Fact]
@@ -132,7 +132,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
   at level2 in crashcauser.js:10:8
   at level1 in crashcauser.js:5:8
   at causeCrash in crashcauser.js:27:4
-  at window in crashcauser.js:32:8";
+  at window.onload in crashcauser.js:32:8";
 
 			// Act
 			string formatted = results.ToString();

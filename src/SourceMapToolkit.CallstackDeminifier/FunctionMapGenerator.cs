@@ -78,12 +78,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			if (wrappingFunction.Bindings != null && wrappingFunction.Bindings.Count > 0)
 			{
+				MappingEntry objectProtoypeMappingEntry = null;
 				if (wrappingFunction.Bindings.Count == 2)
 				{
-					MappingEntry objectProtoypeMappingEntry =
+					objectProtoypeMappingEntry =
 						sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
-
-					methodName = objectProtoypeMappingEntry?.OriginalName;
 				}
 
 				MappingEntry mappingEntry =
@@ -91,9 +90,20 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 				if (mappingEntry?.OriginalName != null)
 				{
-					if (methodName != null)
+					if (objectProtoypeMappingEntry?.OriginalName != null)
 					{
-						methodName = methodName + "." + mappingEntry.OriginalName;
+						string objectName = objectProtoypeMappingEntry.OriginalName;
+						if (objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber
+							&& objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber
+							&& objectName.EndsWith($".{mappingEntry.OriginalName}"))
+						{
+							// The object name already contains the method name, so do not append it
+							methodName = objectName;
+						}
+						else
+						{
+							methodName = $"{objectName}.{mappingEntry.OriginalName}";
+						}
 					}
 					else
 					{

@@ -30,7 +30,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.Equal("mynamespace.objectWithMethods.propertyMethodLevel2", results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.MethodName);
 			Assert.Equal("mynamespace.objectWithMethods.prototypeMethodLevel1", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
 			Assert.Equal("GlobalFunction", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
-			Assert.Equal("window", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
+			Assert.Equal("window.onload", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
 		}
 
 		[Fact]
