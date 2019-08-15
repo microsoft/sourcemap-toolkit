@@ -112,10 +112,16 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 		private IEnumerable<BindingInformation> ExtractBindingsFromBinaryOperator(BinaryOperator parentBinaryOperator)
 		{
+			// If the operand has a dot in the name it's a Member. e.g. a.b, a.prototype, a.prototype.b
 			Member member = parentBinaryOperator.Operand1 as Member;
 			if (member != null)
 			{
+				// Split members into two parts, on the last dot, so a.prototype.b becomes [a.prototype, b]
+				// This separates the generated location for the property/method name (b), and allows deminification
+				// to resolve both the class and method names.
 				yield return ExtractBindingsFromNode(member.Root);
+
+				// a.prototype splits into [a, prototype], but we throw away the prototype as this doesn't map to anything useful in the original source
 				if (member.Name != "prototype")
 				{
 					int offset = member.NameContext.Code.StartsWith(".") ? 1 : 0;
