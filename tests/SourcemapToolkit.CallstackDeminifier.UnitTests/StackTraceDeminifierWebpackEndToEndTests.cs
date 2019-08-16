@@ -47,8 +47,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
     at t.onButtonClick (http://localhost:3000/js/bundle.ffe51781aee314a37903.min.js:1:3573)
     at Object.sh (https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410)";
 			string deminifiedStackTrace = @"TypeError: Cannot read property 'nonExistantmember' of undefined
-  at _this.onButtonClick in webpack:///./components/App.tsx:10:45
-  at Object.sh in https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:163:409";
+  at _this.onButtonClick in webpack:///./components/App.tsx:11:46
+  at Object.sh in https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410";
 
 			// Act
 			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
