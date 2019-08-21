@@ -30,7 +30,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				output += $" in {FilePath}";
 				if (SourcePosition != null)
 				{
-					output += $":{SourcePosition.ZeroBasedLineNumber}:{SourcePosition.ZeroBasedColumnNumber}";
+					output += $":{SourcePosition.ZeroBasedLineNumber + 1}:{SourcePosition.ZeroBasedColumnNumber + 1}";
 				}
 			}
 			return output;

@@ -127,12 +127,12 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:445)";
 			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
 			string exectedResult = @"TypeError: Unable to get property 'length' of undefined or null reference
-  at level3 in crashcauser.js:16:12
-  at level3 in crashcauser.js:14:9
-  at level2 in crashcauser.js:10:8
-  at level1 in crashcauser.js:5:8
-  at causeCrash in crashcauser.js:27:4
-  at window.onload in crashcauser.js:32:8";
+  at level3 in crashcauser.js:17:13
+  at level3 in crashcauser.js:15:10
+  at level2 in crashcauser.js:11:9
+  at level1 in crashcauser.js:6:9
+  at causeCrash in crashcauser.js:28:5
+  at window.onload in crashcauser.js:33:9";
 
 			// Act
 			string formatted = results.ToString();
