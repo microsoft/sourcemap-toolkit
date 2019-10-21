@@ -100,12 +100,20 @@ namespace SourcemapToolkit.CallstackDeminifier
 					{
 						httpIndex = frame.IndexOf(" http", atStringIndex, StringComparison.Ordinal);
 						if (httpIndex != -1)
-							httpIndex++;		// append one char to include a blank space to be able to replace "at " correctly
+							httpIndex++;        // append one char to include a blank space to be able to replace "at " correctly
 					}
 
 					if (httpIndex != -1)
 					{
 						methodName = frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
+					}
+					else
+					{
+						var parenthesesIndex = frame.IndexOf(" (", atStringIndex, StringComparison.Ordinal);
+						if (parenthesesIndex != -1)
+						{
+							methodName = frame.Substring(atStringIndex, parenthesesIndex - atStringIndex).Replace("at ", "").Trim();
+						}
 					}
 				}
 			}
