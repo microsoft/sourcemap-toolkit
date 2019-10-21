@@ -101,6 +101,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				httpIndex = frame.IndexOf(" http", atStringIndex, StringComparison.Ordinal);
 				if (httpIndex != -1)
 				{
+					httpIndex++;		// append one char to include a blank space to be able to replace "at " correctly
 					return frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
 				}
 			}
