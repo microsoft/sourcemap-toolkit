@@ -113,6 +113,23 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		}
 
 		[Fact]
+		public void TryParseSingleStackFrame_StackFrameWithoutParentheses_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = "    at c http://localhost:19220/crashcauser.min.js:8:3";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(7, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(2, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[Fact]
 		public void TryParseSingleStackFrame_ChromeStackFrame_CorrectStackFrame()
 		{
 			// Arrange
