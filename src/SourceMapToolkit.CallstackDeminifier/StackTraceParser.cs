@@ -81,32 +81,38 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		private string TryExtractMethodNameFromFrame(string frame)
 		{
+			string methodName = null;
+
 			// Firefox has stackframes in the form: "c@http://localhost:19220/crashcauser.min.js:1:34"
 			int atSymbolIndex = frame.IndexOf("@http", StringComparison.Ordinal);
 			if (atSymbolIndex != -1)
 			{
-				return frame.Substring(0, atSymbolIndex).TrimStart();
+				methodName = frame.Substring(0, atSymbolIndex).TrimStart();
 			}
-
-			// Chrome and IE11 have stackframes in the form: " at d (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:75)"
-			int atStringIndex = frame.IndexOf("at ", StringComparison.Ordinal);
-			if (atStringIndex != -1)
+			else
 			{
-				int httpIndex = frame.IndexOf(" (http", atStringIndex, StringComparison.Ordinal);
-				if (httpIndex != -1)
+				// Chrome and IE11 have stackframes in the form: " at d (http://chrisgocallstack.azurewebsites.net/crashcauser.min.js:1:75)"
+				int atStringIndex = frame.IndexOf("at ", StringComparison.Ordinal);
+				if (atStringIndex != -1)
 				{
-					return frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
-				}
+					int httpIndex = frame.IndexOf(" (http", atStringIndex, StringComparison.Ordinal);
+					if (httpIndex == -1)
+					{
+						httpIndex = frame.IndexOf(" http", atStringIndex, StringComparison.Ordinal);
+						if (httpIndex != -1)
+							httpIndex++;		// append one char to include a blank space to be able to replace "at " correctly
+					}
 
-				httpIndex = frame.IndexOf(" http", atStringIndex, StringComparison.Ordinal);
-				if (httpIndex != -1)
-				{
-					httpIndex++;		// append one char to include a blank space to be able to replace "at " correctly
-					return frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
+					if (httpIndex != -1)
+					{
+						methodName = frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
+					}
 				}
 			}
 
-			return null;
+			if (string.IsNullOrWhiteSpace(methodName))
+				methodName = null;
+			return methodName;
 		}
 
 		/// <summary>
