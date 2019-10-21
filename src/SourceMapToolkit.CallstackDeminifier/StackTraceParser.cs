@@ -97,6 +97,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 				{
 					return frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
 				}
+
+				httpIndex = frame.IndexOf(" http", atStringIndex, StringComparison.Ordinal);
+				if (httpIndex != -1)
+				{
+					return frame.Substring(atStringIndex, httpIndex - atStringIndex).Replace("at ", "").Trim();
+				}
 			}
 
 			return null;
