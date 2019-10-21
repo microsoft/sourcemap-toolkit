@@ -113,6 +113,40 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 		}
 
 		[Fact]
+		public void TryParseSingleStackFrame_StackFrameWithWebpackLink_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = "    at eval (webpack-internal:///./Static/jsx/InitialStep/InitialStepForm.js:167:14)";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.Equal("webpack-internal:///./Static/jsx/InitialStep/InitialStepForm.js", result.FilePath);
+			Assert.Equal("eval", result.MethodName);
+			Assert.Equal(167-1, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(14-1, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[Fact]
+		public void TryParseSingleStackFrame_StackFrameWithoutParentheses_CorrectStackFrame()
+		{
+			// Arrange
+			StackTraceParser stackTraceParser = new StackTraceParser();
+			string frame = "    at c http://localhost:19220/crashcauser.min.js:8:3";
+
+			// Act
+			StackFrame result = stackTraceParser.TryParseSingleStackFrame(frame);
+
+			// Assert
+			Assert.Equal("http://localhost:19220/crashcauser.min.js", result.FilePath);
+			Assert.Equal("c", result.MethodName);
+			Assert.Equal(7, result.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(2, result.SourcePosition.ZeroBasedColumnNumber);
+		}
+
+		[Fact]
 		public void TryParseSingleStackFrame_ChromeStackFrame_CorrectStackFrame()
 		{
 			// Arrange
