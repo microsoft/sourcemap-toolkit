@@ -45,7 +45,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Any parts of the stack trace that could not be parsed are excluded from
 		/// the result. Does not ever return null.
 		/// </returns>
-		public List<StackFrame> ParseStackTrace(string stackTraceString, out string message)
+		public virtual List<StackFrame> ParseStackTrace(string stackTraceString, out string message)
 		{
 			if (stackTraceString == null)
 			{
@@ -79,7 +79,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Given a single stack frame, extract the method name.
 		/// </summary>
-		private string TryExtractMethodNameFromFrame(string frame)
+		protected virtual string TryExtractMethodNameFromFrame(string frame)
 		{
 			string methodName = null;
 
@@ -126,7 +126,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Parses a string representing a single stack frame into a StackFrame object. 
 		/// </summary>
-		internal virtual StackFrame TryParseSingleStackFrame(string frame)
+		protected internal virtual StackFrame TryParseSingleStackFrame(string frame)
 		{
 			if (frame == null)
 			{
