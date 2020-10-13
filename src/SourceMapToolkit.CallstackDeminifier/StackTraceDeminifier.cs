@@ -28,9 +28,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 			result.Message = message;
 			result.DeminifiedStackFrameResults = new List<StackFrameDeminificationResult>();
 
-			foreach (StackFrame minifiedStackFrame in result.MinifiedStackFrames)
+			// Deminify frames in reverse order so we can pass the symbol name from caller
+			// (i.e. the function name) into the next level's deminification.
+			string callerSymbolName = null;
+			for (int i = result.MinifiedStackFrames.Count - 1; i >= 0; i--)
 			{
-				result.DeminifiedStackFrameResults.Add(_stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame));
+				var frame = _stackFrameDeminifier.DeminifyStackFrame(result.MinifiedStackFrames[i], callerSymbolName);
+				callerSymbolName = frame?.DeminifiedSymbolName;
+				result.DeminifiedStackFrameResults.Insert(0, frame);
 			}
 
 			return result;

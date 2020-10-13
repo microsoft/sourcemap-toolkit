@@ -97,6 +97,7 @@
     <Compile Include="KeyValueCacheUnitTests.cs" />
     <Compile Include="StackFrameDeminifierUnitTests.cs" />
     <Compile Include="StackTraceDeminifierClosureEndToEndTests.cs" />
+    <Compile Include="StackTraceDeminifierMapOnlyEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierWebpackEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierEndToEndTests.cs" />
     <Compile Include="StackTraceDeminifierUnitTests.cs" />

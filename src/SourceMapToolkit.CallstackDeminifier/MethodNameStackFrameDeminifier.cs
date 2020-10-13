@@ -6,12 +6,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 	/// <summary>
 	/// This class only deminfies the method name in a stack frame. It does not depend on having a source map available during runtime.
 	/// </summary>
-	internal class SimpleStackFrameDeminifier : IStackFrameDeminifier
+	internal class MethodNameStackFrameDeminifier : IStackFrameDeminifier
 	{
 		protected readonly IFunctionMapConsumer _functionMapConsumer;
 		protected readonly IFunctionMapStore _functionMapStore;
 
-		public SimpleStackFrameDeminifier(IFunctionMapStore functionMapStore, IFunctionMapConsumer functionMapConsumer)
+		public MethodNameStackFrameDeminifier(IFunctionMapStore functionMapStore, IFunctionMapConsumer functionMapConsumer)
 		{
 			_functionMapStore = functionMapStore;
 			_functionMapConsumer = functionMapConsumer;
@@ -19,7 +19,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// This method will deminify the method name of a single stack from from a minified stack trace.
 		/// </summary>
-		public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame)
+		public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName)
 		{
 			StackFrameDeminificationResult result = new StackFrameDeminificationResult
 			{
