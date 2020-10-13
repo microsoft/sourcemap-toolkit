@@ -41,23 +41,18 @@ namespace SourcemapToolkit.CallstackDeminifier
 			StackFrameDeminificationResult result = null;
 			if (_methodNameDeminifier != null)
 			{
-				try
-				{
-					result = _methodNameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName);
-				}
-				catch { /* Continue to position deminification anyway */ }
+				result = _methodNameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName);
 			}
 
-			if (result == null)
+			if (result == null || result.DeminificationError == DeminificationError.NoSourceCodeProvided)
 			{
 				result = new StackFrameDeminificationResult
 				{
 					DeminificationError = DeminificationError.None,
-					DeminifiedStackFrame = new StackFrame { MethodName = callerSymbolName ?? stackFrame.MethodName ?? "?" }
+					DeminifiedStackFrame = new StackFrame { MethodName = callerSymbolName }
 				};
 			}
 
-			//_simpleDeminifier.DeminifyStackFrame(stackFrame);
 			if (result.DeminificationError == DeminificationError.None)
 			{
 				MappingEntry generatedSourcePositionMappingEntry =
@@ -78,10 +73,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 						result.DeminificationError = DeminificationError.NoMatchingMapingInSourceMap;
 					}
 				}
-
-				result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry?.OriginalFileName;
-				result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry?.OriginalSourcePosition;
-				result.DeminifiedSymbolName = generatedSourcePositionMappingEntry?.OriginalName;
+				else
+				{
+					result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry.OriginalFileName;
+					result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry.OriginalSourcePosition;
+					result.DeminifiedSymbolName = generatedSourcePositionMappingEntry.OriginalName;
+				}
 			}
 
 			return result;

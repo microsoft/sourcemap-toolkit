@@ -20,11 +20,21 @@ namespace SourcemapToolkit.CallstackDeminifier
 				return null;
 			}
 
-			List<FunctionMapEntry> result = ParseSourceCode(sourceCodeStreamReader);
-
-			foreach (FunctionMapEntry functionMapEntry in result)
+			List<FunctionMapEntry> result;
+			try
 			{
-				functionMapEntry.DeminfifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+				result = ParseSourceCode(sourceCodeStreamReader);
+
+				foreach (FunctionMapEntry functionMapEntry in result)
+				{
+					functionMapEntry.DeminfifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+				}
+			}
+			catch
+			{
+				// Failed to parse JavaScript source. This is common as the JS parser does not support ES2015+.
+				// Continue to regular source map deminification.
+				result = null;
 			}
 
 			return result;
