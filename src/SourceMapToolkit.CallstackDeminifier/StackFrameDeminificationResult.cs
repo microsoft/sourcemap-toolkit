@@ -53,6 +53,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public StackFrame DeminifiedStackFrame { get; set; }
 
 		/// <summary>
+		/// The original name of the symbol at this frame's position
+		/// </summary>
+		public string DeminifiedSymbolName { get; set; }
+
+		/// <summary>
 		/// An enum indicating if any errors occured when deminifying the stack frame.
 		/// </summary>
 		public DeminificationError DeminificationError { get; set; }

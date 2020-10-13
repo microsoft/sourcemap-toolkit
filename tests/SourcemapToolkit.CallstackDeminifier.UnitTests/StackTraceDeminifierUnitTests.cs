@@ -36,7 +36,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(minifiedStackFrames).OutRef("Error example");
 
 			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
-			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0])).Return(null);
+			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0], null)).Return(null);
 			
 			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
@@ -60,7 +60,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 			StackFrameDeminificationResult stackFrameDeminification = new StackFrameDeminificationResult();
-			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0])).Return(stackFrameDeminification);
+			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0], null)).Return(stackFrameDeminification);
 
 			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 

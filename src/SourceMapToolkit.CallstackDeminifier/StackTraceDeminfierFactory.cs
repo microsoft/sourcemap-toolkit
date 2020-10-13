@@ -49,7 +49,41 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			return new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 		}
-		
+
+		/// <summary>
+		/// Creates a StackTraceDeminifier which does not depend on JS files, and is ES2015+ compatible.
+		/// StackTrace deminifiers created with this method will keep source maps cached, and thus use significantly more memory during runtime than the ones generated with GetMethodNameOnlyStackTraceDeminfier.
+		/// </summary>
+		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
+		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider)
+		{
+			return GetMapOnlyStackTraceDeminfier(sourceMapProvider, new StackTraceParser());
+		}
+
+		/// <summary>
+		/// Creates a StackTraceDeminifier which does not depend on JS files, and is ES2015+ compatible.
+		/// StackTrace deminifiers created with this method will keep source maps cached, and thus use significantly more memory during runtime than the ones generated with GetMethodNameOnlyStackTraceDeminfier.
+		/// </summary>
+		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
+		/// <param name="stackTraceParser">Consumers of the API should implement this interface, which provides a parser for the stacktrace. Throws ArgumentNullException if the parameter is set to null.</param>
+		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, IStackTraceParser stackTraceParser)
+		{
+			if (sourceMapProvider == null)
+			{
+				throw new ArgumentNullException(nameof(sourceMapProvider));
+			}
+
+			if (stackTraceParser == null)
+			{
+				throw new ArgumentNullException(nameof(stackTraceParser));
+			}
+
+			ISourceMapStore sourceMapStore = new SourceMapStore(sourceMapProvider);
+			IStackFrameDeminifier stackFrameDeminifier = new StackFrameDeminifier(sourceMapStore);
+
+			return new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
+		}
+
 		/// <summary>
 		/// Creates a StackTraceDeminifier that only deminifies the method names. StackTrace deminifiers created with this method will use significantly less memory during runtime than the 
 		/// </summary>
@@ -71,7 +105,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			ValidateArguments(sourceMapProvider, generatedCodeProvider, stackTraceParser);
 			
 			SourceMapParser sourceMapParser = new SourceMapParser();
-			IStackFrameDeminifier stackFrameDeminifier = new SimpleStackFrameDeminifier(new FunctionMapStore(generatedCodeProvider, (url) => sourceMapParser.ParseSourceMap(sourceMapProvider.GetSourceMapContentsForCallstackUrl(url))), new FunctionMapConsumer());
+			IStackFrameDeminifier stackFrameDeminifier = new MethodNameStackFrameDeminifier(new FunctionMapStore(generatedCodeProvider, (url) => sourceMapParser.ParseSourceMap(sourceMapProvider.GetSourceMapContentsForCallstackUrl(url))), new FunctionMapConsumer());
 
 			return new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 		}

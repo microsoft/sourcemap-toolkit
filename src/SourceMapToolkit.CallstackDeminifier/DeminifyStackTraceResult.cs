@@ -17,7 +17,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 			for (int i = 0; i < DeminifiedStackFrameResults.Count; i++)
 			{
 				StackFrame deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
-				StackFrame frame = string.IsNullOrEmpty(deminFrame.MethodName) ? MinifiedStackFrames[i] : deminFrame;
+
+				// Use deminified info wherever possible, merging if necessary so we always print a full frame
+				StackFrame frame = new StackFrame()
+				{
+					MethodName = deminFrame.MethodName ?? MinifiedStackFrames[i].MethodName,
+					SourcePosition = deminFrame.SourcePosition ?? MinifiedStackFrames[i].SourcePosition,
+					FilePath = deminFrame.SourcePosition != null ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
+				};
 
 				output += $"{Environment.NewLine}  {frame}";
 			}
