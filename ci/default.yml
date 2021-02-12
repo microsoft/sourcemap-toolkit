@@ -1,0 +1,161 @@
+variables:
+  - name: solution
+    value: SourcemapTools.sln
+  - name: build_configuration
+    value: Release
+  - name: assemblyVersion
+    value: 1.0.0
+  - name: nugetVersion
+    value: 1.0.0-rc.1
+  - name: nugetDevVersion
+    value: 1.0.0
+  - name: artifact_nugets
+    value: nugets
+
+trigger: none
+pr:
+  branches:
+    include:
+    - '*'
+
+stages:
+
+- stage: ''
+  displayName: ''
+  jobs:
+  - job: main_job
+    pool:
+      vmImage: 'windows-2019'
+    displayName: 'Build/Test/Deploy'
+
+    steps:
+
+#########
+# BUILD #
+#########
+    - task: NuGetToolInstaller@1
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/ci/SetVersion.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: -path $(Build.SourcesDirectory)/Shared.props -version $(assemblyVersion)
+      displayName: Update assembly version
+
+    - task: MSBuild@1
+      inputs:
+        solution: '$(solution)'
+        configuration: '$(build_configuration)'
+        msbuildArguments: '/t:Restore;Rebuild -m /p:ContinuousIntegrationBuild=true'
+      displayName: Build Solution
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/tests/SourcemapTools.UnitTests/SourcemapTools.UnitTests.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f netcoreapp2.1 -c $(build_configuration)
+        nobuild: true
+      displayName: Publish Test Project for netcore 2.1
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/tests/SourcemapTools.UnitTests/SourcemapTools.UnitTests.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f netcoreapp3.1 -c $(build_configuration)
+        nobuild: true
+      displayName: Publish Test Project for netcore 3.1
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/tests/SourcemapTools.UnitTests/SourcemapTools.UnitTests.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f net5.0 -c $(build_configuration)
+        nobuild: true
+      displayName: Publish Test Project for net 5.0
+########
+# TEST #
+########
+    - task: UseDotNet@2
+      displayName: 'Install .net 5'
+      inputs:
+        packageType: sdk
+        version: 5.x
+
+    - script: dotnet test $(Build.SourcesDirectory)\tests\SourcemapTools.UnitTests\bin\Debug\net48\SourcemapTools.UnitTests.dll /Framework:net48 /logger:trx
+      displayName: 'Tests: .NET FX 4.8'
+
+    - script: dotnet test $(Build.SourcesDirectory)\tests\SourcemapTools.UnitTests\bin\Debug\netcoreapp2.1\SourcemapTools.UnitTests.dll /Framework:netcoreapp2.1 /logger:trx
+      displayName: 'Tests: .NET Core 2.1'
+
+    - script: dotnet test $(Build.SourcesDirectory)\tests\SourcemapTools.UnitTests\bin\Debug\netcoreapp3.1\SourcemapTools.UnitTests.dll /Framework:netcoreapp3.1 /logger:trx
+      displayName: 'Tests: .NET Core 3.1'
+
+    - script: dotnet test $(Build.SourcesDirectory)\tests\SourcemapTools.UnitTests\bin\Debug\net5.0\SourcemapTools.UnitTests.dll /Framework:net5.0 /logger:trx
+      displayName: 'Tests: .NET 5'
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VsTest
+        testResultsFiles: '**/*.trx'
+        testRunTitle: 'Puiblish test results'
+
+#################
+# PUBLISH NUGET #
+#################
+    - powershell: echo "##vso[task.setvariable variable=packageVersion]$(packageVersion)-rc.$(Build.BuildId)"
+      condition: eq(variables['Build.SourceBranchName'], 'master')
+      displayName: Update nuget version
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/ci/BuildNuspecs.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: -path $(Build.SourcesDirectory)/ci/SourceMapTools.nuspec -buildPath $(Build.SourcesDirectory)/BuiltNuGet -version $(packageVersion) -branch $(Build.SourceBranchName)
+      displayName: Update nuspecs
+      condition: or(eq(variables['Build.SourceBranchName'], 'master'), eq(variables['Build.SourceBranchName'], 'relase'))
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\SourceMapTools.nuspec -OutputDirectory $(Build.SourcesDirectory)\ci
+        workingDirectory: $(Build.SourcesDirectory)/BuiltNuGet
+      displayName: Build nuget for Azure Artifacts
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\SourceMapTools.nuspec -OutputDirectory $(Build.SourcesDirectory)\ci -Symbols -SymbolPackageFormat snupkg
+        workingDirectory: $(Build.SourcesDirectory)/BuiltNuGet
+      displayName: Build nuget for Nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/BuiltNuGet/built'
+        artifactName: '$(artifact_nugets)'
+      displayName: Publish nuget to artifacts
+      condition: or(eq(variables['Build.SourceBranchName'], 'master'), eq(variables['Build.SourceBranchName'], 'relase'))
+
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.SourcesDirectory)/ci/SourceMapTools.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'TODO'
+      displayName: Publish to Azure Artifacts feed
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.SourcesDirectory)/ci/SourceMapTools.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'nuget.org feed'
+      displayName: Publish to Nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+

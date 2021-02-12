@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\Shared.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net48;netcoreapp2.1;netcoreapp3.1;net5.0;</TargetFrameworks>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="Moq" Version="4.16.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\SourceMapTools\SourcemapTools.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="webpackapp\bundle.ffe51781aee314a37903.min.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="webpackapp\bundle.ffe51781aee314a37903.min.js.map">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

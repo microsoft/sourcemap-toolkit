@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourcemapTools.UnitTests", "tests\SourcemapTools.UnitTests\SourcemapTools.UnitTests.csproj", "{9F51324A-632A-45C0-9082-B49D78B12962}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourcemapTools", "src\SourceMapTools\SourcemapTools.csproj", "{00F66219-2E6C-4660-9B94-3C30E2B20729}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{38BD9C43-BEEE-4AC9-96D2-B086F57F781C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		CONTRIBUTING.md = CONTRIBUTING.md
+		LICENSE.txt = LICENSE.txt
+		Package.nuspec = Package.nuspec
+		README.md = README.md
+		Shared.props = Shared.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{F3404BAE-DD47-4162-B6ED-F156995541D9}"
+	ProjectSection(SolutionItems) = preProject
+		ci\BuildNuspecs.ps1 = ci\BuildNuspecs.ps1
+		ci\default.yml = ci\default.yml
+		ci\SetVersion.ps1 = ci\SetVersion.ps1
+		ci\SourceMapTools.nuspec = ci\SourceMapTools.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F51324A-632A-45C0-9082-B49D78B12962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F51324A-632A-45C0-9082-B49D78B12962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F51324A-632A-45C0-9082-B49D78B12962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F51324A-632A-45C0-9082-B49D78B12962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D364A9C0-2F54-4BD4-9224-D62C19910BC5}
+	EndGlobalSection
+EndGlobal

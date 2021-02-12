@@ -1,8 +1,38 @@
-# Source Map Toolkit [![Build Status](https://dev.azure.com/ms/sourcemap-toolkit/_apis/build/status/microsoft.sourcemap-toolkit?branchName=master)](https://dev.azure.com/ms/sourcemap-toolkit/_build/latest?definitionId=192&branchName=master) [![Build status](https://ci.appveyor.com/api/projects/status/ht4u2w7paesucdjw?svg=true)](https://ci.appveyor.com/project/thomabr/sourcemap-toolkit) [![NuGet](https://img.shields.io/nuget/v/SourceMapToolkit.svg)](https://www.nuget.org/packages/SourceMapToolkit/)
+# Source Map Tools [![Build Status](https://dev.azure.com/sourcemaptools/sourcemaptools/_apis/build/status/build?branchName=master)](https://dev.azure.com/sourcemaptools/sourcemaptools/_build/latest?definitionId=TODO&branchName=master) [![NuGet](https://img.shields.io/nuget/v/SourceMapTools.svg)](https://www.nuget.org/packages/SourceMapTools/)
+
 This is a C# library for working with JavaScript source maps and deminifying JavaScript callstacks.
 
+This is a fork of [microsoft/sourcemap-toolkit](https://github.com/microsoft/sourcemap-toolkit) project that solves following outstanding issues with original project:
+
+- no active development is done anymore for original project
+- no nuget publishing for recent changes: [#64](https://github.com/microsoft/sourcemap-toolkit/issues/64)
+- lack of support for modern frameworks (.net core): [#57](https://github.com/microsoft/sourcemap-toolkit/issues/57)
+- lack of support for ES6+: [#66](https://github.com/microsoft/sourcemap-toolkit/issues/66)
+
+### Fork changes
+
+Solution structure:
+- codebase migrated C# 9 + nullable reference types and projects migrated to CSP from legacy projects
+- merged `SourcemapToolkit.SourcemapParser` and `SourcemapToolkit.CallstackDeminifier` projects into single `SourcemapTools` project as they are not distributed separately anyways. Same done for test projects
+- `SourcemapToolkit.CallstackTestApp` test app project was removed as it wasn't used directly in testing process
+- enabled checked build
+- fork is rebranded to `SourceMapTools` (namespaces in code left intact)
+- strong name sign key changed
+
+Dependencies and targets:
+- `Newtonsoft.Json` dependency replaced with `System.Text.Json`
+- `AjaxMin` ES5 JavaScript parser dependency replaced with `esprima.net` parser with modern JavaScript support
+- `RhinoMocks` test dependency replaced with `Moq`
+- target framework changed from `net45` to `netstandard2.0`
+- SourceLink support added
+
+API changes:
+- modified sourcemap/script source provider interfaces to require `Stream` instead of `StreamReader`
+- modified some DTOs used in code to have more strict instantiation through constructor to simplify nullable reference types analysis
+- some classes/methods now are static as they don't have state (e.g. `SourceMapGenerator`, `SourceMapParser` classes)
+
 ## Source Map Parsing
-The `SourcemapToolkit.SourcemapParser.dll` provides an API for parsing a souce map into an object that is easy to work with and an API for serializing source map object back to json string. 
+The `SourcemapTools.dll` provides an API for parsing a souce map into an object that is easy to work with and an API for serializing source map object back to json string. 
 The source map class has a method `GetMappingEntryForGeneratedSourcePosition`, which can be used to find a source map mapping entry that likely corresponds to a piece of generated code. 
 ### Example
 #### Source map string
@@ -55,25 +85,23 @@ The source map class has a method `GetMappingEntryForGeneratedSourcePosition`, w
 |&nbsp;\|--Sources|Count=1|System.Collections.Generic.List<string>
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\|--[0]|"CommonIntl.js"|string
 ### Usage
-The top level API for source map parsing is the `SourceMapParser.ParseSourceMap` method. The input is a `StreamReader` that can be used to access the contents of the source map.
+The top level API for source map parsing is the `SourceMapParser.ParseSourceMap` method. The input is a `Stream` that can be used to access the contents of the source map.
 The top level API for source map serializing is the `SourceMapGenerator.SerializeMapping` method. The input is a `SourceMap` that to be serialized and an optional JsonSerializerSettings that can be used to control the json serialization.
 A sample usage of the library is shown below.
 
 ```csharp
 // Parse the source map from file
-SourceMapParser parser = new SourceMapParser();
 SourceMap sourceMap;
 using (FileStream stream = new FileStream(@"sample.sourcemap", FileMode.Open))
 {
-    sourceMap = parser.ParseSourceMap(new StreamReader(stream));
+    sourceMap = SourceMapParser.ParseSourceMap(stream);
 }
 
 // Manipulate the source map
 ...
 
 // Save to source map to file
-SourceMapGenerator generator = new SourceMapGenerator();
-string serializedMap = generator.SerializeMapping(sourceMap);
+string serializedMap = SourceMapGenerator.SerializeMapping(sourceMap);
 File.WriteAllText(@"updatedSample.sourcemap", serializedMap);
 ```
 
@@ -114,7 +142,7 @@ SourceMap minifiedToOriginal = minifiedToBundled.ApplySourceMap(bundledToOrigina
 ```
 
 ## Call Stack Deminification
-The `SourcemapToolkit.CallstackDeminifier.dll` allows for the deminification of JavaScript call stacks. 
+The `SourcemapToolkit.dll` allows for the deminification of JavaScript call stacks. 
 ### Example
 #### Call stack string
 ```
@@ -140,7 +168,7 @@ TypeError: Cannot read property 'length' of undefined
     SourcePosition.ZeroBasedLineNumber: 5
 ```
 ### Usage
-The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `StreamReader` that can be used to access the contents of the requested JavaScript code or corresponding source map. A `StackTraceDeminifier` can be instantiated using one of the methods on `StackTraceDeminfierFactory`. A sample usage of the library is shown below.
+The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `Stream` that can be used to access the contents of the requested JavaScript code or corresponding source map. A `StackTraceDeminifier` can be instantiated using one of the methods on `StackTraceDeminfierFactory`. A sample usage of the library is shown below.
 
 ```csharp
 StackTraceDeminifier sourceMapCallstackDeminifier = StackTraceDeminfierFactory.GetStackTraceDeminfier(new SourceMapProvider(), new SourceCodeProvider());
@@ -161,13 +189,12 @@ The Base64 VLQ decoding code was based on the implmentation in the [Closure Comp
 
 The source map parsing implementation and the relevant comments were based on the [Source Maps V3 spec](https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/mobilebasic?pref=2&pli=1) which is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/).
 
-The source map parser uses [Json.NET](http://www.newtonsoft.com/json) which is licensed under the [MIT License](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md).
+The source map parser uses [System.Text.Json](https://www.nuget.org/packages/System.Text.Json) which is licensed under the [MIT License](https://github.com/dotnet/runtime/blob/master/LICENSE.TXT).
 
-The call stack deminifier and test app both use [Ajax Min](http://ajaxmin.codeplex.com/) which is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+The call stack deminifier use [Esprima .NET](https://www.nuget.org/packages/esprima) which is licensed under the [BSD 3-Clause License](https://github.com/sebastienros/esprima-dotnet/blob/dev/LICENSE.txt).
 
-The unit tests for this library leverage the functionality provided by [Rhino Mocks](https://www.hibernatingrhinos.com/oss/rhino-mocks). Rhino Mocks is Open Source and released under the [BSD license](http://www.opensource.org/licenses/bsd-license.php).
+The unit tests for this library leverage the functionality provided by [Moq](https://www.nuget.org/packages/Moq). Moq is Open Source and released under the [BSD 3-Clause License](https://github.com/moq/moq4/blob/main/License.txt).
 
 ## License
-Copyright (c) Microsoft Corporation. All rights reserved.
 
 Licensed under the [MIT](LICENSE.txt) License.

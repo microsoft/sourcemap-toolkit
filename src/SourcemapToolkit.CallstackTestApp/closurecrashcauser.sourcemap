@@ -1,8 +1,0 @@
-﻿{
-"version":3,
-"file":"",
-"lineCount":1,
-"mappings":"AAEgCA,QAAA,EAAS,EAAG,EAC5CC,MAAA,IAAA,CAAgBD,CAChBA,EAAAE,UAAA,CAA0C,CAAEC,EAAuBA,QAAS,EAAG,CAAS,MAAOC,EAAAC,EAAA,CAAVC,IAAAA,EAAU,CAAhB,CAArC,CAE1CF,EAAAC,EAAA,CAAqDD,QAAS,CAACG,CAAD,CAAI,CAAE,MAAOA,EAAAC,OAAT,CAElEC,SAASA,EAAc,EAAG,CAA+C,MAAON,CAA5CG,IAAIN,CAAwCG,GAAA,EAAtD,CAE1BF,MAAA,IAAA,IAAA,CAAuBS,CAAAP,EACvBF,OAAA,IAAA,KAAA,CAAwBG,CAAAC,EACxBJ,OAAA,IAAA,CAAgBQ,CAEhBR,OAAAU,QAAA,CAAiBC,QAAS,CAACC,CAAD,CAAUC,CAAV,CAAkBC,CAAlB,CAA0BC,CAA1B,CAAiCC,CAAjC,CAAwC,CAC1DA,CAAJ,CACIC,QAAAC,eAAA,CAAwB,kBAAxB,CAAAC,UADJ,CAC4DH,CAAAI,MAD5D,CAESpB,MAAAqB,MAAAL,MAFT,GAGIC,QAAAC,eAAA,CAAwB,kBAAxB,CAAAC,UAHJ,CAG4DnB,MAAAqB,MAAAL,MAAAI,MAH5D,CAD8D,CAOlEpB,OAAAsB,OAAA,CAAgBC,QAAS,EAAQ,CAC7BN,QAAAC,eAAA,CAAwB,aAAxB,CAAAM,iBAAA,CAAwD,OAAxD,CAAiE,QAAS,EAAG,CACzEC,OAAAC,IAAA,CAAYlB,CAAA,EAAZ,CADyE,CAA7E,CAD6B;",
-"sources":["//officefile/public/thomabr/closurecrashcauser.js"],
-"names":["mynamespace.objectWithMethods","window","prototype","prototypeMethodLevel1","mynamespace.objectWithMethods.propertyMethodLevel2","propertyMethodLevel2","x","e","length","GlobalFunction","mynamespace.objectWithMethods.prototypeMethodLevel1","onerror","window.onerror","message","source","lineno","colno","error","document","getElementById","innerText","stack","event","onload","window.onload","addEventListener","console","log"]
-}

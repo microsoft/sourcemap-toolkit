@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Version>1.0.0</Version>
+		
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+
+		<LangVersion>9.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+		<Features>strict</Features>
+
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<WarningLevel>4</WarningLevel>
+		<ErrorReport>prompt</ErrorReport>
+
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\SourceMapTools.snk</AssemblyOriginatorKeyFile>
+
+		<GenerateAssemblyCompanyAttribute>False</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyConfigurationAttribute>False</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyFileVersionAttribute>False</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyProductAttribute>False</GenerateAssemblyProductAttribute>
+		<GenerateAssemblyTitleAttribute>False</GenerateAssemblyTitleAttribute>
+		<GenerateAssemblyVersionAttribute>False</GenerateAssemblyVersionAttribute>
+		
+		<RepositoryUrl>https://github.com/MaceWindu/sourcemap-toolkit</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+
+		<AnalysisLevel>preview</AnalysisLevel>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<RunAnalyzers>true</RunAnalyzers>
+	</PropertyGroup>
+</Project>

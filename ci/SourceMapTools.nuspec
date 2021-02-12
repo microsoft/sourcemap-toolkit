@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>SourceMapTools</id>
+		<title>SourceMap Tools</title>
+		<description>A C# library that allows for the consumption of source maps and the deminification of JavaScript stack traces.</description>
+		<summary />
+		<tags>sourcemap callstack stackframe deminify</tags>
+		<copyright>Copyright © 2016, 2021</copyright>
+		<authors>Microsoft, MaceWindu@github.com</authors>
+		<owners>MaceWindu@github.com</owners>
+		<license type="file">MIT-LICENSE.txt</license>
+		<projectUrl>https://github.com/MaceWindu/sourcemap-toolkit</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		
+		<dependencies>
+			<group targetFramework=".NETStandard2.0">
+				<dependency id="esprima"          version="2.0.0-beta-1338" />
+				<dependency id="System.Text.Json" version="5.0.1"           />
+			</group>
+		</dependencies>
+	</metadata>
+
+	<files>
+		<file src="..\LICENSE.txt" />
+		
+		<file src="..\src\SourceMapTools\bin\Release\**\SourcemapTools.pdb" target="lib\" />
+		<file src="..\src\SourceMapTools\bin\Release\**\SourcemapTools.xml" target="lib\" />
+		<file src="..\src\SourceMapTools\bin\Release\**\SourcemapTools.dll" target="lib\" />
+	</files>
+</package>
