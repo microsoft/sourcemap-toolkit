@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
@@ -8,12 +8,17 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public string Message;
 
 		public List<StackFrame> MinifiedStackFrames;
-
 		public List<StackFrameDeminificationResult> DeminifiedStackFrameResults;
 
 		public override string ToString()
 		{
-			string output = Message ?? string.Empty;
+			StringBuilder sb = new StringBuilder();
+
+			if (!string.IsNullOrEmpty(Message))
+			{
+				sb.Append(Message);
+			}
+
 			for (int i = 0; i < DeminifiedStackFrameResults.Count; i++)
 			{
 				StackFrame deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
@@ -26,10 +31,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 					FilePath = deminFrame.SourcePosition != null ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
 				};
 
-				output += $"{Environment.NewLine}  {frame}";
+				sb.AppendLine();
+				sb.Append("  ");
+				sb.Append(frame);
 			}
 
-			return output;
+			return sb.ToString();
 		}
 	}
 }
