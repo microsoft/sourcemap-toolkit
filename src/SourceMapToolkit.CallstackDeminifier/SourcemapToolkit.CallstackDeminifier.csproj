@@ -74,6 +74,7 @@
     <Compile Include="StackTraceDeminfierFactory.cs" />
     <Compile Include="StackTraceDeminifier.cs" />
     <Compile Include="StackTraceParser.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">

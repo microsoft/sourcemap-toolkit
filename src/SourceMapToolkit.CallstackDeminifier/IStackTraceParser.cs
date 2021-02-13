@@ -18,7 +18,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <remarks>
 		/// This override drops the Message out param for backward compatibility
 		/// </remarks>
-		List<StackFrame> ParseStackTrace(string stackTraceString);
+		IReadOnlyList<StackFrame> ParseStackTrace(string stackTraceString);
 
 		/// <summary>
 		/// Generates a list of StackFrame objects based on the input stack trace.
@@ -31,6 +31,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Any parts of the stack trace that could not be parsed are excluded from
 		/// the result. Does not ever return null.
 		/// </returns>
-		List<StackFrame> ParseStackTrace(string stackTraceString, out string message);
+		IReadOnlyList<StackFrame> ParseStackTrace(string stackTraceString, out string message);
 	}
 }

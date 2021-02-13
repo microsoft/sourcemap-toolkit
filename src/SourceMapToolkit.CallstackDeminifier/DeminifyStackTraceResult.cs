@@ -5,10 +5,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 {
 	public class DeminifyStackTraceResult
 	{
-		public string Message;
-
-		public List<StackFrame> MinifiedStackFrames;
-		public List<StackFrameDeminificationResult> DeminifiedStackFrameResults;
+		public string Message { get; }
+		public IReadOnlyList<StackFrame> MinifiedStackFrames { get; }
+		public IReadOnlyList<StackFrameDeminificationResult> DeminifiedStackFrameResults { get; }
 
 		public override string ToString()
 		{
@@ -37,6 +36,16 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			return sb.ToString();
+		}
+
+		public DeminifyStackTraceResult(
+			string message,
+			IReadOnlyList<StackFrame> minifiedStackFrames,
+			IReadOnlyList<StackFrameDeminificationResult> deminifiedStackFrameResults)
+		{
+			Message = message;
+			MinifiedStackFrames = minifiedStackFrames;
+			DeminifiedStackFrameResults = deminifiedStackFrameResults;
 		}
 	}
 }
