@@ -117,8 +117,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry();
-			wrapingFunctionMapEntry.DeminifiedMethodName = "DeminifiedFoo";
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -145,8 +144,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry();
-			wrapingFunctionMapEntry.DeminifiedMethodName = "DeminifiedFoo";
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -172,8 +170,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry();
-			wrapingFunctionMapEntry.DeminifiedMethodName = "DeminifiedFoo";
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -201,8 +198,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry();
-			wrapingFunctionMapEntry.DeminifiedMethodName = "DeminifiedFoo";
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -227,10 +223,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
-		private FunctionMapEntry CreateFunctionMapEntry()
+		private FunctionMapEntry CreateFunctionMapEntry(string deminifiedMethodName)
 		{
 			return new FunctionMapEntry(
 				bindings: default,
+				deminifiedMethodName,
 				startSourcePosition: default,
 				endSourcePosition: default);
 		}

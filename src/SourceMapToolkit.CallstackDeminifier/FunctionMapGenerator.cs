@@ -23,12 +23,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			List<FunctionMapEntry> result;
 			try
 			{
-				result = ParseSourceCode(sourceCodeStreamReader);
-
-				foreach (FunctionMapEntry functionMapEntry in result)
-				{
-					functionMapEntry.DeminifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-				}
+				result = ParseSourceCode(sourceCodeStreamReader, sourceMap);
 			}
 			catch
 			{
@@ -43,7 +38,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Iterates over all the code in the JavaScript file to get a list of all the functions declared in that file.
 		/// </summary>
-		internal List<FunctionMapEntry> ParseSourceCode(StreamReader sourceCodeStreamReader)
+		internal List<FunctionMapEntry> ParseSourceCode(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
 		{
 			if (sourceCodeStreamReader == null)
 			{
@@ -60,68 +55,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			Block block = jsParser.Parse(sourceCode, codeSettings);
 
-			FunctionFinderVisitor functionFinderVisitor = new FunctionFinderVisitor();
+			FunctionFinderVisitor functionFinderVisitor = new FunctionFinderVisitor(sourceMap);
 			functionFinderVisitor.Visit(block);
 			
 			// Sort in descending order by start position
 			functionFinderVisitor.FunctionMap.Sort((x, y) => y.StartSourcePosition.CompareTo(x.StartSourcePosition));
 
 			return functionFinderVisitor.FunctionMap;
-		}
-
-		/// <summary>
-		/// Gets the original name corresponding to a function based on the information provided in the source map.
-		/// </summary>
-		internal static string GetDeminifiedMethodNameFromSourceMap(FunctionMapEntry wrappingFunction, SourceMap sourceMap)
-		{
-			if (wrappingFunction == null)
-			{
-				throw new ArgumentNullException(nameof(wrappingFunction));
-			}
-
-			if (sourceMap == null)
-			{
-				throw new ArgumentNullException(nameof(sourceMap));
-			}
-
-			string methodName = null;
-
-			if (wrappingFunction.Bindings != null && wrappingFunction.Bindings.Count > 0)
-			{
-				MappingEntry objectProtoypeMappingEntry = null;
-				if (wrappingFunction.Bindings.Count == 2)
-				{
-					objectProtoypeMappingEntry =
-						sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings[0].SourcePosition);
-				}
-
-				MappingEntry mappingEntry =
-					sourceMap.GetMappingEntryForGeneratedSourcePosition(wrappingFunction.Bindings.Last().SourcePosition);
-
-				if (mappingEntry?.OriginalName != null)
-				{
-					if (objectProtoypeMappingEntry?.OriginalName != null)
-					{
-						string objectName = objectProtoypeMappingEntry.OriginalName;
-						if (objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber
-							&& objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber
-							&& objectName.EndsWith($".{mappingEntry.OriginalName}"))
-						{
-							// The object name already contains the method name, so do not append it
-							methodName = objectName;
-						}
-						else
-						{
-							methodName = $"{objectName}.{mappingEntry.OriginalName}";
-						}
-					}
-					else
-					{
-						methodName = mappingEntry.OriginalName;
-					}
-				}
-			}
-			return methodName;
 		}
 	}
 }
