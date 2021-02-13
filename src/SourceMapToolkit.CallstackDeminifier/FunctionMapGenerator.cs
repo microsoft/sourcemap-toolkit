@@ -27,7 +27,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 				foreach (FunctionMapEntry functionMapEntry in result)
 				{
-					functionMapEntry.DeminfifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
+					functionMapEntry.DeminifiedMethodName = GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
 				}
 			}
 			catch

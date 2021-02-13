@@ -37,11 +37,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			};
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
 			{
-				new FunctionMapEntry
-				{
-					StartSourcePosition = new SourcePosition {ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 10},
-					EndSourcePosition = new SourcePosition {ZeroBasedLineNumber = 50, ZeroBasedColumnNumber = 10}
-				}
+				new FunctionMapEntry(
+					bindings: default,
+					startSourcePosition: new SourcePosition {ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 10},
+					endSourcePosition: new SourcePosition {ZeroBasedLineNumber = 50, ZeroBasedColumnNumber = 10})
+				
 			};
 			IFunctionMapConsumer functionMapConsumer = new FunctionMapConsumer();
 
@@ -61,11 +61,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				ZeroBasedLineNumber = 41,
 				ZeroBasedColumnNumber = 2
 			};
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 10 },
-				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 50, ZeroBasedColumnNumber = 10 }
-			};
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
+				bindings: default,
+				startSourcePosition: new SourcePosition { ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 10 },
+				endSourcePosition: new SourcePosition { ZeroBasedLineNumber = 50, ZeroBasedColumnNumber = 10 });
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
 			{
 				functionMapEntry
@@ -88,16 +87,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				ZeroBasedLineNumber = 31,
 				ZeroBasedColumnNumber = 0
 			};
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 10, ZeroBasedColumnNumber = 10 },
-				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 30 }
-			};
-			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry
-			{
-				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 30, ZeroBasedColumnNumber = 0 },
-				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 2 }
-			};
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
+				bindings: default,
+				startSourcePosition: new SourcePosition { ZeroBasedLineNumber = 10, ZeroBasedColumnNumber = 10 },
+				endSourcePosition: new SourcePosition { ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 30 });
+			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry(
+				bindings: default,
+				startSourcePosition: new SourcePosition { ZeroBasedLineNumber = 30, ZeroBasedColumnNumber = 0 },
+				endSourcePosition: new SourcePosition { ZeroBasedLineNumber = 40, ZeroBasedColumnNumber = 2 });
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
 			{
 				functionMapEntry,
@@ -121,16 +118,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				ZeroBasedLineNumber = 10,
 				ZeroBasedColumnNumber = 25
 			};
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 10 },
-				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 30 }
-			};
-			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry
-			{
-				StartSourcePosition = new SourcePosition { ZeroBasedLineNumber = 9, ZeroBasedColumnNumber = 0 },
-				EndSourcePosition = new SourcePosition { ZeroBasedLineNumber = 15, ZeroBasedColumnNumber = 2 }
-			};
+			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
+				bindings: default,
+				startSourcePosition: new SourcePosition { ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 10 },
+				endSourcePosition: new SourcePosition { ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 30 });
+			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry(
+				bindings: default,
+				startSourcePosition: new SourcePosition { ZeroBasedLineNumber = 9, ZeroBasedColumnNumber = 0 },
+				endSourcePosition: new SourcePosition { ZeroBasedLineNumber = 15, ZeroBasedColumnNumber = 2 });
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
 			{
 				functionMapEntry2,

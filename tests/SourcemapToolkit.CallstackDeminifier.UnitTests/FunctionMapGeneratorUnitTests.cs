@@ -4,6 +4,7 @@ using Xunit;
 using SourcemapToolkit.SourcemapParser.UnitTests;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser;
+using System.Dynamic;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
@@ -404,7 +405,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_NullSourceMap_ThrowsException()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry();
 			SourceMap sourceMap = null;
 
 			// Act
@@ -415,7 +416,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_NoBinding_ReturnNullMethodName()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry();
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 
 			// Act
@@ -430,17 +431,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
+			List<BindingInformation> bindings = new List<BindingInformation>()
+				{
+					new BindingInformation
 					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
-						}
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
 					}
-			};
+				};
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry(bindings);
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
@@ -457,17 +455,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
+			List<BindingInformation> bindings = new List<BindingInformation>()
+				{
+					new BindingInformation
 					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
-						}
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
 					}
-			};
+				};
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry(bindings);
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(
@@ -491,21 +486,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
+			List<BindingInformation> bindings = new List<BindingInformation>
+				{
+					new BindingInformation
 					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 86, ZeroBasedColumnNumber = 52}
-						},
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 88, ZeroBasedColumnNumber = 78}
-						}
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 86, ZeroBasedColumnNumber = 52}
+					},
+					new BindingInformation
+					{
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 88, ZeroBasedColumnNumber = 78}
 					}
-			};
+				};
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry(bindings);
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(
@@ -535,21 +527,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
 		{
 			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
+			List<BindingInformation> bindings = new List<BindingInformation>
+				{
+					new BindingInformation
 					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
-						},
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
-						}
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
+					},
+					new BindingInformation
+					{
+						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
 					}
-			};
+				};
+			FunctionMapEntry functionMapEntry = CreateFunctionMapEntry(bindings);
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
 			sourceMap.Stub(
@@ -576,6 +565,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal("bar.baz", result);
 			sourceMap.VerifyAllExpectations();
+		}
+
+		private FunctionMapEntry CreateFunctionMapEntry(IReadOnlyList<BindingInformation> bindings = default)
+		{
+			return new FunctionMapEntry(
+				bindings: bindings,
+				startSourcePosition: default,
+				endSourcePosition: default);
 		}
 	}
 }

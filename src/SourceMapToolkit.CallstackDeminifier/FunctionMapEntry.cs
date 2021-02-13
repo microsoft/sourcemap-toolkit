@@ -30,22 +30,32 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// To get the complete name of the function associated with this mapping entry
 		/// append the names of each bindings with a "."
 		/// </summary>
-		public List<BindingInformation> Bindings { get; set; }
+		public IReadOnlyList<BindingInformation> Bindings { get; }
 		
 		/// <summary>
 		/// If this entry represents a function whose name was minified, this value 
 		/// may contain an associated deminfied name corresponding to the function.
 		/// </summary>
-		public string DeminfifiedMethodName { get; set; } 
+		public string DeminifiedMethodName { get; set; }
 
 		/// <summary>
 		/// Denotes the location of the beginning of this function
 		/// </summary>
-		public SourcePosition StartSourcePosition { get; set; }
+		public SourcePosition StartSourcePosition { get; }
 
 		/// <summary>
 		/// Denotes the end location of this function
 		/// </summary>
-		public SourcePosition EndSourcePosition { get; set; }
+		public SourcePosition EndSourcePosition { get; }
+
+		public FunctionMapEntry(
+			IReadOnlyList<BindingInformation> bindings,
+			SourcePosition startSourcePosition,
+			SourcePosition endSourcePosition)
+		{
+			Bindings = bindings;
+			StartSourcePosition = startSourcePosition;
+			EndSourcePosition = endSourcePosition;
+		}
 	}
 }

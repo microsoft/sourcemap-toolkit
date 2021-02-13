@@ -16,33 +16,31 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public override void Visit(FunctionObject node)
 		{
 			base.Visit(node);
-			List<BindingInformation> bindings = GetBindings(node);
+			var bindings = GetBindings(node);
 
 			if (bindings != null)
 			{
-				FunctionMapEntry functionMapEntry = new FunctionMapEntry
-				{
-					Bindings = bindings,
-					StartSourcePosition = new SourcePosition
+				FunctionMapEntry functionMapEntry = new FunctionMapEntry(
+					bindings: bindings,
+					startSourcePosition: new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
 						ZeroBasedColumnNumber = node.Body.Context.StartColumn
 					},
-					EndSourcePosition = new SourcePosition
+					endSourcePosition: new SourcePosition
 					{
 						ZeroBasedLineNumber = node.Body.Context.EndLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
 						ZeroBasedColumnNumber = node.Body.Context.EndColumn
-					}
-				};
+					});
 
 				FunctionMap.Add(functionMapEntry);
-			}	
+			}
 		}
 
 		/// <summary>
 		/// Gets the name and location information related to the function name binding for a FunctionObject node
 		/// </summary>
-		private List<BindingInformation> GetBindings(FunctionObject node)
+		private IReadOnlyList<BindingInformation> GetBindings(FunctionObject node)
 		{
 			List<BindingInformation> result = new List<BindingInformation>();
 			// Gets the name of an object property that a function is bound to, like the static method foo in the example "object.foo = function () {}"
