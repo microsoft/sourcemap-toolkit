@@ -53,7 +53,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string result = keyValueCache.GetValue("bar");
 
 			// Assert
-			Assert.Equal(null, result);
+			Assert.Null(result);
 			valueGetter.VerifyAllExpectations();
 		}
 

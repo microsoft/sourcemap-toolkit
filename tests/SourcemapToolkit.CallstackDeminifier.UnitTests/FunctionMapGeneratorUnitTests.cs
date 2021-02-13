@@ -50,7 +50,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.Equal(0, functionMap.Count);
+			Assert.Empty(functionMap);
 		}
 
 		[Fact]
@@ -64,7 +64,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
 			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
@@ -86,7 +86,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
 			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
@@ -167,7 +167,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
@@ -284,7 +284,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
