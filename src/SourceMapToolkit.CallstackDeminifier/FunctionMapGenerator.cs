@@ -56,8 +56,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			FunctionFinderVisitor functionFinderVisitor = new FunctionFinderVisitor(sourceMap);
 			functionFinderVisitor.Visit(block);
-			
-			// Sort in descending order by start position
+
+			// Sort in descending order by start position.  This allows the first result found in a linear search to be the "closest function to the [consumer's] source position".
+			//
+			// ATTN: It may be possible to do this with an ascending order sort, followed by a series of binary searches on rows & columns.
+			//       Our current profiles show the memory pressure being a bigger issue than the stack lookup, so I'm leaving this for now. 
 			functionFinderVisitor.FunctionMap.Sort((x, y) => y.StartSourcePosition.CompareTo(x.StartSourcePosition));
 
 			return functionFinderVisitor.FunctionMap;
