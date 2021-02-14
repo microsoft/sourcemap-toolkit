@@ -48,16 +48,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			List<BindingInformation> result = new List<BindingInformation>();
 			// Gets the name of an object property that a function is bound to, like the static method foo in the example "object.foo = function () {}"
-			BinaryOperator parentBinaryOperator = node.Parent as BinaryOperator;
-			if (parentBinaryOperator != null)
+			if (node.Parent is BinaryOperator parentBinaryOperator)
 			{
 				result.AddRange(ExtractBindingsFromBinaryOperator(parentBinaryOperator));
 				return result;
 			}
 
 			// Gets the name of an object property that a function is bound to against the prototype, like the instance method foo in the example "object.prototype = {foo: function () {}}"
-			ObjectLiteralProperty parentObjectLiteralProperty = node.Parent as ObjectLiteralProperty;
-			if (parentObjectLiteralProperty != null)
+			if (node.Parent is ObjectLiteralProperty parentObjectLiteralProperty)
 			{
 				// See if we can get the name of the object that this method belongs to
 				ObjectLiteral objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
@@ -75,20 +73,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 				return result;
 			}
 
-			BindingIdentifier bindingIdentifier = null;
-
 			// Gets the name of a variable that a function is bound to, like foo in the example "var foo = function () {}"
-			VariableDeclaration parentVariableDeclaration = node.Parent as VariableDeclaration;
-			if (parentVariableDeclaration != null)
-			{
-				bindingIdentifier = parentVariableDeclaration.Binding as BindingIdentifier;
-			}
-			// Gets the name bound to the function, like foo in the example "function foo() {}
-			else
-			{
-				bindingIdentifier = node.Binding;
-			}
-
+			BindingIdentifier bindingIdentifier = (node.Parent is VariableDeclaration parentVariableDeclaration) ?
+				parentVariableDeclaration.Binding as BindingIdentifier :
+				bindingIdentifier = node.Binding; // Gets the name bound to the function, like foo in the example "function foo() {}
+			
 			if (bindingIdentifier != null)
 			{
 				result.Add(
