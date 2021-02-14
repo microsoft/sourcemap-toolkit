@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
+
 using Newtonsoft.Json;
 
 namespace SourcemapToolkit.SourcemapParser
@@ -29,13 +30,18 @@ namespace SourcemapToolkit.SourcemapParser
 				SourceMap result = serializer.Deserialize<SourceMap>(jsonTextReader);
 
 				// Since SourceMap is immutable we need to allocate a new one and copy over all the information
+				List<MappingEntry> parsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
+
+				// Resize to free unused memory
+				parsedMappings.Capacity = parsedMappings.Count;
+
 				result = new SourceMap(
 					version: result.Version,
 					file: result.File,
 					mappings: result.Mappings,
 					sources: result.Sources,
 					names: result.Names,
-					parsedMappings: _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources),
+					parsedMappings: parsedMappings,
 					sourcesContent: result.SourcesContent);
 
 				sourceMapStream.Close();

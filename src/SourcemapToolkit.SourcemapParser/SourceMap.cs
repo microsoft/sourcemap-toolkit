@@ -17,43 +17,36 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// The version of the source map specification being used
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public int Version { get; }
 
 		/// <summary>
 		/// The name of the generated file to which this source map corresponds
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public string File { get; }
 
 		/// <summary>
 		/// The raw, unparsed mappings entry of the soure map
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public string Mappings { get; }
 
 		/// <summary>
 		/// The list of source files that were the inputs used to generate this output file
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public IReadOnlyList<string> Sources { get; }
 
 		/// <summary>
 		/// A list of known original names for entries in this file
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public IReadOnlyList<string> Names { get; }
 
 		/// <summary>
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public IReadOnlyList<MappingEntry> ParsedMappings { get; }
 
 		/// <summary>
 		/// A list of content source files
 		/// </summary>
-		[JsonProperty(Order = -2)]
 		public IReadOnlyList<string> SourcesContent { get; }
 		
 		public SourceMap(

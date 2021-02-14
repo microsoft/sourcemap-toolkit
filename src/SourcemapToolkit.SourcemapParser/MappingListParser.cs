@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -42,7 +43,9 @@ namespace SourcemapToolkit.SourcemapParser
 		public MappingEntry ToMappingEntry(IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			SourcePosition originalSourcePosition;
-			
+
+			Debugger.Launch();
+
 			if (OriginalColumnNumber.HasValue && OriginalLineNumber.HasValue)
 			{
 				originalSourcePosition = new SourcePosition(
@@ -225,7 +228,8 @@ namespace SourcemapToolkit.SourcemapParser
 					mappingEntries.Add(numericMappingEntry.ToMappingEntry(names, sources));
 
 					// Update the current MappingParserState based on the generated MappingEntry
-					currentMappingsParserState = new MappingsParserState(currentMappingsParserState,
+					currentMappingsParserState = new MappingsParserState(
+						currentMappingsParserState,
 						newGeneratedColumnBase: numericMappingEntry.GeneratedColumnNumber,
 						newSourcesListIndexBase: numericMappingEntry.OriginalSourceFileIndex,
 						newOriginalSourceStartingLineBase: numericMappingEntry.OriginalLineNumber,
