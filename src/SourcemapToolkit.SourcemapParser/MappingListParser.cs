@@ -39,7 +39,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public int? OriginalNameIndex;
 
-		public MappingEntry ToMappingEntry(List<string> names, List<string> sources)
+		public MappingEntry ToMappingEntry(IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			SourcePosition originalSourcePosition;
 			
@@ -196,7 +196,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// Top level API that should be called for decoding the MappingsString element. It will convert the string containing Base64 
 		/// VLQ encoded segments into a list of MappingEntries.
 		/// </summary>
-		internal List<MappingEntry> ParseMappings(string mappingString, List<string> names, List<string> sources)
+		internal List<MappingEntry> ParseMappings(string mappingString, IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			List<MappingEntry> mappingEntries = new List<MappingEntry>();
 			MappingsParserState currentMappingsParserState = new MappingsParserState();

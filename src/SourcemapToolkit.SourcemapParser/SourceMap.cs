@@ -2,64 +2,95 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json;
+
 namespace SourcemapToolkit.SourcemapParser
 {
 	public class SourceMap
 	{
 		/// <summary>
+		///  Cache the comparer to save the allocation
+		/// </summary>
+		[JsonIgnore]
+		private static Comparer<MappingEntry> _comparer = Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition));
+
+		/// <summary>
 		/// The version of the source map specification being used
 		/// </summary>
-		public int Version;
+		[JsonProperty(Order = -2)]
+		public int Version { get; }
 
 		/// <summary>
 		/// The name of the generated file to which this source map corresponds
 		/// </summary>
-		public string File;
+		[JsonProperty(Order = -2)]
+		public string File { get; }
 
 		/// <summary>
 		/// The raw, unparsed mappings entry of the soure map
 		/// </summary>
-		public string Mappings;
+		[JsonProperty(Order = -2)]
+		public string Mappings { get; }
 
 		/// <summary>
 		/// The list of source files that were the inputs used to generate this output file
 		/// </summary>
-		public List<string> Sources;
+		[JsonProperty(Order = -2)]
+		public IReadOnlyList<string> Sources { get; }
 
 		/// <summary>
 		/// A list of known original names for entries in this file
 		/// </summary>
-		public List<string> Names;
+		[JsonProperty(Order = -2)]
+		public IReadOnlyList<string> Names { get; }
 
 		/// <summary>
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
-		public List<MappingEntry> ParsedMappings;
+		[JsonProperty(Order = -2)]
+		public IReadOnlyList<MappingEntry> ParsedMappings { get; }
 
 		/// <summary>
 		/// A list of content source files
 		/// </summary>
-		public List<string> SourcesContent;
+		[JsonProperty(Order = -2)]
+		public IReadOnlyList<string> SourcesContent { get; }
 		
-        public SourceMap Clone()
-        {
-            return new SourceMap
-            {
-                Version = this.Version,
-                File = this.File,
-                Mappings = this.Mappings,
-                Sources = new List<string>(this.Sources),
-                Names = new List<string>(this.Names),
-	            SourcesContent = new List<string>(this.SourcesContent),
-                ParsedMappings = new List<MappingEntry>(this.ParsedMappings)
-            };
-        }
+		public SourceMap(
+			int version,
+			string file,
+			string mappings,
+			IReadOnlyList<string> sources,
+			IReadOnlyList<string> names,
+			IReadOnlyList<MappingEntry> parsedMappings,
+			IReadOnlyList<string> sourcesContent)
+		{
+			Version = version;
+			File = file;
+			Mappings = mappings;
+			Sources = sources;
+			Names = names;
+			ParsedMappings = parsedMappings;
+			SourcesContent = sourcesContent;
+		}
+
+		public SourceMap Clone()
+		{
+			return new SourceMap(
+				version: Version,
+				file: File,
+				mappings: Mappings,
+				sources: Sources,
+				names: Names,
+				parsedMappings: ParsedMappings,
+				sourcesContent: SourcesContent);
+		}
 
 		/// <summary>
 		/// Applies the mappings of a sub source map to the current source map
 		/// Each mapping to the supplied source file is rewritten using the supplied source map
-        /// This is useful in situations where we have a to b to c, with mappings ba.map and cb.map
-        /// Calling cb.ApplySourceMap(ba) will return mappings from c to a (ca)
+		/// This is useful in situations where we have a to b to c, with mappings ba.map and cb.map
+		/// Calling cb.ApplySourceMap(ba) will return mappings from c to a (ca)
 		/// <param name="submap">The submap to apply</param>
 		/// <param name="sourceFile">The filename of the source file. If not specified, submap's File property will be used</param>
 		/// <returns>A new source map</returns>
@@ -75,21 +106,15 @@ namespace SourcemapToolkit.SourcemapParser
 			{
 				if (submap.File == null)
 				{
-					throw new Exception("ApplySourceMap expects either the explicit source file to the map, or submap's 'file' property");
+					throw new Exception($"{nameof(ApplySourceMap)} expects either the explicit source file to the map, or submap's 'file' property");
 				}
 
 				sourceFile = submap.File;
 			}
 
-			SourceMap newSourceMap = new SourceMap
-			{
-				File = this.File,
-				Version = this.Version,
-				Sources = new List<string>(),
-				Names = new List<string>(),
-				SourcesContent = new List<string>(),
-				ParsedMappings = new List<MappingEntry>()
-            };
+			HashSet<string> sources = new HashSet<string>(StringComparer.Ordinal);
+			HashSet<string> names = new HashSet<string>(StringComparer.Ordinal);
+			List<MappingEntry> parsedMappings = new List<MappingEntry>(this.ParsedMappings.Count);
 
 			// transform mappings in this source map
 			foreach (MappingEntry mappingEntry in this.ParsedMappings)
@@ -115,52 +140,62 @@ namespace SourcemapToolkit.SourcemapParser
 				string originalFileName = newMappingEntry.OriginalFileName;
 				string originalName = newMappingEntry.OriginalName;
 
-				if (originalFileName != null && !newSourceMap.Sources.Contains(originalFileName))
+				if (originalFileName != null)
 				{
-                    newSourceMap.Sources.Add(originalFileName);
+					sources.Add(originalFileName);
 				}
 
-				if (originalName != null && !newSourceMap.Names.Contains(originalName))
+				if (originalName != null)
 				{
-                    newSourceMap.Names.Add(originalName);
+					names.Add(originalName);
 				}
 
-                newSourceMap.ParsedMappings.Add(newMappingEntry);
-			};
+				parsedMappings.Add(newMappingEntry);
+			}
+
+			SourceMap newSourceMap = new SourceMap(
+				version: Version,
+				file: File,
+				mappings: default,
+				sources: sources.ToList(),
+				names: names.ToList(),
+				parsedMappings: parsedMappings,
+				new List<string>());
 
 			return newSourceMap;
 		}
 
-        /// <summary>
-        /// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt
-        /// to return a nearby mapping that should map to the same piece of code.
-        /// </summary>
-        /// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
-        /// <returns>A mapping entry that is a close match for the desired generated code location</returns>
-        public virtual MappingEntry? GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
-        {
-            if (ParsedMappings == null)
-            {
-                return null;
-            }
+		/// <summary>
+		/// Finds the mapping entry for the generated source position. If no exact match is found, it will attempt
+		/// to return a nearby mapping that should map to the same piece of code.
+		/// </summary>
+		/// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
+		/// <returns>A mapping entry that is a close match for the desired generated code location</returns>
+		public virtual MappingEntry? GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+		{
+			if (ParsedMappings == null)
+			{
+				return null;
+			}
 
-            MappingEntry mappingEntryToFind = new MappingEntry(generatedSourcePosition: generatedSourcePosition);
+			MappingEntry mappingEntryToFind = new MappingEntry(generatedSourcePosition: generatedSourcePosition);
 
-            int index = ParsedMappings.BinarySearch(mappingEntryToFind,
-                Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
+			int index = ParsedMappings.BinarySearch(mappingEntryToFind, _comparer);
 
-            // If we didn't get an exact match, let's try to return the closest piece of code to the given line
-            if (index < 0)
-            {
-                // The BinarySearch method returns the bitwise complement of the nearest element that is larger than the desired element when there isn't a match.
-                // Based on tests with source maps generated with the Closure Compiler, we should consider the closest source position that is smaller than the target value when we don't have a match.
-                if (~index - 1 >= 0 && ParsedMappings[~index - 1].GeneratedSourcePosition.IsEqualish(generatedSourcePosition))
-                {
-                    index = ~index - 1;
-                }
-            }
+			// If we didn't get an exact match, let's try to return the closest piece of code to the given line
+			if (index < 0)
+			{
+				// The BinarySearch method returns the bitwise complement of the nearest element that is larger than the desired element when there isn't a match.
+				// Based on tests with source maps generated with the Closure Compiler, we should consider the closest source position that is smaller than the target value when we don't have a match.
+				int correctIndex = ~index - 1;
 
-            return index >= 0 ? (MappingEntry?)ParsedMappings[index] : null;
-        }
+				if (correctIndex >= 0 && ParsedMappings[correctIndex].GeneratedSourcePosition.IsEqualish(generatedSourcePosition))
+				{
+					index = correctIndex;
+				}
+			}
+
+			return index >= 0 ? (MappingEntry?)ParsedMappings[index] : null;
+		}
 	}
 }

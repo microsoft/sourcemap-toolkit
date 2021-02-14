@@ -36,15 +36,6 @@ namespace SourcemapToolkit.SourcemapParser
 			OriginalFileName = originalFileName;
 		}
 
-		public MappingEntry Clone()
-		{
-			return new MappingEntry(
-				generatedSourcePosition: GeneratedSourcePosition,
-				originalSourcePosition: OriginalSourcePosition,
-				originalName: OriginalName,
-				originalFileName: OriginalFileName);
-		}
-
 		public MappingEntry CloneWithResetColumnNumber()
 		{
 			return new MappingEntry(

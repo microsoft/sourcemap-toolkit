@@ -55,6 +55,7 @@
     <Compile Include="Base64VlqConstants.cs" />
     <Compile Include="Base64VlqDecoder.cs" />
     <Compile Include="Base64VlqEncoder.cs" />
+    <Compile Include="IReadOnlyListExtensions.cs" />
     <Compile Include="MappingEntry.cs" />
     <Compile Include="MappingListParser.cs" />
     <Compile Include="SourceMap.cs" />

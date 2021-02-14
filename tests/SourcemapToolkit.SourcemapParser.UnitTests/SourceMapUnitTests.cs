@@ -11,7 +11,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void GetMappingEntryForGeneratedSourcePosition_NullMappingList_ReturnNull()
 		{
 			// Arrange
-			SourceMap sourceMap = new SourceMap();
+			SourceMap sourceMap = CreateSourceMap();
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 4, zeroBasedColumnNumber: 3);
 
 			// Act
@@ -25,12 +25,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void GetMappingEntryForGeneratedSourcePosition_NoMatchingEntryInMappingList_ReturnNull()
 		{
 			// Arrange
-			SourceMap sourceMap = new SourceMap();
-			sourceMap.ParsedMappings = new List<MappingEntry>
+			List<MappingEntry> parsedMappings = new List<MappingEntry>
 			{
 				new MappingEntry(
 					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0))
 			};
+
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: parsedMappings);
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 4, zeroBasedColumnNumber: 3);
 
 			// Act
@@ -44,15 +45,16 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void GetMappingEntryForGeneratedSourcePosition_MatchingEntryInMappingList_ReturnMatchingEntry()
 		{
 			// Arrange
-			SourceMap sourceMap = new SourceMap();
 			MappingEntry matchingMappingEntry = new MappingEntry(
 				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 8, zeroBasedColumnNumber: 13));
-			sourceMap.ParsedMappings = new List<MappingEntry>
+			List<MappingEntry> parsedMappings = new List<MappingEntry>
 			{
 				new MappingEntry(
 					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
+
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: parsedMappings);
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 8, zeroBasedColumnNumber: 13);
 
 			// Act
@@ -66,15 +68,15 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnSameLine_ReturnSimilarEntry()
 		{
 			// Arrange
-			SourceMap sourceMap = new SourceMap();
 			MappingEntry matchingMappingEntry = new MappingEntry(
 				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 13));
-			sourceMap.ParsedMappings = new List<MappingEntry>
+			List<MappingEntry> parsedMappings = new List<MappingEntry>
 			{
 				new MappingEntry(
 					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: parsedMappings);
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 14);
 
 			// Act
@@ -88,15 +90,15 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void GetMappingEntryForGeneratedSourcePosition_NoExactMatchHasSimilarOnDifferentLinesLine_ReturnSimilarEntry()
 		{
 			// Arrange
-			SourceMap sourceMap = new SourceMap();
 			MappingEntry matchingMappingEntry = new MappingEntry(
 				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 23, zeroBasedColumnNumber: 15));
-			sourceMap.ParsedMappings = new List<MappingEntry>
+			List<MappingEntry> parsedMappings = new List<MappingEntry>
 			{
 				new MappingEntry(
 					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: parsedMappings);
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 24, zeroBasedColumnNumber: 0);
 
 			// Act
@@ -114,11 +116,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 1, colNumber: 5);
 			MappingEntry mappingEntry = UnitTestUtils.getSimpleEntry(generated1, original1, "generated.js");
 
-			SourceMap sourceMap = new SourceMap
-			{
-				Sources = new List<string> { "generated.js" },
-				ParsedMappings = new List<MappingEntry> { mappingEntry }
-			};
+			SourceMap sourceMap = CreateSourceMap(
+				sources: new List<string>() { "generated.js" },
+				parsedMappings: new List<MappingEntry> { mappingEntry });
 
 			// Act
 			MappingEntry? rootEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(generated1);
@@ -135,12 +135,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 5);
 			MappingEntry mapping = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
-			SourceMap map = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js" },
-				ParsedMappings = new List<MappingEntry> { mapping }
-			};
+			SourceMap map = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string>() { "sourceOne.js" },
+				parsedMappings: new List<MappingEntry> { mapping });
 
 			// Act
 			Assert.Throws<ArgumentNullException>(() => map.ApplySourceMap(null));
@@ -156,23 +154,19 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 1, colNumber: 2);
 			MappingEntry childMapping = UnitTestUtils.getSimpleEntry(generated1, original1, "someOtherSource.js");
 
-			SourceMap childMap = new SourceMap
-			{
-				File = "notSourceOne.js",
-				Sources = new List<string> { "someOtherSource.js" },
-				ParsedMappings = new List<MappingEntry> { childMapping }
-			};
+			SourceMap childMap = CreateSourceMap(
+				file: "notSourceOne.js",
+				sources: new List<string>() { "someOtherSource.js" },
+				parsedMappings: new List<MappingEntry> { childMapping });
 
 			SourcePosition generated2 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 7);
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 3);
 			MappingEntry parentMapping = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
-			SourceMap parentMap = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js" },
-				ParsedMappings = new List<MappingEntry> { parentMapping }
-			};
+			SourceMap parentMap = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string>() { "sourceOne.js" },
+				parsedMappings: new List<MappingEntry> { parentMapping });
 
 			// Act
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
@@ -191,23 +185,19 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 1, colNumber: 10);
 			MappingEntry childMapping = UnitTestUtils.getSimpleEntry(generated1, original1, "sourceTwo.js");
 
-			SourceMap childMap = new SourceMap
-			{
-				File = "sourceOne.js",
-				Sources = new List<string> { "sourceTwo.js" },
-				ParsedMappings = new List<MappingEntry> { childMapping }
-			};
+			SourceMap childMap = CreateSourceMap(
+				file: "sourceOne.js",
+				sources: new List<string>() { "sourceTwo.js" },
+				parsedMappings: new List<MappingEntry> { childMapping });
 
 			SourcePosition generated2 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 4);
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 5);
 			MappingEntry parentMapping = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
-			SourceMap parentMap = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js" },
-				ParsedMappings = new List<MappingEntry> { parentMapping }
-			};
+			SourceMap parentMap = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string>() { "sourceOne.js" },
+				parsedMappings: new List<MappingEntry> { parentMapping });
 
 			// Act
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
@@ -228,23 +218,19 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 1, colNumber: 3);
 			MappingEntry childMapping = UnitTestUtils.getSimpleEntry(generated1, original1, "sourceTwo.js");
 
-			SourceMap childMap = new SourceMap
-			{
-				File = "sourceOne.js",
-				Sources = new List<string> { "sourceTwo.js" },
-				ParsedMappings = new List<MappingEntry> { childMapping }
-			};
+			SourceMap childMap = CreateSourceMap(
+				file: "sourceOne.js",
+				sources: new List<string>() { "sourceTwo.js" },
+				parsedMappings: new List<MappingEntry> { childMapping });
 
 			SourcePosition generated2 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 5);
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 4);
 			MappingEntry parentMapping = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
-			SourceMap parentMap = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js" },
-				ParsedMappings = new List<MappingEntry> { parentMapping }
-			};
+			SourceMap parentMap = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string>() { "sourceOne.js" },
+				parsedMappings: new List<MappingEntry> { parentMapping });
 
 			// Act
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
@@ -268,12 +254,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 1, colNumber: 5);
 			MappingEntry childMapping = UnitTestUtils.getSimpleEntry(generated1, original1, "sourceTwo.js");
 
-			SourceMap childMap = new SourceMap
-			{
-				File = "sourceOne.js",
-				Sources = new List<string> { "sourceTwo.js" },
-				ParsedMappings = new List<MappingEntry> { childMapping }
-			};
+			SourceMap childMap = CreateSourceMap(
+				file: "sourceOne.js",
+				sources: new List<string>() { "sourceTwo.js" },
+				parsedMappings: new List<MappingEntry> { childMapping });
 
 			SourcePosition generated2 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 2);
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 10);
@@ -283,12 +267,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original3 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 2);
 			MappingEntry mapping2 = UnitTestUtils.getSimpleEntry(generated3, original3, "noMapForThis.js");
 
-			SourceMap parentMap = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js", "noMapForThis.js" },
-				ParsedMappings = new List<MappingEntry> { mapping, mapping2 }
-			};
+			SourceMap parentMap = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string> { "sourceOne.js", "noMapForThis.js" },
+				parsedMappings: new List<MappingEntry> { mapping, mapping2 });
 
 			// Act
 			SourceMap combinedMap = parentMap.ApplySourceMap(childMap);
@@ -311,34 +293,28 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition original1 = UnitTestUtils.generateSourcePosition(lineNumber: 2, colNumber: 10);
 			MappingEntry mapLevel2 = UnitTestUtils.getSimpleEntry(generated1, original1, "sourceThree.js");
 
-			SourceMap grandChildMap = new SourceMap
-			{
-				File = "sourceTwo.js",
-				Sources = new List<string> { "sourceThree.js" },
-				ParsedMappings = new List<MappingEntry> { mapLevel2 }
-			};
+			SourceMap grandChildMap = CreateSourceMap(
+				file: "sourceTwo.js",
+				sources: new List<string>() { "sourceThree.js" },
+				parsedMappings: new List<MappingEntry> { mapLevel2 });
 
 			SourcePosition generated2 = UnitTestUtils.generateSourcePosition(lineNumber: 4, colNumber: 3);
 			SourcePosition original2 = UnitTestUtils.generateSourcePosition(lineNumber: 3, colNumber: 5);
 			MappingEntry mapLevel1 = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceTwo.js");
 
-			SourceMap childMap = new SourceMap
-			{
-				File = "sourceOne.js",
-				Sources = new List<string> { "sourceTwo.js" },
-				ParsedMappings = new List<MappingEntry> { mapLevel1 }
-			};
+			SourceMap childMap = CreateSourceMap(
+				file: "sourceOne.js",
+				sources: new List<string>() { "sourceTwo.js" },
+				parsedMappings: new List<MappingEntry> { mapLevel1 });
 
 			SourcePosition generated3 = UnitTestUtils.generateSourcePosition(lineNumber: 5, colNumber: 5);
 			SourcePosition original3 = UnitTestUtils.generateSourcePosition(lineNumber: 4, colNumber: 3);
 			MappingEntry mapLevel0 = UnitTestUtils.getSimpleEntry(generated3, original3, "sourceOne.js");
 
-			SourceMap parentMap = new SourceMap
-			{
-				File = "generated.js",
-				Sources = new List<string> { "sourceOne.js" },
-				ParsedMappings = new List<MappingEntry> { mapLevel0 }
-			};
+			SourceMap parentMap = CreateSourceMap(
+				file: "generated.js",
+				sources: new List<string>() { "sourceOne.js" },
+				parsedMappings: new List<MappingEntry> { mapLevel0 });
 
 			// Act
 			SourceMap firstCombinedMap = parentMap.ApplySourceMap(childMap);
@@ -349,6 +325,25 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.NotNull(secondCombinedMap);
 			MappingEntry? rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
 			Assert.Equal(0, rootMapping.Value.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
+		}
+
+		private static SourceMap CreateSourceMap(
+			int version = default,
+			string file = default,
+			string mappings = default,
+			IReadOnlyList<string> sources = default,
+			IReadOnlyList<string> names = default,
+			IReadOnlyList<MappingEntry> parsedMappings = default,
+			IReadOnlyList<string> sourcesContent = default)
+		{
+			return new SourceMap(
+				version: version,
+				file: file,
+				mappings: mappings,
+				sources: sources,
+				names: names,
+				parsedMappings: parsedMappings,
+				sourcesContent: sourcesContent);
 		}
 	}
 }

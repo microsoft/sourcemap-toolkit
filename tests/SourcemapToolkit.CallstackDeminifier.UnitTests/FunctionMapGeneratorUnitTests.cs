@@ -31,7 +31,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null, sourceMap);
@@ -46,7 +46,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "bar();";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -61,7 +61,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){bar();}";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -84,7 +84,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo()" + Environment.NewLine + "{" + Environment.NewLine + "bar();" +
 								Environment.NewLine + "}";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -106,7 +106,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){bar();}function bar(){baz();}";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -137,7 +137,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){function bar(){baz();}}";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -168,7 +168,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){bar();}";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -191,7 +191,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){};foo.bar = function() { baz(); }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -223,7 +223,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function () { baz(); }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -255,7 +255,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function () { baz(); } }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -289,7 +289,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function myCoolFunctionName(){ bar(); }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -312,7 +312,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){};foo.bar = function myCoolFunctionName() { baz(); }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -344,7 +344,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function myCoolFunctionName() { baz(); } }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -376,7 +376,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function myCoolFunctionName() { baz(); } }";
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
@@ -409,7 +409,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = null;
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			string deminifiedMethodName = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -434,7 +434,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = new List<BindingInformation>();
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -455,7 +455,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15))
 				};
 
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
 
 			// Act
@@ -477,7 +477,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8))
 				};
 
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
@@ -506,7 +506,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78))
 				};
 
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
@@ -541,7 +541,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10))
 				};
 
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
+			SourceMap sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
@@ -560,6 +560,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal("bar.baz", result);
 			sourceMap.VerifyAllExpectations();
+		}
+
+		private static SourceMap CreateSourceMapMock()
+		{
+			return MockRepository.GenerateStub<SourceMap>(
+				0 /* version */,
+				default(string) /* file */,
+				default(string) /* mappings */,
+				default(IReadOnlyList<string>) /* sources */,
+				default(IReadOnlyList<string>) /* names */,
+				default(IReadOnlyList<MappingEntry>) /* parsedMappings */,
+				default(IReadOnlyList<string>) /* sourcesContent */);
 		}
 	}
 }

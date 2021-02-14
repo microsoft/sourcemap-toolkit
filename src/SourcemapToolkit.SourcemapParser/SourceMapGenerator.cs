@@ -26,12 +26,12 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// List that contains the symbol names
 		/// </summary>
-		public readonly IList<string> Names;
+		public readonly IReadOnlyList<string> Names;
 
 		/// <summary>
 		/// List that contains the file sources
 		/// </summary>
-		public readonly IList<string> Sources;
+		public readonly IReadOnlyList<string> Sources;
 
 		/// <summary>
 		/// Index of last file source
@@ -48,7 +48,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public bool IsFirstSegment { get; set; }
 
-		public MappingGenerateState(IList<string> names, IList<string> sources)
+		public MappingGenerateState(IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			Names = names;
 			Sources = sources;
@@ -95,15 +95,7 @@ namespace SourcemapToolkit.SourcemapParser
 				throw new ArgumentNullException(nameof(sourceMap));
 			}
 
-			SourceMap mapToSerialize = new SourceMap()
-			{
-				File = sourceMap.File,
-				Names = sourceMap.Names,
-				Sources = sourceMap.Sources,
-				Version = sourceMap.Version,
-				SourcesContent = sourceMap.SourcesContent
-			};
-
+			string mappings = null;
 			if (sourceMap.ParsedMappings != null && sourceMap.ParsedMappings.Count > 0)
 			{
 				MappingGenerateState state = new MappingGenerateState(sourceMap.Names, sourceMap.Sources);
@@ -116,8 +108,17 @@ namespace SourcemapToolkit.SourcemapParser
 
 				output.Append(';');
 
-				mapToSerialize.Mappings = output.ToString();
+				mappings = output.ToString();
 			}
+
+			SourceMap mapToSerialize = new SourceMap(
+				version: sourceMap.Version,
+				file: sourceMap.File,
+				mappings: mappings,
+				sources: sourceMap.Sources,
+				names: sourceMap.Names,
+				parsedMappings: default,
+				sourcesContent: sourceMap.SourcesContent);
 
 			return JsonConvert.SerializeObject(mapToSerialize,
 				jsonSerializerSettings ?? new JsonSerializerSettings

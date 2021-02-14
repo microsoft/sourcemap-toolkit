@@ -148,29 +148,34 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 		private SourceMap GetSimpleSourceMap()
 		{
-			SourceMap input = new SourceMap()
-			{
-				File = "CommonIntl",
-				Names = new List<string>() { "CommonStrings", "afrikaans" },
-				Sources = new List<string>() { "input/CommonIntl.js" },
-				Version = 3,
-			};
-			input.ParsedMappings = new List<MappingEntry>()
-			{
-				new MappingEntry(
-					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0),
-					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-					originalName: input.Names[0],
-					originalFileName: input.Sources[0]),
-				new MappingEntry(
-					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 13),
-					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-					originalFileName: input.Sources[0]),
-				new MappingEntry(
-					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 14),
-					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 14),
-					originalFileName: input.Sources[0]),
-			};
+			List<string> sources = new List<string>() { "input/CommonIntl.js" };
+			List<string> names = new List<string>() { "CommonStrings", "afrikaans" };
+
+			var parsedMappings = new List<MappingEntry>()
+				{
+					new MappingEntry(
+						generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0),
+						originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+						originalName: names[0],
+						originalFileName: sources[0]),
+					new MappingEntry(
+						generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 13),
+						originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+						originalFileName: sources[0]),
+					new MappingEntry(
+						generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 14),
+						originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 14),
+						originalFileName: sources[0]),
+				};
+
+			SourceMap input = new SourceMap(
+				version: 3,
+				file: "CommonIntl",
+				mappings: default,
+				sources: sources,
+				names: names,
+				parsedMappings: parsedMappings,
+				sourcesContent: default);
 
 			return input;
 		}

@@ -179,7 +179,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			functionMapConsumer.Stub(c => c.GetWrappingFunctionForSourceLocation(Arg<SourcePosition>.Is.Anything, Arg<List<FunctionMapEntry>>.Is.Anything))
 				.Return(wrapingFunctionMapEntry);
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStub<ISourceMapStore>();
-			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(new SourceMap());
+			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(CreateSourceMap());
 
 			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore: sourceMapStore,functionMapStore: functionMapStore, functionMapConsumer: functionMapConsumer);
 
@@ -204,7 +204,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
 				.Return(new List<FunctionMapEntry>());
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStub<ISourceMapStore>();
-			SourceMap sourceMap = new SourceMap() {ParsedMappings = new List<MappingEntry>()};
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: new List<MappingEntry>());
 
 			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(sourceMap);
 			IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStub<IFunctionMapConsumer>();
@@ -223,7 +223,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
-		private FunctionMapEntry CreateFunctionMapEntry(string deminifiedMethodName)
+		private static FunctionMapEntry CreateFunctionMapEntry(string deminifiedMethodName)
 		{
 			return new FunctionMapEntry(
 				bindings: default,
@@ -232,5 +232,16 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				endSourcePosition: default);
 		}
 
+		private static SourceMap CreateSourceMap(List<MappingEntry> parsedMappings = default)
+		{
+			return new SourceMap(
+				version: default,
+				file: default,
+				mappings: default,
+				sources: default,
+				names: default,
+				parsedMappings: parsedMappings,
+				sourcesContent: default);
+		}
 	}
 }
