@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SourcemapToolkit.SourcemapParser;
+using System.Collections.Generic;
 using System.Text;
 
 namespace SourcemapToolkit.CallstackDeminifier
@@ -26,8 +27,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 				StackFrame frame = new StackFrame()
 				{
 					MethodName = deminFrame.MethodName ?? MinifiedStackFrames[i].MethodName,
-					SourcePosition = deminFrame.SourcePosition ?? MinifiedStackFrames[i].SourcePosition,
-					FilePath = deminFrame.SourcePosition != null ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
+					SourcePosition = deminFrame.SourcePosition != SourcePosition.NotFound ? deminFrame.SourcePosition : MinifiedStackFrames[i].SourcePosition,
+					FilePath = deminFrame.SourcePosition != SourcePosition.NotFound ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
 				};
 
 				sb.AppendLine();

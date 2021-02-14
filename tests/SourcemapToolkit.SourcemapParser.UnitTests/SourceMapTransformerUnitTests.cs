@@ -31,9 +31,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
             // Assert
             Assert.NotNull(linesOnlyMap);
-            Assert.Equal(1, linesOnlyMap.Sources.Count);
-            Assert.Equal(1, linesOnlyMap.SourcesContent.Count);
-            Assert.Equal(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.Single(linesOnlyMap.Sources);
+            Assert.Single(linesOnlyMap.SourcesContent);
+            Assert.Single(linesOnlyMap.ParsedMappings);
             Assert.Equal(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.Equal(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
             Assert.Equal(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);
@@ -65,9 +65,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
             // Assert
             Assert.NotNull(linesOnlyMap);
-            Assert.Equal(1, linesOnlyMap.Sources.Count);
-            Assert.Equal(1, linesOnlyMap.SourcesContent.Count);
-            Assert.Equal(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.Single(linesOnlyMap.Sources);
+            Assert.Single(linesOnlyMap.SourcesContent);
+            Assert.Single(linesOnlyMap.ParsedMappings);
             Assert.Equal(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.Equal(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
             Assert.Equal(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);
@@ -99,9 +99,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
             // Assert
             Assert.NotNull(linesOnlyMap);
-            Assert.Equal(1, linesOnlyMap.Sources.Count);
-            Assert.Equal(1, linesOnlyMap.SourcesContent.Count);
-            Assert.Equal(1, linesOnlyMap.ParsedMappings.Count);
+            Assert.Single(linesOnlyMap.Sources);
+            Assert.Single(linesOnlyMap.SourcesContent);
+            Assert.Single(linesOnlyMap.ParsedMappings);
             Assert.Equal(1, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedLineNumber);
             Assert.Equal(0, linesOnlyMap.ParsedMappings[0].GeneratedSourcePosition.ZeroBasedColumnNumber);
             Assert.Equal(2, linesOnlyMap.ParsedMappings[0].OriginalSourcePosition.ZeroBasedLineNumber);

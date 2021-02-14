@@ -24,7 +24,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Assert
 			Assert.Equal(12, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
 			Assert.Equal(13, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.Null(mappingEntry.OriginalSourcePosition);
+			Assert.Equal(SourcePosition.NotFound, mappingEntry.OriginalSourcePosition);
 			Assert.Null(mappingEntry.OriginalFileName);
 			Assert.Null(mappingEntry.OriginalName);
 		}
@@ -75,7 +75,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Assert
 			Assert.Equal(8, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
 			Assert.Equal(48, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.Null(mappingEntry.OriginalSourcePosition);
+			Assert.Equal(SourcePosition.NotFound, mappingEntry.OriginalSourcePosition);
 			Assert.Equal("three", mappingEntry.OriginalFileName);
 			Assert.Equal("bar", mappingEntry.OriginalName);
 		}

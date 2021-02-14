@@ -5,10 +5,18 @@ namespace SourcemapToolkit.SourcemapParser
 	/// <summary>
 	/// Identifies the location of a piece of code in a JavaScript file
 	/// </summary>
-	public class SourcePosition : IComparable<SourcePosition>
+	public struct SourcePosition : IComparable<SourcePosition>, IEquatable<SourcePosition>
 	{
+		public static readonly SourcePosition NotFound = new SourcePosition(-1, -1);
+
 		public int ZeroBasedLineNumber { get; }
 		public int ZeroBasedColumnNumber { get; }
+
+		public SourcePosition(int zeroBasedLineNumber, int zeroBasedColumnNumber)
+		{
+			ZeroBasedLineNumber = zeroBasedLineNumber;
+			ZeroBasedColumnNumber = zeroBasedColumnNumber;
+		}
 
 		public int CompareTo(SourcePosition other)
 		{
@@ -28,6 +36,32 @@ namespace SourcemapToolkit.SourcemapParser
 		public static bool operator >(SourcePosition x, SourcePosition y)
 		{
 			return x.CompareTo(y) > 0;
+		}
+
+		public static bool operator ==(SourcePosition x, SourcePosition y)
+		{
+			return x.Equals(y);
+		}
+
+		public static bool operator !=(SourcePosition x, SourcePosition y)
+		{
+			return !x.Equals(y);
+		}
+
+		public bool Equals(SourcePosition that)
+		{
+			return this.ZeroBasedLineNumber == that.ZeroBasedLineNumber
+				&& this.ZeroBasedColumnNumber == that.ZeroBasedColumnNumber;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return (obj is SourcePosition otherSourcePosition) ? Equals(otherSourcePosition) : false;
+		}
+
+		public override int GetHashCode()
+		{
+			return ZeroBasedColumnNumber.GetHashCode() ^ ZeroBasedColumnNumber.GetHashCode();
 		}
 
 		/// <summary>
@@ -55,12 +89,6 @@ namespace SourcemapToolkit.SourcemapParser
 			}
 
 			return false;
-		}
-
-		public SourcePosition(int zeroBasedLineNumber, int zeroBasedColumnNumber)
-		{
-			ZeroBasedLineNumber = zeroBasedLineNumber;
-			ZeroBasedColumnNumber = zeroBasedColumnNumber;
 		}
 	}
 }

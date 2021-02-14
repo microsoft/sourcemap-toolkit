@@ -96,7 +96,7 @@ namespace SourcemapToolkit.SourcemapParser
 			{
 				MappingEntry newMappingEntry = mappingEntry.Clone();
 
-				if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.OriginalSourcePosition != null)
+				if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.OriginalSourcePosition != SourcePosition.NotFound)
 				{
 					MappingEntry correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
 

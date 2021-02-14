@@ -16,12 +16,12 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Last location of the code in the transformed code
 		/// </summary>
-		public SourcePosition LastGeneratedPosition { get; private set; } = new SourcePosition(0, 0);
+		public SourcePosition LastGeneratedPosition { get; private set; } = default;
 
 		/// <summary>
 		/// Last location of the code in the source code
 		/// </summary>
-		public SourcePosition LastOriginalPosition { get; set; } = new SourcePosition(0, 0);
+		public SourcePosition LastOriginalPosition { get; set; } = default;
 
 		/// <summary>
 		/// List that contains the symbol names

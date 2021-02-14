@@ -265,8 +265,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 			// Assert
 			Assert.NotNull(combinedMap);
-			Assert.Equal(1, combinedMap.ParsedMappings.Count);
-			Assert.Equal(1, combinedMap.Sources.Count);
+			Assert.Single(combinedMap.ParsedMappings);
+			Assert.Single(combinedMap.Sources);
 			MappingEntry rootMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
 			Assert.Equal(0, rootMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
 		}

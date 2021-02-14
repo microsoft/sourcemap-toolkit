@@ -36,8 +36,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 					if (objectProtoypeMappingEntry?.OriginalName != null)
 					{
 						string objectName = objectProtoypeMappingEntry.OriginalName;
-						if (objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedColumnNumber
-							&& objectProtoypeMappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber == mappingEntry.OriginalSourcePosition?.ZeroBasedLineNumber
+						if (objectProtoypeMappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber == mappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber
+							&& objectProtoypeMappingEntry.OriginalSourcePosition.ZeroBasedLineNumber == mappingEntry.OriginalSourcePosition.ZeroBasedLineNumber
 							&& objectName.EndsWith($".{mappingEntry.OriginalName}"))
 						{
 							// The object name already contains the method name, so do not append it

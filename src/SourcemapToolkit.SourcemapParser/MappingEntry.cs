@@ -12,7 +12,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// The location of the code in the original source code
 		/// </summary>
-		public SourcePosition OriginalSourcePosition;
+		public SourcePosition OriginalSourcePosition = SourcePosition.NotFound;
 
 		/// <summary>
 		/// The original name of the code referenced by this mapping entry

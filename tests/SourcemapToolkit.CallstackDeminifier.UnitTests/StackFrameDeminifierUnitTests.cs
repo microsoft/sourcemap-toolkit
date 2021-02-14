@@ -61,7 +61,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -83,7 +83,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoSourceCodeProvided, stackFrameDeminification.DeminificationError);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -108,7 +108,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoWrapingFunctionFound, stackFrameDeminification.DeminificationError);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -134,7 +134,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.None, stackFrameDeminification.DeminificationError);
 			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -161,7 +161,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoSourceMap, stackFrameDeminification.DeminificationError);
 			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -189,7 +189,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.SourceMapFailedToParse, stackFrameDeminification.DeminificationError);
 			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -219,7 +219,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoMatchingMapingInSourceMap, stackFrameDeminification.DeminificationError);
 			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
