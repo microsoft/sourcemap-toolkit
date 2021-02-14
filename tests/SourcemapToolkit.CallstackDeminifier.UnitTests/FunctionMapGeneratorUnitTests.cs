@@ -450,10 +450,9 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>()
 				{
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15)
-					}
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15))
 				};
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
@@ -473,10 +472,9 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>()
 				{
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8)
-					}
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8))
 				};
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
@@ -500,14 +498,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>
 				{
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 86, zeroBasedColumnNumber: 52)
-					},
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78)
-					}
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 86, zeroBasedColumnNumber: 52)),
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78))
 				};
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
@@ -537,14 +533,12 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>
 				{
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 5)
-					},
-					new BindingInformation
-					{
-						SourcePosition = new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10)
-					}
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 5)),
+					new BindingInformation(
+						name: default,
+						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10))
 				};
 
 			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();

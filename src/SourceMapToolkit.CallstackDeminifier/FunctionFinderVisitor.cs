@@ -61,19 +61,17 @@ namespace SourcemapToolkit.CallstackDeminifier
 			{
 				// See if we can get the name of the object that this method belongs to
 				ObjectLiteral objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
-				if (objectLiteralParent != null && objectLiteralParent.Parent is BinaryOperator)
+				if (objectLiteralParent != null && objectLiteralParent.Parent is BinaryOperator binaryOperator)
 				{
-					result.AddRange(ExtractBindingsFromBinaryOperator((BinaryOperator)objectLiteralParent.Parent));
+					result.AddRange(ExtractBindingsFromBinaryOperator(binaryOperator));
 				}
 				
 				result.Add(
-					new BindingInformation
-					{
-						Name = parentObjectLiteralProperty.Name.Name,
-						SourcePosition = new SourcePosition(
+					new BindingInformation(
+						name: parentObjectLiteralProperty.Name.Name,
+						sourcePosition: new SourcePosition(
 							zeroBasedLineNumber: parentObjectLiteralProperty.Context.StartLineNumber - 1,
-							zeroBasedColumnNumber: parentObjectLiteralProperty.Context.StartColumn)
-					});
+							zeroBasedColumnNumber: parentObjectLiteralProperty.Context.StartColumn)));
 				return result;
 			}
 
@@ -94,14 +92,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 			if (bindingIdentifier != null)
 			{
 				result.Add(
-					new BindingInformation
-					{
-						Name = bindingIdentifier.Name,
-						SourcePosition = new SourcePosition(
+					new BindingInformation(
+						name: bindingIdentifier.Name,
+						sourcePosition: new SourcePosition(
 							zeroBasedLineNumber: bindingIdentifier.Context.StartLineNumber - 1,
 							// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-							zeroBasedColumnNumber: bindingIdentifier.Context.StartColumn)
-					});
+							zeroBasedColumnNumber: bindingIdentifier.Context.StartColumn)));
 				return result;
 			}
 
@@ -123,13 +119,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 				if (member.Name != "prototype")
 				{
 					int offset = member.NameContext.Code.StartsWith(".") ? 1 : 0;
-					yield return new BindingInformation
-					{
-						Name = member.Name,
-						SourcePosition = new SourcePosition(
+					yield return new BindingInformation(
+						name: member.Name,
+						sourcePosition: new SourcePosition(
 							zeroBasedLineNumber: member.NameContext.StartLineNumber - 1,
-							zeroBasedColumnNumber: member.NameContext.StartColumn + offset)
-					};
+							zeroBasedColumnNumber: member.NameContext.StartColumn + offset));
 				}
 			}
 			else
@@ -140,13 +134,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 		private BindingInformation ExtractBindingsFromNode(AstNode node)
 		{
-			return new BindingInformation
-			{
-				Name = node.Context.Code,
-				SourcePosition = new SourcePosition(
+			return new BindingInformation(
+				name: node.Context.Code,
+				sourcePosition: new SourcePosition(
 					zeroBasedLineNumber: node.Context.StartLineNumber - 1,
-					zeroBasedColumnNumber: node.Context.StartColumn)
-			};
+					zeroBasedColumnNumber: node.Context.StartColumn));
 		}
 	}
 }
