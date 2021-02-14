@@ -19,7 +19,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
 
 			// Assert
 			Assert.Null(functionMap);
@@ -34,7 +34,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null, sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null, sourceMap);
 
 			// Assert
 			Assert.Null(functionMap);
@@ -49,7 +49,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Empty(functionMap);
@@ -64,7 +64,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Single(functionMap);
@@ -87,7 +87,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Single(functionMap);
@@ -109,7 +109,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -140,7 +140,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -171,7 +171,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Single(functionMap);
@@ -194,7 +194,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -226,7 +226,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -258,7 +258,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -292,7 +292,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Single(functionMap);
@@ -315,7 +315,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -347,7 +347,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -379,7 +379,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);

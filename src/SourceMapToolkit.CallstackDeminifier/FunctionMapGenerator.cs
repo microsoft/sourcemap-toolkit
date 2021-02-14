@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+
 using Microsoft.Ajax.Utilities;
 using SourcemapToolkit.SourcemapParser;
 
@@ -13,14 +12,14 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Returns a FunctionMap describing the locations of every funciton in the source code.
 		/// The functions are to be sorted descending by start position.
 		/// </summary>
-		public List<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
+		public IReadOnlyList<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
 		{
 			if (sourceCodeStreamReader == null || sourceMap == null)
 			{
 				return null;
 			}
 
-			List<FunctionMapEntry> result;
+			IReadOnlyList<FunctionMapEntry> result;
 			try
 			{
 				result = ParseSourceCode(sourceCodeStreamReader, sourceMap);
@@ -38,7 +37,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Iterates over all the code in the JavaScript file to get a list of all the functions declared in that file.
 		/// </summary>
-		internal List<FunctionMapEntry> ParseSourceCode(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
+		internal IReadOnlyList<FunctionMapEntry> ParseSourceCode(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
 		{
 			if (sourceCodeStreamReader == null)
 			{
