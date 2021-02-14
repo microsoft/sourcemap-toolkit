@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace SourcemapToolkit.SourcemapParser
 {
@@ -43,8 +42,6 @@ namespace SourcemapToolkit.SourcemapParser
 		public MappingEntry ToMappingEntry(IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			SourcePosition originalSourcePosition;
-
-			Debugger.Launch();
 
 			if (OriginalColumnNumber.HasValue && OriginalLineNumber.HasValue)
 			{
