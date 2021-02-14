@@ -30,16 +30,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 				FunctionMapEntry functionMapEntry = new FunctionMapEntry(
 					bindings: bindings,
 					deminifiedMethodName: SourceMap.GetDeminifiedMethodName(bindings),
-					startSourcePosition: new SourcePosition
-					{
-						ZeroBasedLineNumber = node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						ZeroBasedColumnNumber = node.Body.Context.StartColumn
-					},
-					endSourcePosition: new SourcePosition
-					{
-						ZeroBasedLineNumber = node.Body.Context.EndLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						ZeroBasedColumnNumber = node.Body.Context.EndColumn
-					});
+					startSourcePosition: new SourcePosition(
+						zeroBasedLineNumber: node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+						zeroBasedColumnNumber: node.Body.Context.StartColumn),
+					endSourcePosition: new SourcePosition(
+						zeroBasedLineNumber: node.Body.Context.EndLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+						zeroBasedColumnNumber: node.Body.Context.EndColumn));
 
 				FunctionMap.Add(functionMapEntry);
 			}
@@ -74,11 +70,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 					new BindingInformation
 					{
 						Name = parentObjectLiteralProperty.Name.Name,
-						SourcePosition = new SourcePosition
-						{
-							ZeroBasedLineNumber = parentObjectLiteralProperty.Context.StartLineNumber - 1,
-							ZeroBasedColumnNumber = parentObjectLiteralProperty.Context.StartColumn
-						}
+						SourcePosition = new SourcePosition(
+							zeroBasedLineNumber: parentObjectLiteralProperty.Context.StartLineNumber - 1,
+							zeroBasedColumnNumber: parentObjectLiteralProperty.Context.StartColumn)
 					});
 				return result;
 			}
@@ -103,12 +97,10 @@ namespace SourcemapToolkit.CallstackDeminifier
 					new BindingInformation
 					{
 						Name = bindingIdentifier.Name,
-						SourcePosition = new SourcePosition
-						{
-							ZeroBasedLineNumber = bindingIdentifier.Context.StartLineNumber - 1,
+						SourcePosition = new SourcePosition(
+							zeroBasedLineNumber: bindingIdentifier.Context.StartLineNumber - 1,
 							// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-							ZeroBasedColumnNumber = bindingIdentifier.Context.StartColumn
-						}
+							zeroBasedColumnNumber: bindingIdentifier.Context.StartColumn)
 					});
 				return result;
 			}
@@ -134,11 +126,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 					yield return new BindingInformation
 					{
 						Name = member.Name,
-						SourcePosition = new SourcePosition
-						{
-							ZeroBasedLineNumber = member.NameContext.StartLineNumber - 1,
-							ZeroBasedColumnNumber = member.NameContext.StartColumn + offset
-						}
+						SourcePosition = new SourcePosition(
+							zeroBasedLineNumber: member.NameContext.StartLineNumber - 1,
+							zeroBasedColumnNumber: member.NameContext.StartColumn + offset)
 					};
 				}
 			}
@@ -153,11 +143,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 			return new BindingInformation
 			{
 				Name = node.Context.Code,
-				SourcePosition = new SourcePosition
-				{
-					ZeroBasedLineNumber = node.Context.StartLineNumber - 1,
-					ZeroBasedColumnNumber = node.Context.StartColumn
-				}
+				SourcePosition = new SourcePosition(
+					zeroBasedLineNumber: node.Context.StartLineNumber - 1,
+					zeroBasedColumnNumber: node.Context.StartColumn)
 			};
 		}
 	}

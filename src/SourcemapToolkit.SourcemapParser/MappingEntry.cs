@@ -28,11 +28,22 @@ namespace SourcemapToolkit.SourcemapParser
 		{
 			return new MappingEntry
 			{
-				GeneratedSourcePosition = this.GeneratedSourcePosition.Clone(),
-				OriginalSourcePosition = this.OriginalSourcePosition.Clone(),
+				GeneratedSourcePosition = this.GeneratedSourcePosition,
+				OriginalSourcePosition = this.OriginalSourcePosition,
 				OriginalFileName = this.OriginalFileName,
 				OriginalName = this.OriginalName
 			};
+		}
+
+		public void ResetColumnNumber()
+		{
+			GeneratedSourcePosition = new SourcePosition(
+				zeroBasedLineNumber: GeneratedSourcePosition.ZeroBasedLineNumber,
+				zeroBasedColumnNumber: 0);
+
+			OriginalSourcePosition = new SourcePosition(
+				zeroBasedLineNumber: OriginalSourcePosition.ZeroBasedLineNumber,
+				zeroBasedColumnNumber: 0);
 		}
 
 		public Boolean IsValueEqual(MappingEntry anEntry)

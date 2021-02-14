@@ -23,11 +23,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
         public static SourcePosition generateSourcePosition(int lineNumber, int colNumber = 0)
         {
-            return new SourcePosition
-            {
-                ZeroBasedLineNumber = lineNumber,
-                ZeroBasedColumnNumber = colNumber
-            };
+            return new SourcePosition(
+                zeroBasedLineNumber: lineNumber,
+                zeroBasedColumnNumber: colNumber);
         }
     }
 }

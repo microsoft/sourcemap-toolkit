@@ -43,20 +43,16 @@ namespace SourcemapToolkit.SourcemapParser
 		{
 			MappingEntry result = new MappingEntry
 			{
-				GeneratedSourcePosition = new SourcePosition
-				{
-					ZeroBasedColumnNumber = GeneratedColumnNumber,
-					ZeroBasedLineNumber = GeneratedLineNumber
-				}
+				GeneratedSourcePosition = new SourcePosition(
+					zeroBasedLineNumber: GeneratedLineNumber,
+					zeroBasedColumnNumber: GeneratedColumnNumber)
 			};
 
 			if (OriginalColumnNumber.HasValue && OriginalLineNumber.HasValue)
 			{
-				result.OriginalSourcePosition = new SourcePosition
-				{
-					ZeroBasedColumnNumber = OriginalColumnNumber.Value,
-					ZeroBasedLineNumber = OriginalLineNumber.Value
-				};
+				result.OriginalSourcePosition = new SourcePosition(
+					zeroBasedLineNumber: OriginalLineNumber.Value,
+					zeroBasedColumnNumber: OriginalColumnNumber.Value);
 			}
 
 			if (OriginalNameIndex.HasValue)

@@ -105,8 +105,8 @@ namespace SourcemapToolkit.SourcemapParser
 						// Copy the mapping
 						newMappingEntry = new MappingEntry
 						{
-							GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition.Clone(),
-							OriginalSourcePosition = correspondingSubMapMappingEntry.OriginalSourcePosition.Clone(),
+							GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition,
+							OriginalSourcePosition = correspondingSubMapMappingEntry.OriginalSourcePosition,
 							OriginalName = correspondingSubMapMappingEntry.OriginalName?? mappingEntry.OriginalName,
 							OriginalFileName = correspondingSubMapMappingEntry.OriginalFileName?? mappingEntry.OriginalFileName
 						};

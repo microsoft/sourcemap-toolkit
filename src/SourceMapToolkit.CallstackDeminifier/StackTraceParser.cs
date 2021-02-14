@@ -152,14 +152,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 			if (lineNumberMatch.Success)
 			{
 				result.FilePath = lineNumberMatch.Groups[1].Value;
-				result.SourcePosition = new SourcePosition
-				{
+				result.SourcePosition = new SourcePosition(
 					// The browser provides one-based line and column numbers, but the
 					// rest of this library uses zero-based values. Normalize to make
 					// the stack frames zero based.
-					ZeroBasedLineNumber = int.Parse(lineNumberMatch.Groups[2].Value, CultureInfo.InvariantCulture) - 1,
-					ZeroBasedColumnNumber = int.Parse(lineNumberMatch.Groups[3].Value, CultureInfo.InvariantCulture) -1 
-				};
+					zeroBasedLineNumber: int.Parse(lineNumberMatch.Groups[2].Value, CultureInfo.InvariantCulture) - 1,
+					zeroBasedColumnNumber: int.Parse(lineNumberMatch.Groups[3].Value, CultureInfo.InvariantCulture) -1);
 			}
 
 			return result;

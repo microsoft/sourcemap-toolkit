@@ -452,7 +452,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				{
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15)
 					}
 				};
 
@@ -475,7 +475,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				{
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8)
 					}
 				};
 
@@ -505,11 +505,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				{
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 86, ZeroBasedColumnNumber = 52}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 86, zeroBasedColumnNumber: 52)
 					},
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 88, ZeroBasedColumnNumber = 78}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78)
 					}
 				};
 
@@ -545,11 +545,11 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				{
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 5)
 					},
 					new BindingInformation
 					{
-						SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
+						SourcePosition = new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10)
 					}
 				};
 

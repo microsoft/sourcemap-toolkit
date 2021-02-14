@@ -32,9 +32,8 @@ namespace SourcemapToolkit.SourcemapParser
                 if (!visitedLines.Contains(generatedLine))
                 {
                     visitedLines.Add(generatedLine);
-                    var newMapping = mapping.Clone();
-                    newMapping.GeneratedSourcePosition.ZeroBasedColumnNumber = 0;
-                    newMapping.OriginalSourcePosition.ZeroBasedColumnNumber = 0;
+                    MappingEntry newMapping = mapping.Clone();
+                    newMapping.ResetColumnNumber();
                     newMap.ParsedMappings.Add(newMapping);
                 }
             }
