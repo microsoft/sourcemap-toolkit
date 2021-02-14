@@ -17,13 +17,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.UpdateLastGeneratedPositionColumn(zeroBasedColumnNumber: 1);
 
-			MappingEntry entry = new MappingEntry()
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-				OriginalFileName = state.Sources[0],
-				OriginalName = state.Names[0],
-				OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-			};
+			MappingEntry entry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+				originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+				originalName: state.Names[0],
+				originalFileName: state.Sources[0]);
 
 			// Act
 			var result = new StringBuilder();
@@ -41,11 +39,9 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 
 			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 
-			MappingEntry entry = new MappingEntry()
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 10),
-				OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 1),
-			};
+			MappingEntry entry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 10),
+				originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 1));
 
 			// Act
 			var result = new StringBuilder();
@@ -64,12 +60,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.IsFirstSegment = false;
 
-			MappingEntry entry = new MappingEntry()
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 10),
-				OriginalFileName = state.Sources[0],
-				OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 5),
-			};
+			MappingEntry entry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 10),
+				originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 5),
+				originalFileName: state.Sources[0]);
 
 			// Act
 			var result = new StringBuilder();
@@ -88,13 +82,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingGenerateState state = new MappingGenerateState(new List<string>() { "Name" }, new List<string>() { "Source" });
 			state.AdvanceLastGeneratedPositionLine();
 
-			MappingEntry entry = new MappingEntry()
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 5),
-				OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 6),
-				OriginalFileName = state.Sources[0],
-				OriginalName = state.Names[0],
-			};
+			MappingEntry entry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 5),
+				originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 6),
+				originalName: state.Names[0],
+				originalFileName: state.Sources[0]);
 
 			// Act
 			var result = new StringBuilder();
@@ -165,25 +157,19 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 			input.ParsedMappings = new List<MappingEntry>()
 			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0),
-					OriginalFileName = input.Sources[0],
-					OriginalName = input.Names[0],
-					OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-				},
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 13),
-					OriginalFileName = input.Sources[0],
-					OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
-				},
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 14),
-					OriginalFileName = input.Sources[0],
-					OriginalSourcePosition = new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 14),
-				},
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0),
+					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+					originalName: input.Names[0],
+					originalFileName: input.Sources[0]),
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 13),
+					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 0),
+					originalFileName: input.Sources[0]),
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 14),
+					originalSourcePosition: new SourcePosition(zeroBasedLineNumber: 1, zeroBasedColumnNumber: 14),
+					originalFileName: input.Sources[0]),
 			};
 
 			return input;

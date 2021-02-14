@@ -11,21 +11,19 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			return new StreamReader(new MemoryStream(byteArray));
 		}
 
-        public static MappingEntry getSimpleEntry(SourcePosition generatedSourcePosition, SourcePosition originalSourcePosition, string originalFileName)
-        {
-            return new MappingEntry
-            {
-                GeneratedSourcePosition = generatedSourcePosition,
-                OriginalSourcePosition = originalSourcePosition,
-                OriginalFileName = originalFileName
-            };
-        }
+		public static MappingEntry getSimpleEntry(SourcePosition generatedSourcePosition, SourcePosition originalSourcePosition, string originalFileName)
+		{
+			return new MappingEntry(
+				generatedSourcePosition: generatedSourcePosition,
+				originalSourcePosition: originalSourcePosition,
+				originalFileName: originalFileName);
+		}
 
-        public static SourcePosition generateSourcePosition(int lineNumber, int colNumber = 0)
-        {
-            return new SourcePosition(
-                zeroBasedLineNumber: lineNumber,
-                zeroBasedColumnNumber: colNumber);
-        }
-    }
+		public static SourcePosition generateSourcePosition(int lineNumber, int colNumber = 0)
+		{
+			return new SourcePosition(
+				zeroBasedLineNumber: lineNumber,
+				zeroBasedColumnNumber: colNumber);
+		}
+	}
 }

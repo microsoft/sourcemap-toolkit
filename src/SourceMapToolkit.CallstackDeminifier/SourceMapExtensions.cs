@@ -21,36 +21,38 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			if (bindings != null && bindings.Count > 0)
 			{
-				MappingEntry objectProtoypeMappingEntry = null;
+				MappingEntry? objectProtoypeMappingEntry = null;
 				if (bindings.Count == 2)
 				{
 					objectProtoypeMappingEntry =
 						sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings[0].SourcePosition);
 				}
 
-				MappingEntry mappingEntry =
+				MappingEntry? mappingEntry =
 					sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings.Last().SourcePosition);
 
 				if (mappingEntry?.OriginalName != null)
 				{
 					if (objectProtoypeMappingEntry?.OriginalName != null)
 					{
-						string objectName = objectProtoypeMappingEntry.OriginalName;
-						if (objectProtoypeMappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber == mappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber
-							&& objectProtoypeMappingEntry.OriginalSourcePosition.ZeroBasedLineNumber == mappingEntry.OriginalSourcePosition.ZeroBasedLineNumber
-							&& objectName.EndsWith($".{mappingEntry.OriginalName}"))
+						string objectName = objectProtoypeMappingEntry.Value.OriginalName;
+						if (objectProtoypeMappingEntry.Value.OriginalSourcePosition.ZeroBasedColumnNumber == mappingEntry.Value.OriginalSourcePosition.ZeroBasedColumnNumber
+							&& objectProtoypeMappingEntry.Value.OriginalSourcePosition.ZeroBasedLineNumber == mappingEntry.Value.OriginalSourcePosition.ZeroBasedLineNumber
+							&& objectName.Length > mappingEntry.Value.OriginalName.Length
+							&& objectName.EndsWith(mappingEntry.Value.OriginalName)
+							&& (objectName[objectName.Length - 1 - mappingEntry.Value.OriginalName.Length] == '.'))
 						{
 							// The object name already contains the method name, so do not append it
 							methodName = objectName;
 						}
 						else
 						{
-							methodName = $"{objectName}.{mappingEntry.OriginalName}";
+							methodName = $"{objectName}.{mappingEntry.Value.OriginalName}";
 						}
 					}
 					else
 					{
-						methodName = mappingEntry.OriginalName;
+						methodName = mappingEntry.Value.OriginalName;
 					}
 				}
 			}

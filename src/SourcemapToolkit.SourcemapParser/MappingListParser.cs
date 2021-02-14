@@ -41,44 +41,52 @@ namespace SourcemapToolkit.SourcemapParser
 
 		public MappingEntry ToMappingEntry(List<string> names, List<string> sources)
 		{
-			MappingEntry result = new MappingEntry
-			{
-				GeneratedSourcePosition = new SourcePosition(
-					zeroBasedLineNumber: GeneratedLineNumber,
-					zeroBasedColumnNumber: GeneratedColumnNumber)
-			};
-
+			SourcePosition originalSourcePosition;
+			
 			if (OriginalColumnNumber.HasValue && OriginalLineNumber.HasValue)
 			{
-				result.OriginalSourcePosition = new SourcePosition(
+				originalSourcePosition = new SourcePosition(
 					zeroBasedLineNumber: OriginalLineNumber.Value,
 					zeroBasedColumnNumber: OriginalColumnNumber.Value);
 			}
-
+			else
+			{
+				originalSourcePosition = SourcePosition.NotFound;
+			}
+			
+			string originalName = null;
 			if (OriginalNameIndex.HasValue)
 			{
 				try
 				{
-					result.OriginalName = names[OriginalNameIndex.Value];
+					originalName = names[OriginalNameIndex.Value];
 				}
 				catch (IndexOutOfRangeException e)
 				{
-					throw new IndexOutOfRangeException("Source map contains original name index that is outside the range of the provided names array" ,e);
+					throw new IndexOutOfRangeException("Source map contains original name index that is outside the range of the provided names array", e);
 				}
-
 			}
 
+			string originalFileName = null;
 			if (OriginalSourceFileIndex.HasValue)
 			{
 				try
 				{
-					result.OriginalFileName = sources[OriginalSourceFileIndex.Value];
+					originalFileName = sources[OriginalSourceFileIndex.Value];
 				}
 				catch (IndexOutOfRangeException e)
 				{
 					throw new IndexOutOfRangeException("Source map contains original source index that is outside the range of the provided sources array", e);
 				}
 			}
+
+			MappingEntry result = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(
+					zeroBasedLineNumber: GeneratedLineNumber,
+					zeroBasedColumnNumber: GeneratedColumnNumber),
+				originalSourcePosition: originalSourcePosition,
+				originalName: originalName,
+				originalFileName: originalFileName);
 
 			return result;
 		}

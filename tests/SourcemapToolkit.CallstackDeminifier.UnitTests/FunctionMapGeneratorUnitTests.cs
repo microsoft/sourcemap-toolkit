@@ -484,10 +484,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "foo",
-				});
+				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "foo"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -524,10 +521,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 88 && y.ZeroBasedColumnNumber == 78)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "baz",
-				});
+				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "baz"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -558,19 +552,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "bar"
-				});
+				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "bar"));
 
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "baz",
-				});
+				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "baz"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);

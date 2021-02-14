@@ -51,7 +51,7 @@ namespace SourcemapToolkit.SourcemapParser
                 Sources = new List<string>(this.Sources),
                 Names = new List<string>(this.Names),
 	            SourcesContent = new List<string>(this.SourcesContent),
-                ParsedMappings = new List<MappingEntry>(this.ParsedMappings.Select(m => m.Clone()))
+                ParsedMappings = new List<MappingEntry>(this.ParsedMappings)
             };
         }
 
@@ -94,22 +94,20 @@ namespace SourcemapToolkit.SourcemapParser
 			// transform mappings in this source map
 			foreach (MappingEntry mappingEntry in this.ParsedMappings)
 			{
-				MappingEntry newMappingEntry = mappingEntry.Clone();
+				MappingEntry newMappingEntry = mappingEntry;
 
 				if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.OriginalSourcePosition != SourcePosition.NotFound)
 				{
-					MappingEntry correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
+					MappingEntry? correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.OriginalSourcePosition);
 
 					if (correspondingSubMapMappingEntry != null)
 					{
 						// Copy the mapping
-						newMappingEntry = new MappingEntry
-						{
-							GeneratedSourcePosition = mappingEntry.GeneratedSourcePosition,
-							OriginalSourcePosition = correspondingSubMapMappingEntry.OriginalSourcePosition,
-							OriginalName = correspondingSubMapMappingEntry.OriginalName?? mappingEntry.OriginalName,
-							OriginalFileName = correspondingSubMapMappingEntry.OriginalFileName?? mappingEntry.OriginalFileName
-						};
+						newMappingEntry = new MappingEntry(
+							generatedSourcePosition: mappingEntry.GeneratedSourcePosition,
+							originalSourcePosition: correspondingSubMapMappingEntry.Value.OriginalSourcePosition,
+							originalName: correspondingSubMapMappingEntry.Value.OriginalName ?? mappingEntry.OriginalName,
+							originalFileName: correspondingSubMapMappingEntry.Value.OriginalFileName ?? mappingEntry.OriginalFileName);
 					}
 				}
 
@@ -139,17 +137,14 @@ namespace SourcemapToolkit.SourcemapParser
         /// </summary>
         /// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
         /// <returns>A mapping entry that is a close match for the desired generated code location</returns>
-        public virtual MappingEntry GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+        public virtual MappingEntry? GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
         {
             if (ParsedMappings == null)
             {
                 return null;
             }
 
-            MappingEntry mappingEntryToFind = new MappingEntry
-            {
-                GeneratedSourcePosition = generatedSourcePosition
-            };
+            MappingEntry mappingEntryToFind = new MappingEntry(generatedSourcePosition: generatedSourcePosition);
 
             int index = ParsedMappings.BinarySearch(mappingEntryToFind,
                 Comparer<MappingEntry>.Create((a, b) => a.GeneratedSourcePosition.CompareTo(b.GeneratedSourcePosition)));
@@ -165,7 +160,7 @@ namespace SourcemapToolkit.SourcemapParser
                 }
             }
 
-            return index >= 0 ? ParsedMappings[index] : null;
+            return index >= 0 ? (MappingEntry?)ParsedMappings[index] : null;
         }
 	}
 }

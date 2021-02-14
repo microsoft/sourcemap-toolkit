@@ -15,7 +15,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 4, zeroBasedColumnNumber: 3);
 
 			// Act
-			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+			MappingEntry? result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
 			Assert.Null(result);
@@ -28,15 +28,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap sourceMap = new SourceMap();
 			sourceMap.ParsedMappings = new List<MappingEntry>
 			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)
-				}
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0))
 			};
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 4, zeroBasedColumnNumber: 3);
 
 			// Act
-			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+			MappingEntry? result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
 			Assert.Null(result);
@@ -47,22 +45,18 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			SourceMap sourceMap = new SourceMap();
-			MappingEntry matchingMappingEntry = new MappingEntry
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 8, zeroBasedColumnNumber: 13)
-			};
+			MappingEntry matchingMappingEntry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 8, zeroBasedColumnNumber: 13));
 			sourceMap.ParsedMappings = new List<MappingEntry>
 			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)
-				},
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 8, zeroBasedColumnNumber: 13);
 
 			// Act
-			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+			MappingEntry? result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
 			Assert.Equal(matchingMappingEntry, result);
@@ -73,22 +67,18 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			SourceMap sourceMap = new SourceMap();
-			MappingEntry matchingMappingEntry = new MappingEntry
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 13)
-			};
+			MappingEntry matchingMappingEntry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 13));
 			sourceMap.ParsedMappings = new List<MappingEntry>
 			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)
-				},
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 14);
 
 			// Act
-			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+			MappingEntry? result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
 			Assert.Equal(matchingMappingEntry, result);
@@ -99,22 +89,18 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		{
 			// Arrange
 			SourceMap sourceMap = new SourceMap();
-			MappingEntry matchingMappingEntry = new MappingEntry
-			{
-				GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 23, zeroBasedColumnNumber: 15)
-			};
+			MappingEntry matchingMappingEntry = new MappingEntry(
+				generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 23, zeroBasedColumnNumber: 15));
 			sourceMap.ParsedMappings = new List<MappingEntry>
 			{
-				new MappingEntry
-				{
-					GeneratedSourcePosition = new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)
-				},
+				new MappingEntry(
+					generatedSourcePosition: new SourcePosition(zeroBasedLineNumber: 0, zeroBasedColumnNumber: 0)),
 				matchingMappingEntry
 			};
 			SourcePosition sourcePosition = new SourcePosition(zeroBasedLineNumber: 24, zeroBasedColumnNumber: 0);
 
 			// Act
-			MappingEntry result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+			MappingEntry? result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
 
 			// Asset
 			Assert.Equal(matchingMappingEntry, result);
@@ -135,7 +121,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			};
 
 			// Act
-			MappingEntry rootEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(generated1);
+			MappingEntry? rootEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(generated1);
 
 			// Assert
 			Assert.Equal(rootEntry, mappingEntry);
@@ -194,7 +180,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Assert
 			Assert.NotNull(combinedMap);
 			MappingEntry firstMapping = combinedMap.ParsedMappings[0];
-			Assert.True(firstMapping.IsValueEqual(parentMapping));
+			Assert.True(firstMapping.Equals(parentMapping));
 		}
 
 		[Fact]
@@ -229,7 +215,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			// Assert
 			Assert.NotNull(combinedMap);
 			MappingEntry firstMapping = combinedMap.ParsedMappings[0];
-			Assert.True(firstMapping.IsValueEqual(parentMapping));
+			Assert.True(firstMapping.Equals(parentMapping));
 		}
 
 		[Fact]
@@ -267,8 +253,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.NotNull(combinedMap);
 			Assert.Single(combinedMap.ParsedMappings);
 			Assert.Single(combinedMap.Sources);
-			MappingEntry rootMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
-			Assert.Equal(0, rootMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
+			MappingEntry? rootMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
+			Assert.Equal(0, rootMapping.Value.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
 		}
 
 		[Fact]
@@ -311,10 +297,10 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.NotNull(combinedMap);
 			Assert.Equal(2, combinedMap.ParsedMappings.Count);
 			Assert.Equal(2, combinedMap.Sources.Count);
-			MappingEntry firstCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
-			Assert.True(firstCombinedMapping.IsValueEqual(mapping2));
-			MappingEntry secondCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
-			Assert.Equal(0, secondCombinedMapping.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
+			MappingEntry? firstCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
+			Assert.True(firstCombinedMapping.Equals(mapping2));
+			MappingEntry? secondCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
+			Assert.Equal(0, secondCombinedMapping.Value.OriginalSourcePosition.CompareTo(childMapping.OriginalSourcePosition));
 		}
 
 		[Fact]
@@ -361,8 +347,8 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.NotNull(firstCombinedMap);
 			SourceMap secondCombinedMap = firstCombinedMap.ApplySourceMap(grandChildMap);
 			Assert.NotNull(secondCombinedMap);
-			MappingEntry rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
-			Assert.Equal(0, rootMapping.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
+			MappingEntry? rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
+			Assert.Equal(0, rootMapping.Value.OriginalSourcePosition.CompareTo(mapLevel2.OriginalSourcePosition));
 		}
 	}
 }
