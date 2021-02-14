@@ -76,7 +76,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			// Gets the name of a variable that a function is bound to, like foo in the example "var foo = function () {}"
 			BindingIdentifier bindingIdentifier = (node.Parent is VariableDeclaration parentVariableDeclaration) ?
 				parentVariableDeclaration.Binding as BindingIdentifier :
-				bindingIdentifier = node.Binding; // Gets the name bound to the function, like foo in the example "function foo() {}
+				node.Binding; // Gets the name bound to the function, like foo in the example "function foo() {}
 			
 			if (bindingIdentifier != null)
 			{
