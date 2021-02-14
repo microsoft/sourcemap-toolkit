@@ -9,8 +9,8 @@ namespace SourcemapToolkit.SourcemapParser
 	{
 		public static readonly SourcePosition NotFound = new SourcePosition(-1, -1);
 
-		public int ZeroBasedLineNumber { get; }
-		public int ZeroBasedColumnNumber { get; }
+		public readonly int ZeroBasedLineNumber;
+		public readonly int ZeroBasedColumnNumber;
 
 		public SourcePosition(int zeroBasedLineNumber, int zeroBasedColumnNumber)
 		{

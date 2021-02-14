@@ -12,12 +12,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// The name of the method or class
 		/// </summary>
-		public string Name { get; }
+		public readonly string Name;
 
 		/// <summary>
 		/// The location of the function name or class declaration
 		/// </summary>
-		public SourcePosition SourcePosition { get; }
+		public readonly SourcePosition SourcePosition;
 
 		public BindingInformation(string name, SourcePosition sourcePosition)
 		{

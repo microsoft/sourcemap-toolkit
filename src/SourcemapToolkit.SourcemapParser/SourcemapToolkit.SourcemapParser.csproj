@@ -64,6 +64,7 @@
     <Compile Include="SourceMapParser.cs" />
     <Compile Include="SourceMapTransformer.cs" />
     <Compile Include="SourcePosition.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

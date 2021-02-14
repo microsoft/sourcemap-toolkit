@@ -7,7 +7,7 @@ namespace SourcemapToolkit.SourcemapParser
 	/// Corresponds to a single parsed entry in the source map mapping string that is used internally by the parser.
 	/// The public API exposes the MappingEntry object, which is more useful to consumers of the library.
 	/// </summary>
-	internal class NumericMappingEntry
+	internal struct NumericMappingEntry
 	{
 		/// <summary>
 		/// The zero-based line number in the generated code that corresponds to this mapping segment.
@@ -105,7 +105,8 @@ namespace SourcemapToolkit.SourcemapParser
 		public readonly int OriginalSourceStartingColumnBase;
 		public readonly int NamesListIndexBase;
 
-		public MappingsParserState(MappingsParserState previousMappingsParserState = new MappingsParserState(),
+		public MappingsParserState(
+			MappingsParserState previousMappingsParserState = new MappingsParserState(),
 			int? newGeneratedLineNumber = null,
 			int? newGeneratedColumnBase = null,
 			int? newSourcesListIndexBase = null,
@@ -128,6 +129,8 @@ namespace SourcemapToolkit.SourcemapParser
 	/// </summary>
 	internal class MappingsListParser
 	{
+		private static readonly char[] LineDelimiter = new[] { ',' };
+
 		/// <summary>
 		/// Parses a single "segment" of the mapping field for a source map. A segment describes one piece of code in the generated source.
 		/// In the mapping string "AAaAA,CAACC;", AAaAA and CAACC are both segments. This method assumes the segments have already been decoded 
@@ -136,7 +139,7 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <param name="segmentFields">The integer values for the segment fields</param>
 		/// <param name="mappingsParserState">The current state of the state variables for the parser</param>
 		/// <returns></returns>
-		internal NumericMappingEntry ParseSingleMappingSegment(List<int> segmentFields, MappingsParserState mappingsParserState)
+		internal NumericMappingEntry ParseSingleMappingSegment(IReadOnlyList<int> segmentFields, MappingsParserState mappingsParserState)
 		{
 			if (segmentFields == null)
 			{
@@ -148,7 +151,7 @@ namespace SourcemapToolkit.SourcemapParser
 				throw new ArgumentOutOfRangeException(nameof(segmentFields));
 			}
 
-			NumericMappingEntry numericMappingEntry = new NumericMappingEntry
+			NumericMappingEntry numericMappingEntry = new NumericMappingEntry()
 			{
 				GeneratedLineNumber = mappingsParserState.CurrentGeneratedLineNumber,
 				GeneratedColumnNumber = mappingsParserState.CurrentGeneratedColumnBase + segmentFields[0]
@@ -203,16 +206,21 @@ namespace SourcemapToolkit.SourcemapParser
 
 			// The V3 source map format calls for all Base64 VLQ segments to be seperated by commas.
 			// Each line of generated code is separated using semicolons. The count of semicolons encountered gives the current line number.
-			string[] lines = mappingString.Split(';');
+			string[] lines = mappingString.SplitFast(';');
 
-			for (int lineNumber = 0; lineNumber < lines.Length; lineNumber += 1)
+			for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
 			{
 				// The only value that resets when encountering a semicolon is the starting column.
-				currentMappingsParserState = new MappingsParserState(currentMappingsParserState, newGeneratedLineNumber:lineNumber, newGeneratedColumnBase: 0);
-				string[] segmentsForLine = lines[lineNumber].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+				currentMappingsParserState = new MappingsParserState(
+					currentMappingsParserState,
+					newGeneratedLineNumber: lineNumber,
+					newGeneratedColumnBase: 0);
+
+				string[] segmentsForLine = lines[lineNumber].Split(LineDelimiter, StringSplitOptions.RemoveEmptyEntries);
 
 				foreach (string segment in segmentsForLine)
 				{
+					// Reuse the numericMappingEntry to ease GC allocations.
 					NumericMappingEntry numericMappingEntry = ParseSingleMappingSegment(Base64VlqDecoder.Decode(segment), currentMappingsParserState);
 					mappingEntries.Add(numericMappingEntry.ToMappingEntry(names, sources));
 

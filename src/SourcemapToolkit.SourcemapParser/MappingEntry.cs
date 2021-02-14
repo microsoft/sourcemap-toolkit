@@ -7,22 +7,22 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// The location of the line of code in the transformed code
 		/// </summary>
-		public SourcePosition GeneratedSourcePosition { get; }
+		public readonly SourcePosition GeneratedSourcePosition;
 
 		/// <summary>
 		/// The location of the code in the original source code
 		/// </summary>
-		public SourcePosition OriginalSourcePosition { get; }
+		public readonly SourcePosition OriginalSourcePosition;
 
 		/// <summary>
 		/// The original name of the code referenced by this mapping entry
 		/// </summary>
-		public string OriginalName { get; }
+		public readonly string OriginalName;
 
 		/// <summary>
 		/// The name of the file that originally contained this code
 		/// </summary>
-		public string OriginalFileName { get; }
+		public readonly string OriginalFileName;
 
 		public MappingEntry(
 			SourcePosition generatedSourcePosition,

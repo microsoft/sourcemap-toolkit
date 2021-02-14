@@ -99,6 +99,7 @@
     <Compile Include="SourceMapTransformerUnitTests.cs" />
     <Compile Include="SourceMapUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
+    <Compile Include="StringExtensionsUnitTests.cs" />
     <Compile Include="UnitTestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
