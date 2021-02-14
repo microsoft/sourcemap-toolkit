@@ -6,8 +6,6 @@
 		/// String.Split() allocates an O(input.Length) int array, and
 		/// is surprisingly expensive.  For most cases this implementation
 		/// is faster and does fewer allocations.
-		/// There's a copy of this function in StandardFlightManager.cs because
-		/// that code can't reference this version - keep them in sync
 		/// </summary>
 		public static string[] SplitFast(this string input, char delimiter)
 		{
