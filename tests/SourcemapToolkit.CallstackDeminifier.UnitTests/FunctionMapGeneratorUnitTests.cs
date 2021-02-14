@@ -405,7 +405,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_NullBindings_ReturnsNull()
+		public void GetDeminifiedMethodName_NullBindings_ReturnsNull()
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = null;
@@ -419,7 +419,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_NullSourceMap_ThrowsException()
+		public void GetDeminifiedMethodName_NullSourceMap_ThrowsException()
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = null;
@@ -430,7 +430,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_EmptyBinding_ReturnNullMethodName()
+		public void GetDeminifiedMethodName_EmptyBinding_ReturnNullMethodName()
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = new List<BindingInformation>();
@@ -445,7 +445,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
+		public void GetDeminifiedMethodName_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
 		{
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>()
@@ -467,7 +467,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
+		public void GetDeminifiedMethodName_HasSingleBindingMatchingMapping_ReturnsMethodName()
 		{
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>()
@@ -493,7 +493,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
+		public void GetDeminifiedMethodName_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
 		{
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>
@@ -528,7 +528,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		}
 
 		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
+		public void GetDeminifiedMethodName_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
 		{
 			// Arrange
 			List<BindingInformation> bindings = new List<BindingInformation>
