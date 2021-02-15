@@ -21,21 +21,22 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName)
 		{
-			StackFrameDeminificationResult result = new StackFrameDeminificationResult
-			{
-				DeminificationError = DeminificationError.None
-			};
 			if (stackFrame == null)
 			{
 				throw new ArgumentNullException(nameof(stackFrame));
 			}
 
+			StackFrameDeminificationResult result = new StackFrameDeminificationResult
+			{
+				DeminificationError = DeminificationError.None
+			};
+			
 			FunctionMapEntry wrappingFunction = null;
 
 			// This code deminifies the stack frame by finding the wrapping function in 
 			// the generated code and then using the source map to find the name and 
 			// and original source location.
-			List<FunctionMapEntry> functionMap = _functionMapStore.GetFunctionMapForSourceCode(stackFrame.FilePath);
+			IReadOnlyList<FunctionMapEntry> functionMap = _functionMapStore.GetFunctionMapForSourceCode(stackFrame.FilePath);
 			if (functionMap != null)
 			{
 				wrappingFunction =
@@ -51,7 +52,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				result.DeminificationError = DeminificationError.NoSourceCodeProvided;
 			}
 
-			result.DeminifiedStackFrame = new StackFrame {MethodName = wrappingFunction?.DeminfifiedMethodName};
+			result.DeminifiedStackFrame = new StackFrame {MethodName = wrappingFunction?.DeminifiedMethodName};
 			return result;
 		}
 	}

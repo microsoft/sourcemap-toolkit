@@ -23,20 +23,22 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString)
 		{
-			DeminifyStackTraceResult result = new DeminifyStackTraceResult();
-			result.MinifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out string message);
-			result.Message = message;
-			result.DeminifiedStackFrameResults = new List<StackFrameDeminificationResult>();
+			var minifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out string message);
+			var deminifiedStackFrameResults = new List<StackFrameDeminificationResult>(minifiedStackFrames.Count);
 
 			// Deminify frames in reverse order so we can pass the symbol name from caller
 			// (i.e. the function name) into the next level's deminification.
 			string callerSymbolName = null;
-			for (int i = result.MinifiedStackFrames.Count - 1; i >= 0; i--)
+			for (int i = minifiedStackFrames.Count - 1; i >= 0; i--)
 			{
-				var frame = _stackFrameDeminifier.DeminifyStackFrame(result.MinifiedStackFrames[i], callerSymbolName);
+				var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrames[i], callerSymbolName);
 				callerSymbolName = frame?.DeminifiedSymbolName;
-				result.DeminifiedStackFrameResults.Insert(0, frame);
+				deminifiedStackFrameResults.Add(frame);
 			}
+
+			deminifiedStackFrameResults.Reverse();
+
+			var result = new DeminifyStackTraceResult(message, minifiedStackFrames, deminifiedStackFrameResults);
 
 			return result;
 		}

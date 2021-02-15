@@ -4,6 +4,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 {
 	internal interface IFunctionMapStore
 	{
-		List<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl);
+		IReadOnlyList<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl);
 	}
 }

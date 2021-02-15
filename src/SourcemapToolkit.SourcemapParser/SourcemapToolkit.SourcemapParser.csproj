@@ -55,6 +55,7 @@
     <Compile Include="Base64VlqConstants.cs" />
     <Compile Include="Base64VlqDecoder.cs" />
     <Compile Include="Base64VlqEncoder.cs" />
+    <Compile Include="IReadOnlyListExtensions.cs" />
     <Compile Include="MappingEntry.cs" />
     <Compile Include="MappingListParser.cs" />
     <Compile Include="SourceMap.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="SourceMapParser.cs" />
     <Compile Include="SourceMapTransformer.cs" />
     <Compile Include="SourcePosition.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

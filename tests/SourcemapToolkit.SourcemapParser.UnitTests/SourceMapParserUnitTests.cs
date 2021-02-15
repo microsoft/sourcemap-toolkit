@@ -34,7 +34,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.Equal(3, output.Version);
 			Assert.Equal("CommonIntl", output.File);
 			Assert.Equal("AACAA,aAAA,CAAc", output.Mappings);
-			Assert.Equal(1, output.Sources.Count);
+			Assert.Single(output.Sources);
 			Assert.Equal("input/CommonIntl.js", output.Sources[0]);
 			Assert.Equal(2, output.Names.Count);
 			Assert.Equal("CommonStrings", output.Names[0]);

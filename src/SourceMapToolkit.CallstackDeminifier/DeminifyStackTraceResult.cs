@@ -1,19 +1,24 @@
-﻿using System;
+﻿using SourcemapToolkit.SourcemapParser;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
 	public class DeminifyStackTraceResult
 	{
-		public string Message;
-
-		public List<StackFrame> MinifiedStackFrames;
-
-		public List<StackFrameDeminificationResult> DeminifiedStackFrameResults;
+		public string Message { get; }
+		public IReadOnlyList<StackFrame> MinifiedStackFrames { get; }
+		public IReadOnlyList<StackFrameDeminificationResult> DeminifiedStackFrameResults { get; }
 
 		public override string ToString()
 		{
-			string output = Message ?? string.Empty;
+			StringBuilder sb = new StringBuilder();
+
+			if (!string.IsNullOrEmpty(Message))
+			{
+				sb.Append(Message);
+			}
+
 			for (int i = 0; i < DeminifiedStackFrameResults.Count; i++)
 			{
 				StackFrame deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
@@ -22,14 +27,26 @@ namespace SourcemapToolkit.CallstackDeminifier
 				StackFrame frame = new StackFrame()
 				{
 					MethodName = deminFrame.MethodName ?? MinifiedStackFrames[i].MethodName,
-					SourcePosition = deminFrame.SourcePosition ?? MinifiedStackFrames[i].SourcePosition,
-					FilePath = deminFrame.SourcePosition != null ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
+					SourcePosition = deminFrame.SourcePosition != SourcePosition.NotFound ? deminFrame.SourcePosition : MinifiedStackFrames[i].SourcePosition,
+					FilePath = deminFrame.SourcePosition != SourcePosition.NotFound ? deminFrame.FilePath : MinifiedStackFrames[i].FilePath
 				};
 
-				output += $"{Environment.NewLine}  {frame}";
+				sb.AppendLine();
+				sb.Append("  ");
+				sb.Append(frame);
 			}
 
-			return output;
+			return sb.ToString();
+		}
+
+		public DeminifyStackTraceResult(
+			string message,
+			IReadOnlyList<StackFrame> minifiedStackFrames,
+			IReadOnlyList<StackFrameDeminificationResult> deminifiedStackFrameResults)
+		{
+			Message = message;
+			MinifiedStackFrames = minifiedStackFrames;
+			DeminifiedStackFrameResults = deminifiedStackFrameResults;
 		}
 	}
 }

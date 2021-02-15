@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Xunit;
 using Rhino.Mocks;
 using SourcemapToolkit.SourcemapParser;
+using System.Linq.Expressions;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
@@ -45,7 +46,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			StackFrame stackFrame = null;
 
 			// Act
-			Assert.Throws<ArgumentNullException>( ()=> stackFrameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName: null));
+			Assert.Throws<ArgumentNullException>(() => stackFrameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName: null));
 		}
 
 		[Fact]
@@ -60,7 +61,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -82,7 +83,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoSourceCodeProvided, stackFrameDeminification.DeminificationError);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -107,7 +108,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Assert
 			Assert.Equal(DeminificationError.NoWrapingFunctionFound, stackFrameDeminification.DeminificationError);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -116,7 +117,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = new FunctionMapEntry {DeminfifiedMethodName = "DeminifiedFoo"};
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -132,8 +133,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Equal(DeminificationError.None, stackFrameDeminification.DeminificationError);
-			Assert.Equal(wrapingFunctionMapEntry.DeminfifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -143,7 +144,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = new FunctionMapEntry { DeminfifiedMethodName = "DeminifiedFoo" };
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -159,8 +160,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Equal(DeminificationError.NoSourceMap, stackFrameDeminification.DeminificationError);
-			Assert.Equal(wrapingFunctionMapEntry.DeminfifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -169,7 +170,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = new FunctionMapEntry { DeminfifiedMethodName = "DeminifiedFoo" };
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
@@ -178,7 +179,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			functionMapConsumer.Stub(c => c.GetWrappingFunctionForSourceLocation(Arg<SourcePosition>.Is.Anything, Arg<List<FunctionMapEntry>>.Is.Anything))
 				.Return(wrapingFunctionMapEntry);
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStub<ISourceMapStore>();
-			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(new SourceMap());
+			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(CreateSourceMap());
 
 			IStackFrameDeminifier stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(sourceMapStore: sourceMapStore,functionMapStore: functionMapStore, functionMapConsumer: functionMapConsumer);
 
@@ -187,8 +188,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Equal(DeminificationError.SourceMapFailedToParse, stackFrameDeminification.DeminificationError);
-			Assert.Equal(wrapingFunctionMapEntry.DeminfifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
@@ -197,13 +198,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			string filePath = "foo";
-			FunctionMapEntry wrapingFunctionMapEntry = new FunctionMapEntry { DeminfifiedMethodName = "DeminifiedFoo" };
+			FunctionMapEntry wrapingFunctionMapEntry = CreateFunctionMapEntry(deminifiedMethodName: "DeminifiedFoo");
 			StackFrame stackFrame = new StackFrame { FilePath = filePath };
 			IFunctionMapStore functionMapStore = MockRepository.GenerateStub<IFunctionMapStore>();
 			functionMapStore.Stub(c => c.GetFunctionMapForSourceCode(filePath))
 				.Return(new List<FunctionMapEntry>());
 			ISourceMapStore sourceMapStore = MockRepository.GenerateStub<ISourceMapStore>();
-			SourceMap sourceMap = new SourceMap() {ParsedMappings = new List<MappingEntry>()};
+			SourceMap sourceMap = CreateSourceMap(parsedMappings: new List<MappingEntry>());
 
 			sourceMapStore.Stub(c => c.GetSourceMapForUrl(Arg<string>.Is.Anything)).Return(sourceMap);
 			IFunctionMapConsumer functionMapConsumer = MockRepository.GenerateStub<IFunctionMapConsumer>();
@@ -217,10 +218,30 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 			// Assert
 			Assert.Equal(DeminificationError.NoMatchingMapingInSourceMap, stackFrameDeminification.DeminificationError);
-			Assert.Equal(wrapingFunctionMapEntry.DeminfifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
-			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
+			Assert.Equal(wrapingFunctionMapEntry.DeminifiedMethodName, stackFrameDeminification.DeminifiedStackFrame.MethodName);
+			Assert.Equal(SourcePosition.NotFound, stackFrameDeminification.DeminifiedStackFrame.SourcePosition);
 			Assert.Null(stackFrameDeminification.DeminifiedStackFrame.FilePath);
 		}
 
+		private static FunctionMapEntry CreateFunctionMapEntry(string deminifiedMethodName)
+		{
+			return new FunctionMapEntry(
+				bindings: default,
+				deminifiedMethodName,
+				startSourcePosition: default,
+				endSourcePosition: default);
+		}
+
+		private static SourceMap CreateSourceMap(List<MappingEntry> parsedMappings = default)
+		{
+			return new SourceMap(
+				version: default,
+				file: default,
+				mappings: default,
+				sources: default,
+				names: default,
+				parsedMappings: parsedMappings,
+				sourcesContent: default);
+		}
 	}
 }

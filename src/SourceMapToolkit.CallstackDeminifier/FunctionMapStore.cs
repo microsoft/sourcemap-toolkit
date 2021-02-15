@@ -10,12 +10,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 	internal class FunctionMapStore : IFunctionMapStore
 	{
 		private readonly IFunctionMapGenerator _functionMapGenerator;
-		private readonly KeyValueCache<string,List<FunctionMapEntry>> _functionMapCache;
+		private readonly KeyValueCache<string, IReadOnlyList<FunctionMapEntry>> _functionMapCache;
 
 		public FunctionMapStore(ISourceCodeProvider sourceCodeProvider, Func<string, SourceMap> sourceMapGetter)
 		{
 			_functionMapGenerator = new FunctionMapGenerator();
-			_functionMapCache = new KeyValueCache<string, List<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
+			_functionMapCache = new KeyValueCache<string, IReadOnlyList<FunctionMapEntry>>(sourceCodeUrl => _functionMapGenerator.GenerateFunctionMap(
 				sourceCodeProvider.GetSourceCode(sourceCodeUrl),
 				sourceMapGetter(sourceCodeUrl)));
 		}
@@ -26,7 +26,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Once a function map is generated, the value is cached in memory for future usages.
 		/// </summary>
 		/// <param name="sourceCodeUrl">The URL of the file for which a function map is required</param>
-		public List<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl)
+		public IReadOnlyList<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl)
 		{
 			return _functionMapCache.GetValue(sourceCodeUrl);
 		}

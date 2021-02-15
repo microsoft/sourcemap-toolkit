@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Xunit;
-using SourcemapToolkit.SourcemapParser.UnitTests;
+
 using Rhino.Mocks;
+
 using SourcemapToolkit.SourcemapParser;
+using SourcemapToolkit.SourcemapParser.UnitTests;
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
@@ -18,7 +21,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			string sourceCode = "";
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.GenerateFunctionMap(UnitTestUtils.StreamReaderFromString(sourceCode), null);
 
 			// Assert
 			Assert.Null(functionMap);
@@ -30,9 +33,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null);
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(null, sourceMap);
 
 			// Assert
 			Assert.Null(functionMap);
@@ -44,12 +48,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "bar();";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
-			Assert.Equal(0, functionMap.Count);
+			Assert.Empty(functionMap);
 		}
 
 		[Fact]
@@ -58,12 +63,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){bar();}";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
 			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
@@ -80,12 +86,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo()" + Environment.NewLine + "{" + Environment.NewLine + "bar();" +
 								Environment.NewLine + "}";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
 			Assert.Equal(9, functionMap[0].Bindings[0].SourcePosition.ZeroBasedColumnNumber);
@@ -101,9 +108,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){bar();}function bar(){baz();}";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -131,9 +139,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "function foo(){function bar(){baz();}}";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -161,12 +170,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){bar();}";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
@@ -183,9 +193,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){};foo.bar = function() { baz(); }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -214,9 +225,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function () { baz(); }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -245,9 +257,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function () { baz(); } }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -278,12 +291,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function myCoolFunctionName(){ bar(); }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
-			Assert.Equal(1, functionMap.Count);
+			Assert.Single(functionMap);
 
 			Assert.Equal("foo", functionMap[0].Bindings[0].Name);
 			Assert.Equal(0, functionMap[0].Bindings[0].SourcePosition.ZeroBasedLineNumber);
@@ -300,9 +314,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){};foo.bar = function myCoolFunctionName() { baz(); }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -331,9 +346,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype.bar = function myCoolFunctionName() { baz(); } }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -362,9 +378,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			// Arrange
 			FunctionMapGenerator functionMapGenerator = new FunctionMapGenerator();
 			string sourceCode = "var foo = function(){} foo.prototype = { bar: function myCoolFunctionName() { baz(); } }";
+			SourceMap sourceMap = CreateSourceMapMock();
 
 			// Act
-			List<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode));
+			IReadOnlyList<FunctionMapEntry> functionMap = functionMapGenerator.ParseSourceCode(UnitTestUtils.StreamReaderFromString(sourceCode), sourceMap);
 
 			// Assert
 			Assert.Equal(2, functionMap.Count);
@@ -389,193 +406,16 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			Assert.Equal(22, functionMap[1].EndSourcePosition.ZeroBasedColumnNumber);
 		}
 
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_NullFunctionMapEntry_ThrowsException()
+		private static SourceMap CreateSourceMapMock()
 		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = null;
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-
-			// Act
-			Assert.Throws<ArgumentNullException>( ()=> FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap));
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_NullSourceMap_ThrowsException()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
-			SourceMap sourceMap = null;
-
-			// Act
-			Assert.Throws<ArgumentNullException>( ()=> FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap));
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_NoBinding_ReturnNullMethodName()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry();
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-
-			// Act
-			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-
-			// Assert
-			Assert.Null(result);
-			sourceMap.VerifyAllExpectations();
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
-					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 15}
-						}
-					}
-			};
-
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
-
-			// Act
-			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-
-			// Assert
-			Assert.Null(result);
-			sourceMap.VerifyAllExpectations();
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_HasSingleBindingMatchingMapping_ReturnsMethodName()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
-					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 8}
-						}
-					}
-			};
-
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-			sourceMap.Stub(
-				x =>
-					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "foo",
-				});
-
-			// Act
-			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-
-			// Assert
-			Assert.Equal("foo", result);
-			sourceMap.VerifyAllExpectations();
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
-					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 86, ZeroBasedColumnNumber = 52}
-						},
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 88, ZeroBasedColumnNumber = 78}
-						}
-					}
-			};
-
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-			sourceMap.Stub(
-				x =>
-					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 86 && y.ZeroBasedColumnNumber == 52)))
-				.Return(null);
-
-			sourceMap.Stub(
-				x =>
-					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 88 && y.ZeroBasedColumnNumber == 78)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "baz",
-				});
-
-			// Act
-			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-
-			// Assert
-			Assert.Equal("baz", result);
-			sourceMap.VerifyAllExpectations();
-		}
-
-		[Fact]
-		public void GetDeminifiedMethodNameFromSourceMap_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
-		{
-			// Arrange
-			FunctionMapEntry functionMapEntry = new FunctionMapEntry
-			{
-				Bindings =
-					new List<BindingInformation>
-					{
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 5, ZeroBasedColumnNumber = 5}
-						},
-						new BindingInformation
-						{
-							SourcePosition = new SourcePosition {ZeroBasedLineNumber = 20, ZeroBasedColumnNumber = 10}
-						}
-					}
-			};
-
-			SourceMap sourceMap = MockRepository.GenerateStub<SourceMap>();
-			sourceMap.Stub(
-				x =>
-					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "bar"
-				});
-
-			sourceMap.Stub(
-				x =>
-					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
-				.Return(new MappingEntry
-				{
-					OriginalName = "baz",
-				});
-
-			// Act
-			string result = FunctionMapGenerator.GetDeminifiedMethodNameFromSourceMap(functionMapEntry, sourceMap);
-
-			// Assert
-			Assert.Equal("bar.baz", result);
-			sourceMap.VerifyAllExpectations();
+			return MockRepository.GenerateStub<SourceMap>(
+				0 /* version */,
+				default(string) /* file */,
+				default(string) /* mappings */,
+				default(IReadOnlyList<string>) /* sources */,
+				default(IReadOnlyList<string>) /* names */,
+				default(IReadOnlyList<MappingEntry>) /* parsedMappings */,
+				default(IReadOnlyList<string>) /* sourcesContent */);
 		}
 	}
 }

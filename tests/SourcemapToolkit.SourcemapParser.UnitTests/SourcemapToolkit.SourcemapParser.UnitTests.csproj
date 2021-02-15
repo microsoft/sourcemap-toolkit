@@ -91,6 +91,7 @@
     <Compile Include="Base64ConverterUnitTests.cs" />
     <Compile Include="Base64VlqDecoderUnitTests.cs" />
     <Compile Include="Base64VlqEncoderUnitTests.cs" />
+    <Compile Include="IReadOnlyListExtensionsUnitTests.cs" />
     <Compile Include="NumericMappingEntryUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MappingsListParserUnitTests.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="SourceMapTransformerUnitTests.cs" />
     <Compile Include="SourceMapUnitTests.cs" />
     <Compile Include="SourcePositionUnitTests.cs" />
+    <Compile Include="StringExtensionsUnitTests.cs" />
     <Compile Include="UnitTestUtils.cs" />
   </ItemGroup>
   <ItemGroup>

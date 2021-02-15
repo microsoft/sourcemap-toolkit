@@ -30,10 +30,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
     at HTMLButtonElement.<anonymous> (http://localhost:19220/crashcauser.min.js:1:332)";
 
 			// Act
-			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
+			var stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.Equal(stackTrace.Count, 4);
+			Assert.Equal(4, stackTrace.Count);
 		}
 
 		[Fact]
@@ -47,10 +47,10 @@ b@http://localhost:19220/crashcauser.min.js:1:14
 window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 
 			// Act
-			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
+			var stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.Equal(stackTrace.Count, 4);
+			Assert.Equal(4, stackTrace.Count);
 		}
 
 		[Fact]
@@ -64,10 +64,10 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
    at b (http://localhost:19220/crashcauser.min.js:1:14)";
 
 			// Act
-			List<StackFrame> stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
+			var stackTrace = stackTraceParser.ParseStackTrace(browserStackTrace);
 
 			// Assert
-			Assert.Equal(stackTrace.Count, 3);
+			Assert.Equal(3, stackTrace.Count);
 		}
 
 		[Fact]
@@ -78,7 +78,7 @@ window.onload/<@http://localhost:19220/crashcauser.min.js:1:332";
 			string frame = null;
 
 			// Act
-			Assert.Throws<ArgumentNullException>( ()=> stackTraceParser.TryParseSingleStackFrame(frame));
+			Assert.Throws<ArgumentNullException>(() => stackTraceParser.TryParseSingleStackFrame(frame));
 		}
 
 		[Fact]

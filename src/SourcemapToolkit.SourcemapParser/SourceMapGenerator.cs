@@ -16,22 +16,22 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Last location of the code in the transformed code
 		/// </summary>
-		public readonly SourcePosition LastGeneratedPosition = new SourcePosition();
+		public SourcePosition LastGeneratedPosition { get; private set; } = default;
 
 		/// <summary>
 		/// Last location of the code in the source code
 		/// </summary>
-		public readonly SourcePosition LastOriginalPosition = new SourcePosition();
+		public SourcePosition LastOriginalPosition { get; set; } = default;
 
 		/// <summary>
 		/// List that contains the symbol names
 		/// </summary>
-		public readonly IList<string> Names;
+		public readonly IReadOnlyList<string> Names;
 
 		/// <summary>
 		/// List that contains the file sources
 		/// </summary>
-		public readonly IList<string> Sources;
+		public readonly IReadOnlyList<string> Sources;
 
 		/// <summary>
 		/// Index of last file source
@@ -48,11 +48,25 @@ namespace SourcemapToolkit.SourcemapParser
 		/// </summary>
 		public bool IsFirstSegment { get; set; }
 
-		public MappingGenerateState(IList<string> names, IList<string> sources)
+		public MappingGenerateState(IReadOnlyList<string> names, IReadOnlyList<string> sources)
 		{
 			Names = names;
 			Sources = sources;
 			IsFirstSegment = true;
+		}
+
+		public void AdvanceLastGeneratedPositionLine()
+		{
+			LastGeneratedPosition = new SourcePosition(
+				zeroBasedLineNumber: LastGeneratedPosition.ZeroBasedLineNumber + 1,
+				zeroBasedColumnNumber: 0);
+		}
+
+		public void UpdateLastGeneratedPositionColumn(int zeroBasedColumnNumber)
+		{
+			LastGeneratedPosition = new SourcePosition(
+				zeroBasedLineNumber: LastGeneratedPosition.ZeroBasedLineNumber,
+				zeroBasedColumnNumber: zeroBasedColumnNumber);
 		}
 	}
 
@@ -81,15 +95,7 @@ namespace SourcemapToolkit.SourcemapParser
 				throw new ArgumentNullException(nameof(sourceMap));
 			}
 
-			SourceMap mapToSerialize = new SourceMap()
-			{
-				File = sourceMap.File,
-				Names = sourceMap.Names,
-				Sources = sourceMap.Sources,
-				Version = sourceMap.Version,
-				SourcesContent = sourceMap.SourcesContent
-			};
-
+			string mappings = null;
 			if (sourceMap.ParsedMappings != null && sourceMap.ParsedMappings.Count > 0)
 			{
 				MappingGenerateState state = new MappingGenerateState(sourceMap.Names, sourceMap.Sources);
@@ -102,8 +108,17 @@ namespace SourcemapToolkit.SourcemapParser
 
 				output.Append(';');
 
-				mapToSerialize.Mappings = output.ToString();
+				mappings = output.ToString();
 			}
+
+			SourceMap mapToSerialize = new SourceMap(
+				version: sourceMap.Version,
+				file: sourceMap.File,
+				mappings: mappings,
+				sources: sourceMap.Sources,
+				names: sourceMap.Names,
+				parsedMappings: default,
+				sourcesContent: sourceMap.SourcesContent);
 
 			return JsonConvert.SerializeObject(mapToSerialize,
 				jsonSerializerSettings ?? new JsonSerializerSettings
@@ -126,8 +141,7 @@ namespace SourcemapToolkit.SourcemapParser
 			// Each line of generated code is separated using semicolons
 			while (entry.GeneratedSourcePosition.ZeroBasedLineNumber != state.LastGeneratedPosition.ZeroBasedLineNumber)
 			{
-				state.LastGeneratedPosition.ZeroBasedColumnNumber = 0;
-				state.LastGeneratedPosition.ZeroBasedLineNumber++;
+				state.AdvanceLastGeneratedPositionLine();
 				state.IsFirstSegment = true;
 				output.Append(';');
 			}
@@ -163,7 +177,7 @@ namespace SourcemapToolkit.SourcemapParser
 			 */
 
 			Base64VlqEncoder.Encode(output, entry.GeneratedSourcePosition.ZeroBasedColumnNumber - state.LastGeneratedPosition.ZeroBasedColumnNumber);
-			state.LastGeneratedPosition.ZeroBasedColumnNumber = entry.GeneratedSourcePosition.ZeroBasedColumnNumber;
+			state.UpdateLastGeneratedPositionColumn(entry.GeneratedSourcePosition.ZeroBasedColumnNumber);
 
 			if (entry.OriginalFileName != null)
 			{
@@ -177,10 +191,11 @@ namespace SourcemapToolkit.SourcemapParser
 				state.LastSourceIndex = sourceIndex;
 
 				Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedLineNumber - state.LastOriginalPosition.ZeroBasedLineNumber);
-				state.LastOriginalPosition.ZeroBasedLineNumber = entry.OriginalSourcePosition.ZeroBasedLineNumber;
-
 				Base64VlqEncoder.Encode(output, entry.OriginalSourcePosition.ZeroBasedColumnNumber - state.LastOriginalPosition.ZeroBasedColumnNumber);
-				state.LastOriginalPosition.ZeroBasedColumnNumber = entry.OriginalSourcePosition.ZeroBasedColumnNumber;
+
+				state.LastOriginalPosition = new SourcePosition(
+					zeroBasedLineNumber: entry.OriginalSourcePosition.ZeroBasedLineNumber,
+					zeroBasedColumnNumber: entry.OriginalSourcePosition.ZeroBasedColumnNumber);
 
 				if (entry.OriginalName != null)
 				{

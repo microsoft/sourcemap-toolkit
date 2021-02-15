@@ -29,9 +29,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <remarks>
 		/// This override drops the Message out param for backward compatibility
 		/// </remarks>
-		public List<StackFrame> ParseStackTrace(string stackTraceString)
+		public IReadOnlyList<StackFrame> ParseStackTrace(string stackTraceString)
 		{
-			return ParseStackTrace(stackTraceString, out string message);
+			return ParseStackTrace(stackTraceString, out _);
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// Any parts of the stack trace that could not be parsed are excluded from
 		/// the result. Does not ever return null.
 		/// </returns>
-		public virtual List<StackFrame> ParseStackTrace(string stackTraceString, out string message)
+		public virtual IReadOnlyList<StackFrame> ParseStackTrace(string stackTraceString, out string message)
 		{
 			if (stackTraceString == null)
 			{
@@ -53,19 +53,23 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			message = null;
-			List<StackFrame> stackTrace = new List<StackFrame>();
-			List<string> stackFrameStrings = stackTraceString.Split('\n').ToList();
+			string[] stackFrameStrings = stackTraceString.SplitFast('\n');
+
+			int startingIndex = 0;
 
 			var firstFrame = stackFrameStrings.First();
 			if (!firstFrame.StartsWith(" ") && TryExtractMethodNameFromFrame(firstFrame) == null)
 			{
 				message = firstFrame.Trim();
-				stackFrameStrings.RemoveAt(0);
+				startingIndex = 1;
 			}
 
-			foreach (string frame in stackFrameStrings)
+			// Allocate assuming none of the frames are null.
+			List<StackFrame> stackTrace = new List<StackFrame>(stackFrameStrings.Length - startingIndex);
+
+			for (int i = startingIndex; i < stackFrameStrings.Length; i++)
 			{
-				StackFrame parsedStackFrame = TryParseSingleStackFrame(frame);
+				StackFrame parsedStackFrame = TryParseSingleStackFrame(stackFrameStrings[i]);
 
 				if (parsedStackFrame != null)
 				{
@@ -119,7 +123,10 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			if (string.IsNullOrWhiteSpace(methodName))
+			{
 				methodName = null;
+			}
+
 			return methodName;
 		}
 
@@ -145,14 +152,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 			if (lineNumberMatch.Success)
 			{
 				result.FilePath = lineNumberMatch.Groups[1].Value;
-				result.SourcePosition = new SourcePosition
-				{
+				result.SourcePosition = new SourcePosition(
 					// The browser provides one-based line and column numbers, but the
 					// rest of this library uses zero-based values. Normalize to make
 					// the stack frames zero based.
-					ZeroBasedLineNumber = int.Parse(lineNumberMatch.Groups[2].Value, CultureInfo.InvariantCulture) - 1,
-					ZeroBasedColumnNumber = int.Parse(lineNumberMatch.Groups[3].Value, CultureInfo.InvariantCulture) -1 
-				};
+					zeroBasedLineNumber: int.Parse(lineNumberMatch.Groups[2].Value, CultureInfo.InvariantCulture) - 1,
+					zeroBasedColumnNumber: int.Parse(lineNumberMatch.Groups[3].Value, CultureInfo.InvariantCulture) -1);
 			}
 
 			return result;

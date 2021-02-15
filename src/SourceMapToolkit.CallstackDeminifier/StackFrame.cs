@@ -20,7 +20,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// The zero-based position of this stack entry.
 		/// </summary>
-		public SourcePosition SourcePosition { get; set; }
+		public SourcePosition SourcePosition { get; set; } = SourcePosition.NotFound;
 
 		public override string ToString()
 		{
@@ -28,7 +28,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			if (!string.IsNullOrWhiteSpace(FilePath))
 			{
 				output += $" in {FilePath}";
-				if (SourcePosition != null)
+				if (SourcePosition != SourcePosition.NotFound)
 				{
 					output += $":{SourcePosition.ZeroBasedLineNumber + 1}:{SourcePosition.ZeroBasedColumnNumber + 1}";
 				}
