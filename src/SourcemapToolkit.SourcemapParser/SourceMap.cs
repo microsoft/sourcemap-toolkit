@@ -6,6 +6,36 @@ using Newtonsoft.Json;
 
 namespace SourcemapToolkit.SourcemapParser
 {
+	/// <summary>
+	/// A seemingly silly class, but unfortunately one which appears necessary.
+	/// While the SourceMap class is serializable, it is not deserializable directly.
+	/// The problem is that the IReadOnlyList generics throw the following exception:
+	/// 'Newtonsoft.Json.JsonSerializationException: Cannot create and populate list type'
+	/// when attempting to deserialize from a stream using a JsonTextReader.  This
+	/// intermediary class mitigates the problem by reading the data into a mutable list
+	/// first.
+	/// </summary>
+	internal class SourceMapDeserializable
+	{
+		/// <summary><see cref="SourceMap.Version"/></summary>
+		public int Version;
+
+		/// <summary><see cref="SourceMap.File"/></summary>
+		public string File;
+
+		/// <summary><see cref="SourceMap.Mappings"/></summary>
+		public string Mappings;
+
+		/// <summary><see cref="SourceMap.Sources"/></summary>
+		public List<string> Sources;
+
+		/// <summary><see cref="SourceMap.Names"/></summary>
+		public List<string> Names;
+
+		/// <summary><see cref="SourceMap.SourcesContent"/></summary>
+		public List<string> SourcesContent;
+	}
+
 	public class SourceMap
 	{
 		/// <summary>
@@ -42,6 +72,8 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
+		/// <remarks>Marked as JsonIgnore to because it isn't part of the actual format.  See: https://sourcemaps.info/spec.html#h.mofvlxcwqzej </remarks>
+		[JsonIgnore]
 		public IReadOnlyList<MappingEntry> ParsedMappings { get; }
 
 		/// <summary>
