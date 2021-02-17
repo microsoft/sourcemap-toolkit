@@ -27,25 +27,37 @@ namespace SourcemapToolkit.SourcemapParser
 			{
 				JsonSerializer serializer = new JsonSerializer();
 
-				SourceMap result = serializer.Deserialize<SourceMap>(jsonTextReader);
+				SourceMapDeserializable deserializedSourceMap = serializer.Deserialize<SourceMapDeserializable>(jsonTextReader);
 
 				// Since SourceMap is immutable we need to allocate a new one and copy over all the information
-				List<MappingEntry> parsedMappings = _mappingsListParser.ParseMappings(result.Mappings, result.Names, result.Sources);
+				List<MappingEntry> parsedMappings = _mappingsListParser.ParseMappings(deserializedSourceMap.Mappings, deserializedSourceMap.Names, deserializedSourceMap.Sources);
 
 				// Resize to free unused memory
-				parsedMappings.Capacity = parsedMappings.Count;
+				RemoveExtraSpaceFromList(parsedMappings);
+				RemoveExtraSpaceFromList(deserializedSourceMap.Sources);
+				RemoveExtraSpaceFromList(deserializedSourceMap.Names);
+				RemoveExtraSpaceFromList(deserializedSourceMap.ParsedMappings);
+				RemoveExtraSpaceFromList(deserializedSourceMap.SourcesContent);
 
-				result = new SourceMap(
-					version: result.Version,
-					file: result.File,
-					mappings: result.Mappings,
-					sources: result.Sources,
-					names: result.Names,
+				SourceMap result = new SourceMap(
+					version: deserializedSourceMap.Version,
+					file: deserializedSourceMap.File,
+					mappings: deserializedSourceMap.Mappings,
+					sources: deserializedSourceMap.Sources,
+					names: deserializedSourceMap.Names,
 					parsedMappings: parsedMappings,
-					sourcesContent: result.SourcesContent);
+					sourcesContent: deserializedSourceMap.SourcesContent);
 
 				sourceMapStream.Close();
 				return result;
+			}
+		}
+
+		private void RemoveExtraSpaceFromList<T>(List<T> list)
+		{
+			if (list != null)
+			{
+				list.Capacity = list.Count;
 			}
 		}
 	}
