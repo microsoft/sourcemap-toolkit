@@ -36,7 +36,6 @@ namespace SourcemapToolkit.SourcemapParser
 				RemoveExtraSpaceFromList(parsedMappings);
 				RemoveExtraSpaceFromList(deserializedSourceMap.Sources);
 				RemoveExtraSpaceFromList(deserializedSourceMap.Names);
-				RemoveExtraSpaceFromList(deserializedSourceMap.ParsedMappings);
 				RemoveExtraSpaceFromList(deserializedSourceMap.SourcesContent);
 
 				SourceMap result = new SourceMap(

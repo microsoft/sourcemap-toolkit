@@ -32,9 +32,6 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary><see cref="SourceMap.Names"/></summary>
 		public List<string> Names;
 
-		/// <summary><see cref="SourceMap.ParsedMappings"/></summary>
-		public List<MappingEntry> ParsedMappings;
-
 		/// <summary><see cref="SourceMap.SourcesContent"/></summary>
 		public List<string> SourcesContent;
 	}
@@ -75,6 +72,8 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Parsed version of the mappings string that is used for getting original names and source positions
 		/// </summary>
+		/// <remarks>Marked as JsonIgnore to because it isn't part of the actual format.  See: https://sourcemaps.info/spec.html#h.mofvlxcwqzej </remarks>
+		[JsonIgnore]
 		public IReadOnlyList<MappingEntry> ParsedMappings { get; }
 
 		/// <summary>
