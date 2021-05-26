@@ -21,7 +21,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Parses and deminifies a string containing a minified stack trace.
 		/// </summary>
-		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString)
+		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString, bool preferSourceMapsSymbols = false)
 		{
 			var minifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out string message);
 			var deminifiedStackFrameResults = new List<StackFrameDeminificationResult>(minifiedStackFrames.Count);
@@ -31,7 +31,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			string callerSymbolName = null;
 			for (int i = minifiedStackFrames.Count - 1; i >= 0; i--)
 			{
-				var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrames[i], callerSymbolName);
+				var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrames[i], callerSymbolName, preferSourceMapsSymbols);
 				callerSymbolName = frame?.DeminifiedSymbolName;
 				deminifiedStackFrameResults.Add(frame);
 			}

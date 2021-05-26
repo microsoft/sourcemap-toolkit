@@ -19,7 +19,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// This method will deminify the method name of a single stack from from a minified stack trace.
 		/// </summary>
-		public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName)
+		public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName, bool preferSourceMapsSymbols = false)
 		{
 			if (stackFrame == null)
 			{
