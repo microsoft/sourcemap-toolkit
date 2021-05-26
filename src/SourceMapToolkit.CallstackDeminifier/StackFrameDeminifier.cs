@@ -77,7 +77,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 				{
 					if (preferSourceMapsSymbols)
 					{
-							result.DeminifiedStackFrame.MethodName = generatedSourcePositionMappingEntry.Value.OriginalName;
+						result.DeminifiedStackFrame.MethodName = generatedSourcePositionMappingEntry.Value.OriginalName;
 					}
 					result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry.Value.OriginalFileName;
 					result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry.Value.OriginalSourcePosition;
