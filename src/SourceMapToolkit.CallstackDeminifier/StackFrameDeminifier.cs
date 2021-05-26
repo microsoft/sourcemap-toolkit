@@ -28,7 +28,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// This method will deminify a single stack from from a minified stack trace.
 		/// </summary>
 		/// <returns>Returns a StackFrameDeminificationResult that contains a stack trace that has been translated to the original source code. The DeminificationError Property indicates if the StackFrame could not be deminified. DeminifiedStackFrame will not be null, but any properties of DeminifiedStackFrame could be null if the value could not be extracted. </returns>
-		public StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName)
+		public StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName, bool preferSourceMapsSymbols = false)
 		{
 			if (stackFrame == null)
 			{
@@ -75,6 +75,10 @@ namespace SourcemapToolkit.CallstackDeminifier
 				}
 				else
 				{
+					if (preferSourceMapsSymbols)
+					{
+							result.DeminifiedStackFrame.MethodName = generatedSourcePositionMappingEntry.Value.OriginalName;
+					}
 					result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry.Value.OriginalFileName;
 					result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry.Value.OriginalSourcePosition;
 					result.DeminifiedSymbolName = generatedSourcePositionMappingEntry.Value.OriginalName;
