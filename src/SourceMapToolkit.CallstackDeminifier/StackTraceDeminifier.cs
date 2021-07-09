@@ -21,7 +21,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Parses and deminifies a string containing a minified stack trace.
 		/// </summary>
-		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString, bool preferSourceMapsSymbols = false, bool fixOffByOne = false)
+		/// <param name="stackTraceString">stack trace as string, to deobfuscate</param>
+		/// <param name="preferSourceMapsSymbols">if true, we will use exact sourcemap names for deobfuscation, without guessing the wrapper function name from source code</param>
+		/// <param name="fixOffByOneWithPreferSouceMapSymbols">preferSourceMapsSymbols uses name at call site in deobfuscated frame. Passing this as true fixes that case, to use the caller function name from next frame</param>
+		/// <returns></returns>
+		public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString, bool preferSourceMapsSymbols = false, bool fixOffByOneWithPreferSouceMapSymbols = false)
 		{
 			var minifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out string message);
 			var deminifiedStackFrameResults = new List<StackFrameDeminificationResult>(minifiedStackFrames.Count);
@@ -37,7 +41,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			deminifiedStackFrameResults.Reverse();
-			if (fixOffByOne)
+			if (preferSourceMapsSymbols && fixOffByOneWithPreferSouceMapSymbols)
 			{
 				// we want to move all method names by one frame, so each frame will contain caller name and not callee name. To make callstacks more familiar to C# and js debug versions.
 				// However, for first frame we want to keep calee name (if avaliable) as well since this is interesting info we don't want to lose.
