@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Microsoft.SourceMapToolkit</id>
-    <version>1.4.5</version>
+    <version>$version$</version>
     <authors>Microsoft</authors>
     <owners>Microsoft,Office Online</owners>
     <projectUrl>https://github.com/Microsoft/sourcemap-toolkit</projectUrl>
