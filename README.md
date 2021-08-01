@@ -143,7 +143,7 @@ TypeError: Cannot read property 'length' of undefined
 The top level API for call stack deminification is the `StackTraceDeminifier.DeminifyStackTrace` method. For each url that appears in a JavaScript callstack, the library requires the contents of the JavaScript file and corresponding source map in order to determine the original method name and code location. This information is provided by the consumer of the API by implementing the `ISourceMapProvider` and `ISourceCodeProvider` interfaces. These interfaces are expected to return a `StreamReader` that can be used to access the contents of the requested JavaScript code or corresponding source map. A `StackTraceDeminifier` can be instantiated using one of the methods on `StackTraceDeminfierFactory`. A sample usage of the library is shown below.
 
 ```csharp
-StackTraceDeminifier sourceMapCallstackDeminifier = StackTraceDeminifierFactory.GetStackTraceDeminfier(new SourceMapProvider(), new SourceCodeProvider());
+StackTraceDeminifier sourceMapCallstackDeminifier = StackTraceDeminfierFactory.GetStackTraceDeminfier(new SourceMapProvider(), new SourceCodeProvider());
 DeminifyStackTraceResult deminifyStackTraceResult = sourceMapCallstackDeminifier.DeminifyStackTrace(callstack);
 string deminifiedCallstack = deminifyStackTraceResult.ToString();
 ```
