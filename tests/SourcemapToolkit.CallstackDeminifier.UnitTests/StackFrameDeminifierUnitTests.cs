@@ -229,7 +229,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				bindings: default(IReadOnlyList<BindingInformation>),
 				deminifiedMethodName,
 				startSourcePosition: default(SourcePosition),
-				endSourcePosition: default(SourcePosition);
+				endSourcePosition: default(SourcePosition));
 		}
 
 		private static SourceMap CreateSourceMap(List<MappingEntry> parsedMappings = default(List<MappingEntry>))
