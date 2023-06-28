@@ -328,13 +328,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		}
 
 		private static SourceMap CreateSourceMap(
-			int version = default,
-			string file = default,
-			string mappings = default,
-			IReadOnlyList<string> sources = default,
-			IReadOnlyList<string> names = default,
-			IReadOnlyList<MappingEntry> parsedMappings = default,
-			IReadOnlyList<string> sourcesContent = default)
+			int version = default(int),
+			string file = default(string),
+			string mappings = default(string),
+			IReadOnlyList<string> sources = default(IReadOnlyList<string>),
+			IReadOnlyList<string> names = default(IReadOnlyList<string>),
+			IReadOnlyList<MappingEntry> parsedMappings = default(IReadOnlyList<MappingEntry>),
+			IReadOnlyList<string> sourcesContent = default(IReadOnlyList<string>))
 		{
 			return new SourceMap(
 				version: version,

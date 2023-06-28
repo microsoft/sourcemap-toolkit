@@ -226,22 +226,22 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		private static FunctionMapEntry CreateFunctionMapEntry(string deminifiedMethodName)
 		{
 			return new FunctionMapEntry(
-				bindings: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
 				deminifiedMethodName,
-				startSourcePosition: default,
-				endSourcePosition: default);
+				startSourcePosition: default(SourcePosition),
+				endSourcePosition: default(SourcePosition);
 		}
 
-		private static SourceMap CreateSourceMap(List<MappingEntry> parsedMappings = default)
+		private static SourceMap CreateSourceMap(List<MappingEntry> parsedMappings = default(List<MappingEntry>))
 		{
 			return new SourceMap(
-				version: default,
-				file: default,
-				mappings: default,
-				sources: default,
-				names: default,
+				version: default(int),
+				file: default(string),
+				mappings: default(string),
+				sources: default(IReadOnlyList<string>),
+				names: default(IReadOnlyList<string>),
 				parsedMappings: parsedMappings,
-				sourcesContent: default);
+				sourcesContent: default(IReadOnlyList<string>));
 		}
 	}
 }

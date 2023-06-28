@@ -16,12 +16,12 @@ namespace SourcemapToolkit.SourcemapParser
 		/// <summary>
 		/// Last location of the code in the transformed code
 		/// </summary>
-		public SourcePosition LastGeneratedPosition { get; private set; } = default;
+		public SourcePosition LastGeneratedPosition { get; private set; } = default(SourcePosition);
 
 		/// <summary>
 		/// Last location of the code in the source code
 		/// </summary>
-		public SourcePosition LastOriginalPosition { get; set; } = default;
+		public SourcePosition LastOriginalPosition { get; set; } = default(SourcePosition);
 
 		/// <summary>
 		/// List that contains the symbol names
@@ -117,7 +117,7 @@ namespace SourcemapToolkit.SourcemapParser
 				mappings: mappings,
 				sources: sourceMap.Sources,
 				names: sourceMap.Names,
-				parsedMappings: default,
+				parsedMappings: default(IReadOnlyList<MappingEntry>),
 				sourcesContent: sourceMap.SourcesContent);
 
 			return JsonConvert.SerializeObject(mapToSerialize,

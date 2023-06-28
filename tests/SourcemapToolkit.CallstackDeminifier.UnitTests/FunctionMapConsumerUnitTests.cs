@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using SourcemapToolkit.SourcemapParser;
+using Xunit;
+
 
 namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 {
@@ -34,8 +35,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
 			{
 				new FunctionMapEntry(
-					bindings: default,
-					deminifiedMethodName: default,
+					bindings: default(IReadOnlyList<BindingInformation>),
+					deminifiedMethodName: default(string),
 					startSourcePosition: new SourcePosition(zeroBasedLineNumber: 40, zeroBasedColumnNumber: 10),
 					endSourcePosition: new SourcePosition(zeroBasedLineNumber: 50, zeroBasedColumnNumber: 10))
 				
@@ -57,8 +58,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				zeroBasedLineNumber: 41,
 				zeroBasedColumnNumber: 2);
 			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
-				bindings: default,
-				deminifiedMethodName: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
+				deminifiedMethodName: default(string),
 				startSourcePosition: new SourcePosition(zeroBasedLineNumber: 40, zeroBasedColumnNumber: 10),
 				endSourcePosition: new SourcePosition(zeroBasedLineNumber: 50, zeroBasedColumnNumber: 10));
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
@@ -82,13 +83,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				zeroBasedLineNumber: 31,
 				zeroBasedColumnNumber: 0);
 			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
-				bindings: default,
-				deminifiedMethodName: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
+				deminifiedMethodName: default(string),
 				startSourcePosition: new SourcePosition(zeroBasedLineNumber: 10, zeroBasedColumnNumber: 10),
 				endSourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 30));
 			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry(
-				bindings: default,
-				deminifiedMethodName: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
+				deminifiedMethodName: default(string),
 				startSourcePosition: new SourcePosition(zeroBasedLineNumber: 30, zeroBasedColumnNumber: 0),
 				endSourcePosition: new SourcePosition(zeroBasedLineNumber: 40, zeroBasedColumnNumber: 2));
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>
@@ -113,13 +114,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				zeroBasedLineNumber: 10,
 				zeroBasedColumnNumber: 25);
 			FunctionMapEntry functionMapEntry = new FunctionMapEntry(
-				bindings: default,
-				deminifiedMethodName: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
+				deminifiedMethodName: default(string),
 				startSourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 10),
 				endSourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 30));
 			FunctionMapEntry functionMapEntry2 = new FunctionMapEntry(
-				bindings: default,
-				deminifiedMethodName: default,
+				bindings: default(IReadOnlyList<BindingInformation>),
+				deminifiedMethodName: default(string),
 				startSourcePosition: new SourcePosition(zeroBasedLineNumber: 9, zeroBasedColumnNumber: 0),
 				endSourcePosition: new SourcePosition(zeroBasedLineNumber: 15, zeroBasedColumnNumber: 2));
 			List<FunctionMapEntry> functionMap = new List<FunctionMapEntry>

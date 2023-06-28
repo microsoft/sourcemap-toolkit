@@ -58,7 +58,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<BindingInformation> bindings = new List<BindingInformation>()
 				{
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15))
 				};
 
@@ -80,7 +80,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<BindingInformation> bindings = new List<BindingInformation>()
 				{
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8))
 				};
 
@@ -89,7 +89,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
-				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "foo"));
+				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "foo"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -106,10 +106,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<BindingInformation> bindings = new List<BindingInformation>
 				{
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 86, zeroBasedColumnNumber: 52)),
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78))
 				};
 
@@ -124,7 +124,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 88 && y.ZeroBasedColumnNumber == 78)))
-				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "baz"));
+				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "baz"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
@@ -141,10 +141,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 			List<BindingInformation> bindings = new List<BindingInformation>
 				{
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 5)),
 					new BindingInformation(
-						name: default,
+						name: default(string),
 						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10))
 				};
 
@@ -153,13 +153,13 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
-				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "bar"));
+				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "bar"));
 
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
 						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
-				.Return(new MappingEntry(generatedSourcePosition: default, originalName: "baz"));
+				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "baz"));
 
 			// Act
 			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);

@@ -171,11 +171,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			SourceMap input = new SourceMap(
 				version: 3,
 				file: "CommonIntl",
-				mappings: default,
+				mappings: default(string),
 				sources: sources,
 				names: names,
 				parsedMappings: parsedMappings,
-				sourcesContent: default);
+				sourcesContent: default(IReadOnlyList<string>));
 
 			return input;
 		}
