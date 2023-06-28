@@ -181,7 +181,7 @@ namespace SourcemapToolkit.SourcemapParser
 			SourceMap newSourceMap = new SourceMap(
 				version: Version,
 				file: File,
-				mappings: default,
+				mappings: default(string),
 				sources: sources.ToList(),
 				names: names.ToList(),
 				parsedMappings: parsedMappings,

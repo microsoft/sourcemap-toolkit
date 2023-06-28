@@ -19,11 +19,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry = UnitTestUtils.getSimpleEntry(generated1, original1, "sourceOne.js");
 
 			SourceMap map = new SourceMap(
-				version: default,
+				version: default(int),
 				file: "generated.js",
-				mappings: default,
+				mappings: default(string),
 				sources: new List<string>() { "sourceOne.js" },
-				names: default,
+				names: default(IReadOnlyList<string>),
 				parsedMappings: new List<MappingEntry> { mappingEntry },
 				sourcesContent: new List<string> { "var a = b" });
 
@@ -54,11 +54,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry2 = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
 			SourceMap map = new SourceMap(
-				version: default,
+				version: default(int),
 				file: "generated.js",
-				mappings: default,
+				mappings: default(string),
 				sources: new List<string>() { "sourceOne.js" },
-				names: default,
+				names: default(IReadOnlyList<string>),
 				parsedMappings: new List<MappingEntry> { mappingEntry, mappingEntry2 },
 				sourcesContent: new List<string> { "var a = b" });
 
@@ -89,11 +89,11 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			MappingEntry mappingEntry2 = UnitTestUtils.getSimpleEntry(generated2, original2, "sourceOne.js");
 
 			SourceMap map = new SourceMap(
-				version: default,
+				version: default(int),
 				file: "generated.js",
-				mappings: default,
+				mappings: default(string),
 				sources: new List<string>() { "sourceOne.js" },
-				names: default,
+				names: default(IReadOnlyList<string>),
 				parsedMappings: new List<MappingEntry> { mappingEntry, mappingEntry2 },
 				sourcesContent: new List<string> { "var a = b" });
 
