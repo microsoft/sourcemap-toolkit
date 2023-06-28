@@ -227,7 +227,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			return new FunctionMapEntry(
 				bindings: default(IReadOnlyList<BindingInformation>),
-				deminifiedMethodName,
+				deminifiedMethodName: deminifiedMethodName,
 				startSourcePosition: default(SourcePosition),
 				endSourcePosition: default(SourcePosition));
 		}
