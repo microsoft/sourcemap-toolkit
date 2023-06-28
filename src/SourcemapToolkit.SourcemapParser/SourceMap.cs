@@ -185,7 +185,7 @@ namespace SourcemapToolkit.SourcemapParser
 				sources: sources.ToList(),
 				names: names.ToList(),
 				parsedMappings: parsedMappings,
-				new List<string>());
+				sourcesContent: new List<string>());
 
 			return newSourceMap;
 		}
