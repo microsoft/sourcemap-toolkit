@@ -16,10 +16,10 @@ namespace SourcemapToolkit.CallstackDeminifier
 		private readonly ISourceMapProvider _sourceMapProvider;
 		private readonly KeyValueCache<string, SourceMap> _sourceMapCache;
 
-		public SourceMapStore(ISourceMapProvider sourceMapProvider)
+		public SourceMapStore(ISourceMapProvider sourceMapProvider, bool removeSourcesContent)
 		{
 			_sourceMapProvider = sourceMapProvider;
-			_sourceMapParser = new SourceMapParser();
+			_sourceMapParser = new SourceMapParser(removeSourcesContent);
 			_sourceMapCache = new KeyValueCache<string, SourceMap>(sourceCodeUrl => _sourceMapParser.ParseSourceMap(_sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
 		}
 

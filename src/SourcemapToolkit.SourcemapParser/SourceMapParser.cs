@@ -8,10 +8,12 @@ namespace SourcemapToolkit.SourcemapParser
 	public class SourceMapParser
 	{
 		private readonly MappingsListParser _mappingsListParser;
+		private readonly bool _removeSourcesContent;
 
-		public SourceMapParser()
+		public SourceMapParser(bool removeSourcesContent = false)
 		{
 			_mappingsListParser = new MappingsListParser();
+			_removeSourcesContent = removeSourcesContent;
 		}
 
 		/// <summary>
@@ -36,7 +38,15 @@ namespace SourcemapToolkit.SourcemapParser
 				RemoveExtraSpaceFromList(parsedMappings);
 				RemoveExtraSpaceFromList(deserializedSourceMap.Sources);
 				RemoveExtraSpaceFromList(deserializedSourceMap.Names);
-				RemoveExtraSpaceFromList(deserializedSourceMap.SourcesContent);
+
+				if (_removeSourcesContent && deserializedSourceMap.SourcesContent != null)
+				{
+					deserializedSourceMap.SourcesContent.Clear();
+				}
+				else
+				{
+					RemoveExtraSpaceFromList(deserializedSourceMap.SourcesContent);
+				}
 
 				SourceMap result = new SourceMap(
 					version: deserializedSourceMap.Version,

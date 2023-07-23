@@ -40,5 +40,26 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			Assert.Equal("CommonStrings", output.Names[0]);
 			Assert.Equal("afrikaans", output.Names[1]);
 		}
+
+		[Fact]
+		public void ParseSourceMap_SimpleSourceMapWithRemovedSourcesContent_CorrectlyParsed()
+		{
+			// Arrange
+			SourceMapParser sourceMapParser = new SourceMapParser(removeSourcesContent: true);
+			string input = "{ \"version\":3, \"file\":\"CommonIntl\", \"lineCount\":65, \"mappings\":\"AACAA,aAAA,CAAc\", \"sources\":[\"input/CommonIntl.js\"], \"names\":[\"CommonStrings\",\"afrikaans\"], \"sourcescontent\":[\"CommonStrings.afrikaans(test)...\"]}";
+
+			// Act
+			SourceMap output = sourceMapParser.ParseSourceMap(UnitTestUtils.StreamReaderFromString(input));
+
+			// Assert
+			Assert.Equal(3, output.Version);
+			Assert.Equal("CommonIntl", output.File);
+			Assert.Equal("AACAA,aAAA,CAAc", output.Mappings);
+			Assert.Single(output.Sources);
+			Assert.Equal("input/CommonIntl.js", output.Sources[0]);
+			Assert.Equal(2, output.Names.Count);
+			Assert.Equal("CommonStrings", output.Names[0]);
+			Assert.Equal("afrikaans", output.Names[1]);
+		}
 	}
 }
