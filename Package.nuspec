@@ -13,7 +13,7 @@
     <tags>sourcemap callstack stackframe deminify</tags>
     <dependencies>
       <dependency id="AjaxMin" version="5.14.5506.26202" />
-      <dependency id="Newtonsoft.Json" version="9.0.1" />
+      <dependency id="Newtonsoft.Json" version="13.0.1" />
     </dependencies>
   </metadata>
   <files>
