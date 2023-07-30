@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier
@@ -44,8 +45,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		public static StackTraceDeminifier GetStackTraceDeminfier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider, IStackTraceParser stackTraceParser, bool removeSourcesContent = false)
 		{
 			ValidateArguments(sourceMapProvider, generatedCodeProvider, stackTraceParser);
-
-			ISourceMapStore sourceMapStore = new SourceMapStore(sourceMapProvider, removeSourcesContent);
+			ISourceMapStore sourceMapStore = new SourceMapStore(sourceMapProvider, null, removeSourcesContent);;
 			IStackFrameDeminifier stackFrameDeminifier = new StackFrameDeminifier(sourceMapStore,
 				new FunctionMapStore(generatedCodeProvider, sourceMapStore.GetSourceMapForUrl), new FunctionMapConsumer());
 
@@ -60,17 +60,27 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="removeSourcesContent">Optional parameter that will remove "SourcesContent" data from the loaded source maps, which will use less memory for the cached map files</param>
 		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, bool removeSourcesContent = false)
 		{
-			return GetMapOnlyStackTraceDeminfier(sourceMapProvider, new StackTraceParser(), removeSourcesContent);
+			return GetMapOnlyStackTraceDeminfier(sourceMapProvider, new StackTraceParser(), null, removeSourcesContent);
 		}
 
 		/// <summary>
 		/// Creates a StackTraceDeminifier which does not depend on JS files, and is ES2015+ compatible.
 		/// StackTrace deminifiers created with this method will keep source maps cached, and thus use significantly more memory during runtime than the ones generated with GetMethodNameOnlyStackTraceDeminfier.
+		/// This method gets external keyValueCache object, which holds the SourceMap per file, and will allow a better caching control for memory efficiency.
 		/// </summary>
 		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
-		/// <param name="stackTraceParser">Consumers of the API should implement this interface, which provides a parser for the stacktrace. Throws ArgumentNullException if the parameter is set to null.</param>
+		/// <param name="keyValueCache">Object of type IKeyValueCache which will have map file name (string) ans key and returns the matching SourceMap as value</param>
 		/// <param name="removeSourcesContent">Optional parameter that will remove "SourcesContent" data from the loaded source maps, which will use less memory for the cached map files</param>
-		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, IStackTraceParser stackTraceParser, bool removeSourcesContent = false)
+		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, IKeyValueCache<string, SourceMap> keyValueCache, bool removeSourcesContent = false)
+		{
+			return GetMapOnlyStackTraceDeminfier(sourceMapProvider, new StackTraceParser(), keyValueCache, removeSourcesContent);
+
+		}
+
+
+		/// <param name="keyValueCache">Optional object of type IKeyValueCache which will have map file name (string) ans key and returns the matching SourceMap as value</param>
+		/// <param name="removeSourcesContent">Optional parameter that will remove "SourcesContent" data from the loaded source maps, which will use less memory for the cached map files</param>
+		public static StackTraceDeminifier GetMapOnlyStackTraceDeminfier(ISourceMapProvider sourceMapProvider, IStackTraceParser stackTraceParser, IKeyValueCache<string, SourceMap> keyValueCache = null, bool removeSourcesContent = false)
 		{
 			if (sourceMapProvider == null)
 			{
@@ -82,7 +92,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 				throw new ArgumentNullException(nameof(stackTraceParser));
 			}
 
-			ISourceMapStore sourceMapStore = new SourceMapStore(sourceMapProvider, removeSourcesContent);
+			ISourceMapStore sourceMapStore = new SourceMapStore(sourceMapProvider, keyValueCache, removeSourcesContent);
+
 			IStackFrameDeminifier stackFrameDeminifier = new StackFrameDeminifier(sourceMapStore);
 
 			return new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);

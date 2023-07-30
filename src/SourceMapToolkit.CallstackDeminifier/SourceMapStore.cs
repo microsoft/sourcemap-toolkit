@@ -1,4 +1,5 @@
 ﻿using SourcemapToolkit.SourcemapParser;
+using System;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
@@ -14,13 +15,23 @@ namespace SourcemapToolkit.CallstackDeminifier
 	{
 		private readonly SourceMapParser _sourceMapParser;
 		private readonly ISourceMapProvider _sourceMapProvider;
-		private readonly KeyValueCache<string, SourceMap> _sourceMapCache;
+		private readonly IKeyValueCache<string, SourceMap> _sourceMapCache;
 
-		public SourceMapStore(ISourceMapProvider sourceMapProvider, bool removeSourcesContent)
+		public SourceMapStore(ISourceMapProvider sourceMapProvider, IKeyValueCache<string, SourceMap> keyValueCache, bool removeSourcesContent)
 		{
 			_sourceMapProvider = sourceMapProvider;
 			_sourceMapParser = new SourceMapParser(removeSourcesContent);
-			_sourceMapCache = new KeyValueCache<string, SourceMap>(sourceCodeUrl => _sourceMapParser.ParseSourceMap(_sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl)));
+			Func<string, SourceMap> valueGetter = sourceCodeUrl => _sourceMapParser.ParseSourceMap(_sourceMapProvider.GetSourceMapContentsForCallstackUrl(sourceCodeUrl));
+
+			if (keyValueCache == null)
+			{
+				_sourceMapCache = new KeyValueCache<string, SourceMap>(valueGetter);
+			}
+			else
+			{
+				keyValueCache.SetValueGetter(valueGetter);
+				_sourceMapCache = keyValueCache;
+			}
 		}
 
 		/// <summary>

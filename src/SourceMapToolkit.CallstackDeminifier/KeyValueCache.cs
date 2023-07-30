@@ -3,10 +3,24 @@ using System.Collections.Concurrent;
 
 namespace SourcemapToolkit.CallstackDeminifier
 {
-	internal class KeyValueCache<TKey, TValue> where TValue : class
+	public interface IKeyValueCache<TKey, TValue> where TValue : class
+	{
+		/// <summary>
+		/// Attempts to obtain the value associated with this key.
+		/// </summary>
+		TValue GetValue(TKey key);
+
+
+		/// <summary>
+		/// Set\Change the valueGetter function which returns a new value for given key.
+		/// </summary>
+		void SetValueGetter(Func<TKey, TValue> valueGetter);
+	}
+
+	internal class KeyValueCache<TKey, TValue> : IKeyValueCache<TKey, TValue> where TValue : class
 	{
 		private readonly ConcurrentDictionary<TKey, TValue> _cache;
-		private readonly Func<TKey, TValue> _valueGetter;
+		private Func<TKey, TValue> _valueGetter;
 		public KeyValueCache(Func<TKey, TValue> valueGetter)
 		{
 			_cache = new ConcurrentDictionary<TKey, TValue>();
@@ -34,6 +48,11 @@ namespace SourcemapToolkit.CallstackDeminifier
 			}
 
 			return value;
+		}
+
+		public void SetValueGetter(Func<TKey, TValue> valueGetter)
+		{
+			_valueGetter = valueGetter;
 		}
 	}
 }
