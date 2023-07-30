@@ -84,7 +84,6 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <summary>
 		/// Creates a StackTraceDeminifier which does not depend on JS files, and is ES2015+ compatible.
 		/// StackTrace deminifiers created with this method will keep source maps cached, and thus use significantly more memory during runtime than the ones generated with GetMethodNameOnlyStackTraceDeminfier.
-		/// This method gets external keyValueCache object, which holds the SourceMap per file, and will allow a better caching control for memory efficiency.
 		/// </summary>
 		/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which provides the source map for a given JavaScript file. Throws ArgumentNullException if the parameter is set to null.</param>
 		/// <param name="stackTraceParser">Consumers of the API should implement this interface, which provides a parser for the stacktrace. Throws ArgumentNullException if the parameter is set to null.</param>
