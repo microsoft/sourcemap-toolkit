@@ -13,10 +13,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private StackTraceDeminifier GetStackTraceDeminifierWithDependencies()
 		{
-			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
+			var sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
 			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/crashcauser.min.js")).Return(UnitTestUtils.StreamReaderFromString(SourceMapString));
 
-			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
+			var sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
 			sourceCodeProvider.Stub(x => x.GetSourceCode("http://localhost:11323/crashcauser.min.js")).Return(UnitTestUtils.StreamReaderFromString(GeneratedCodeString));
 
 			return StackTraceDeminfierFactory.GetMapOnlyStackTraceDeminfier(sourceMapProvider);
@@ -26,20 +26,20 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			Assert.Equal(6, results.DeminifiedStackFrameResults.Count);
 			Assert.Equal(DeminificationError.None, results.DeminifiedStackFrameResults[0].DeminificationError);
-			Assert.Equal(16, results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(16, results.DeminifiedStackFrameResults[0].DeminifiedStackFrame.SourcePosition.Line);
 			Assert.Equal("level3", results.DeminifiedStackFrameResults[1].DeminifiedStackFrame.MethodName);
 			Assert.Equal("level2", results.DeminifiedStackFrameResults[2].DeminifiedStackFrame.MethodName);
 			Assert.Equal("level1", results.DeminifiedStackFrameResults[3].DeminifiedStackFrame.MethodName);
 			Assert.Equal("causeCrash", results.DeminifiedStackFrameResults[4].DeminifiedStackFrame.MethodName);
-			Assert.Equal(32, results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.SourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(32, results.DeminifiedStackFrameResults[5].DeminifiedStackFrame.SourcePosition.Line);
 		}
 
 		[Fact]
 		public void DeminifyStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string chromeStackTrace = @"TypeError: Cannot read property 'length' of undefined
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var chromeStackTrace = @"TypeError: Cannot read property 'length' of undefined
 	at http://localhost:11323/crashcauser.min.js:1:125
 	at i (http://localhost:11323/crashcauser.min.js:1:137)
 	at t (http://localhost:11323/crashcauser.min.js:1:75)
@@ -48,7 +48,7 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 	at HTMLButtonElement.<anonymous> (http://localhost:11323/crashcauser.min.js:1:445)";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
+			var results = stackTraceDeminifier.DeminifyStackTrace(chromeStackTrace);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -58,8 +58,8 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyStackTrace_FireFoxStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string fireFoxStackTrace = @"i/<@http://localhost:11323/crashcauser.min.js:1:112
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var fireFoxStackTrace = @"i/<@http://localhost:11323/crashcauser.min.js:1:112
 i@http://localhost:11323/crashcauser.min.js:1:95
 t@http://localhost:11323/crashcauser.min.js:1:75
 n@http://localhost:11323/crashcauser.min.js:1:50
@@ -67,7 +67,7 @@ causeCrash@http://localhost:11323/crashcauser.min.js:1:341
 window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(fireFoxStackTrace);
+			var results = stackTraceDeminifier.DeminifyStackTrace(fireFoxStackTrace);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -77,8 +77,8 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 		public void DeminifyStackTrace_IE11StackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string ieStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var ieStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:112)
    at i (http://localhost:11323/crashcauser.min.js:1:95)
    at t (http://localhost:11323/crashcauser.min.js:1:75)
@@ -87,7 +87,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:445)";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
+			var results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -97,8 +97,8 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 		public void DeminifyStackTrace_EdgeStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string dgeStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var dgeStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:112)
    at i (http://localhost:11323/crashcauser.min.js:1:95)
    at t (http://localhost:11323/crashcauser.min.js:1:75)
@@ -107,7 +107,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:445)";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(dgeStackTrace);
+			var results = stackTraceDeminifier.DeminifyStackTrace(dgeStackTrace);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -117,16 +117,16 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
 		public void DeminifyResultToString_SuccessfullyDeminified_AllLinesDeminified()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string ieStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var ieStackTrace = @"TypeError: Unable to get property 'length' of undefined or null reference
    at Anonymous function (http://localhost:11323/crashcauser.min.js:1:112)
    at i (http://localhost:11323/crashcauser.min.js:1:95)
    at t (http://localhost:11323/crashcauser.min.js:1:75)
    at n (http://localhost:11323/crashcauser.min.js:1:50)
    at causeCrash (http://localhost:11323/crashcauser.min.js:1:341)
    at http://localhost:11323/crashcauser.min.js:1:445";
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
-			string exectedResult = @"TypeError: Unable to get property 'length' of undefined or null reference
+			var results = stackTraceDeminifier.DeminifyStackTrace(ieStackTrace);
+			var exectedResult = @"TypeError: Unable to get property 'length' of undefined or null reference
   at Anonymous function in crashcauser.js:17:13
   at level3 in crashcauser.js:15:10
   at level2 in crashcauser.js:11:9
@@ -135,7 +135,7 @@ window.onload/<@http://localhost:11323/crashcauser.min.js:1:445";
   at ? in crashcauser.js:33:9";
 
 			// Act
-			string formatted = results.ToString();
+			var formatted = results.ToString();
 
 			// Assert
 			Assert.Equal(exectedResult.Replace("\r", ""), formatted.Replace("\r", ""));

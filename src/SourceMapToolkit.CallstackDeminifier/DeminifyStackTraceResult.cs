@@ -12,19 +12,19 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (!string.IsNullOrEmpty(Message))
 			{
 				sb.Append(Message);
 			}
 
-			for (int i = 0; i < DeminifiedStackFrameResults.Count; i++)
+			for (var i = 0; i < DeminifiedStackFrameResults.Count; i++)
 			{
-				StackFrame deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
+				var deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
 
 				// Use deminified info wherever possible, merging if necessary so we always print a full frame
-				StackFrame frame = new StackFrame()
+				var frame = new StackFrame()
 				{
 					MethodName = deminFrame.MethodName ?? MinifiedStackFrames[i].MethodName,
 					SourcePosition = deminFrame.SourcePosition != SourcePosition.NotFound ? deminFrame.SourcePosition : MinifiedStackFrames[i].SourcePosition,

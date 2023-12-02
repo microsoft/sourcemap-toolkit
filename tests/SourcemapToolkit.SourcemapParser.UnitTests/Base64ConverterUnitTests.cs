@@ -10,7 +10,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void FromBase64_ValidBase64InputC_CorrectIntegerOutput2()
 		{
 			// Act
-			int value = Base64Converter.FromBase64('C');
+			var value = Base64Converter.FromBase64('C');
 
 			// Assert
 			Assert.Equal(2, value);
@@ -20,7 +20,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void FromBase64_ValidBase64Input9_CorrectIntegerOutput61()
 		{
 			// Act
-			int value = Base64Converter.FromBase64('9');
+			var value = Base64Converter.FromBase64('9');
 
 			// Assert
 			Assert.Equal(61, value);
@@ -37,7 +37,7 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void ToBase64_ValidIntegerInput61_CorrectBase64Output9()
 		{
 			// Act
-			char value = Base64Converter.ToBase64(61);
+			var value = Base64Converter.ToBase64(61);
 
 			// Assert
 			Assert.Equal('9', value);

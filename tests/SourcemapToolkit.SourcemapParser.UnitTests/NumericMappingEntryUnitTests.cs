@@ -10,21 +10,21 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void ToMappingEntry_ContainsGeneratedSourcePosition_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
-			NumericMappingEntry numericMappingEntry = new NumericMappingEntry
+			var numericMappingEntry = new NumericMappingEntry
 			{
-				GeneratedColumnNumber = 12,
-				GeneratedLineNumber = 13
+				MappedColumn = 12,
+				MappedLine = 13
 			};
-			List<string> names = new List<string>();
-			List<string> sources = new List<string>();
+			var names = new List<string>();
+			var sources = new List<string>();
 
 			// Act
-			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
+			var mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.Equal(12, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.Equal(13, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.Equal(SourcePosition.NotFound, mappingEntry.OriginalSourcePosition);
+			Assert.Equal(12, mappingEntry.SourceMapPosition.Column);
+			Assert.Equal(13, mappingEntry.SourceMapPosition.Line);
+			Assert.Equal(SourcePosition.NotFound, mappingEntry.SourcePosition);
 			Assert.Null(mappingEntry.OriginalFileName);
 			Assert.Null(mappingEntry.OriginalName);
 		}
@@ -33,24 +33,24 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void ToMappingEntry_ContainsGeneratedAndOriginalSourcePosition_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
-			NumericMappingEntry numericMappingEntry = new NumericMappingEntry
+			var numericMappingEntry = new NumericMappingEntry
 			{
-				GeneratedColumnNumber = 2,
-				GeneratedLineNumber = 3,
-				OriginalColumnNumber = 16,
-				OriginalLineNumber = 23
+				MappedColumn = 2,
+				MappedLine = 3,
+				SourceColumn = 16,
+				SourceLine = 23
 			};
-			List<string> names = new List<string>();
-			List<string> sources = new List<string>();
+			var names = new List<string>();
+			var sources = new List<string>();
 
 			// Act
-			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
+			var mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.Equal(2, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.Equal(3, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.Equal(16, mappingEntry.OriginalSourcePosition.ZeroBasedColumnNumber);
-			Assert.Equal(23, mappingEntry.OriginalSourcePosition.ZeroBasedLineNumber);
+			Assert.Equal(2, mappingEntry.SourceMapPosition.Column);
+			Assert.Equal(3, mappingEntry.SourceMapPosition.Line);
+			Assert.Equal(16, mappingEntry.SourcePosition.Column);
+			Assert.Equal(23, mappingEntry.SourcePosition.Line);
 			Assert.Null(mappingEntry.OriginalFileName);
 			Assert.Null(mappingEntry.OriginalName);
 		}
@@ -59,23 +59,23 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 		public void ToMappingEntry_ContainsGeneratedPositionNameIndexAndSourcesIndex_CorrectMappingEntryFieldsPopulated()
 		{
 			// Arrange
-			NumericMappingEntry numericMappingEntry = new NumericMappingEntry
+			var numericMappingEntry = new NumericMappingEntry
 			{
-				GeneratedColumnNumber = 8,
-				GeneratedLineNumber = 48,
-				OriginalNameIndex = 1,
-				OriginalSourceFileIndex = 2
+				MappedColumn = 8,
+				MappedLine = 48,
+				SourceNameIndex = 1,
+				SourceFileIndex = 2
 			};
-			List<string> names = new List<string> {"foo", "bar"};
-			List<string> sources = new List<string> { "one", "two", "three"};
+			var names = new List<string> {"foo", "bar"};
+			var sources = new List<string> { "one", "two", "three"};
 
 			// Act
-			MappingEntry mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
+			var mappingEntry = numericMappingEntry.ToMappingEntry(names, sources);
 
 			// Assert
-			Assert.Equal(8, mappingEntry.GeneratedSourcePosition.ZeroBasedColumnNumber);
-			Assert.Equal(48, mappingEntry.GeneratedSourcePosition.ZeroBasedLineNumber);
-			Assert.Equal(SourcePosition.NotFound, mappingEntry.OriginalSourcePosition);
+			Assert.Equal(8, mappingEntry.SourceMapPosition.Column);
+			Assert.Equal(48, mappingEntry.SourceMapPosition.Line);
+			Assert.Equal(SourcePosition.NotFound, mappingEntry.SourcePosition);
 			Assert.Equal("three", mappingEntry.OriginalFileName);
 			Assert.Equal("bar", mappingEntry.OriginalName);
 		}

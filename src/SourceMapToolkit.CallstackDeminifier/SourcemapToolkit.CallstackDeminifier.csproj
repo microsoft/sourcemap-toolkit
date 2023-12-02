@@ -77,12 +77,6 @@
     <Compile Include="StackTraceParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj">
-      <Project>{69FD1EB5-32F2-4759-9187-9A8E25927BCA}</Project>
-      <Name>SourcemapToolkit.SourcemapParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

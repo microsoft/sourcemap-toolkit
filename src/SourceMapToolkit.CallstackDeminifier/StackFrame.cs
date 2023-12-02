@@ -24,13 +24,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 		public override string ToString()
 		{
-			string output = $"at {(string.IsNullOrWhiteSpace(MethodName) ? "?" : MethodName)}";
+			var output = $"at {(string.IsNullOrWhiteSpace(MethodName) ? "?" : MethodName)}";
 			if (!string.IsNullOrWhiteSpace(FilePath))
 			{
 				output += $" in {FilePath}";
 				if (SourcePosition != SourcePosition.NotFound)
 				{
-					output += $":{SourcePosition.ZeroBasedLineNumber + 1}:{SourcePosition.ZeroBasedColumnNumber + 1}";
+					output += $":{SourcePosition.Line + 1}:{SourcePosition.Column + 1}";
 				}
 			}
 			return output;

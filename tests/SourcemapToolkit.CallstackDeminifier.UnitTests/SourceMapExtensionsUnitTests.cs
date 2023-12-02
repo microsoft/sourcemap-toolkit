@@ -16,10 +16,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = null;
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 
 			// Act
-			string deminifiedMethodName = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var deminifiedMethodName = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Null(deminifiedMethodName);
@@ -41,10 +41,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		{
 			// Arrange
 			IReadOnlyList<BindingInformation> bindings = new List<BindingInformation>();
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 
 			// Act
-			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Null(result);
@@ -55,18 +55,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodName_HasSingleBindingNoMatchingMapping_ReturnNullMethodName()
 		{
 			// Arrange
-			List<BindingInformation> bindings = new List<BindingInformation>()
+			var bindings = new List<BindingInformation>()
 				{
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 15))
+						sourcePosition: new SourcePosition(line: 20, column: 15))
 				};
 
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(x => x.GetMappingEntryForGeneratedSourcePosition(Arg<SourcePosition>.Is.Anything)).Return(null);
 
 			// Act
-			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Null(result);
@@ -77,22 +77,22 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodName_HasSingleBindingMatchingMapping_ReturnsMethodName()
 		{
 			// Arrange
-			List<BindingInformation> bindings = new List<BindingInformation>()
+			var bindings = new List<BindingInformation>()
 				{
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 8))
+						sourcePosition: new SourcePosition(line: 5, column: 8))
 				};
 
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 8)))
-				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "foo"));
+						Arg<SourcePosition>.Matches(y => y.Line == 5 && y.Column == 8)))
+				.Return(new MappingEntry(sourceMapPosition: default(SourcePosition), originalName: "foo"));
 
 			// Act
-			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Equal("foo", result);
@@ -103,31 +103,31 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodName_MatchingMappingMultipleBindingsMissingPrototypeMapping_ReturnsMethodName()
 		{
 			// Arrange
-			List<BindingInformation> bindings = new List<BindingInformation>
+			var bindings = new List<BindingInformation>
 				{
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 86, zeroBasedColumnNumber: 52)),
+						sourcePosition: new SourcePosition(line: 86, column: 52)),
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 88, zeroBasedColumnNumber: 78))
+						sourcePosition: new SourcePosition(line: 88, column: 78))
 				};
 
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 86 && y.ZeroBasedColumnNumber == 52)))
+						Arg<SourcePosition>.Matches(y => y.Line == 86 && y.Column == 52)))
 				.Return(null);
 
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 88 && y.ZeroBasedColumnNumber == 78)))
-				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "baz"));
+						Arg<SourcePosition>.Matches(y => y.Line == 88 && y.Column == 78)))
+				.Return(new MappingEntry(sourceMapPosition: default(SourcePosition), originalName: "baz"));
 
 			// Act
-			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Equal("baz", result);
@@ -138,31 +138,31 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void GetDeminifiedMethodName_MatchingMappingMultipleBindings_ReturnsMethodNameWithFullBinding()
 		{
 			// Arrange
-			List<BindingInformation> bindings = new List<BindingInformation>
+			var bindings = new List<BindingInformation>
 				{
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 5, zeroBasedColumnNumber: 5)),
+						sourcePosition: new SourcePosition(line: 5, column: 5)),
 					new BindingInformation(
 						name: default(string),
-						sourcePosition: new SourcePosition(zeroBasedLineNumber: 20, zeroBasedColumnNumber: 10))
+						sourcePosition: new SourcePosition(line: 20, column: 10))
 				};
 
-			SourceMap sourceMap = CreateSourceMapMock();
+			var sourceMap = CreateSourceMapMock();
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 5 && y.ZeroBasedColumnNumber == 5)))
-				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "bar"));
+						Arg<SourcePosition>.Matches(y => y.Line == 5 && y.Column == 5)))
+				.Return(new MappingEntry(sourceMapPosition: default(SourcePosition), originalName: "bar"));
 
 			sourceMap.Stub(
 				x =>
 					x.GetMappingEntryForGeneratedSourcePosition(
-						Arg<SourcePosition>.Matches(y => y.ZeroBasedLineNumber == 20 && y.ZeroBasedColumnNumber == 10)))
-				.Return(new MappingEntry(generatedSourcePosition: default(SourcePosition), originalName: "baz"));
+						Arg<SourcePosition>.Matches(y => y.Line == 20 && y.Column == 10)))
+				.Return(new MappingEntry(sourceMapPosition: default(SourcePosition), originalName: "baz"));
 
 			// Act
-			string result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
+			var result = SourceMapExtensions.GetDeminifiedMethodName(sourceMap, bindings);
 
 			// Assert
 			Assert.Equal("bar.baz", result);

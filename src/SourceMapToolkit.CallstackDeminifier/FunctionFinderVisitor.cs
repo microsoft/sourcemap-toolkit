@@ -27,15 +27,15 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			if (bindings != null)
 			{
-				FunctionMapEntry functionMapEntry = new FunctionMapEntry(
+				var functionMapEntry = new FunctionMapEntry(
 					bindings: bindings,
 					deminifiedMethodName: SourceMap.GetDeminifiedMethodName(bindings),
 					startSourcePosition: new SourcePosition(
-						zeroBasedLineNumber: node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						zeroBasedColumnNumber: node.Body.Context.StartColumn),
+						line: node.Body.Context.StartLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+						column: node.Body.Context.StartColumn),
 					endSourcePosition: new SourcePosition(
-						zeroBasedLineNumber: node.Body.Context.EndLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-						zeroBasedColumnNumber: node.Body.Context.EndColumn));
+						line: node.Body.Context.EndLineNumber - 1, // Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
+						column: node.Body.Context.EndColumn));
 
 				FunctionMap.Add(functionMapEntry);
 			}
@@ -46,7 +46,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// </summary>
 		private IReadOnlyList<BindingInformation> GetBindings(FunctionObject node)
 		{
-			List<BindingInformation> result = new List<BindingInformation>();
+			var result = new List<BindingInformation>();
 			// Gets the name of an object property that a function is bound to, like the static method foo in the example "object.foo = function () {}"
 			if (node.Parent is BinaryOperator parentBinaryOperator)
 			{
@@ -58,7 +58,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 			if (node.Parent is ObjectLiteralProperty parentObjectLiteralProperty)
 			{
 				// See if we can get the name of the object that this method belongs to
-				ObjectLiteral objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
+				var objectLiteralParent = parentObjectLiteralProperty.Parent?.Parent as ObjectLiteral;
 				if (objectLiteralParent != null && objectLiteralParent.Parent is BinaryOperator binaryOperator)
 				{
 					result.AddRange(ExtractBindingsFromBinaryOperator(binaryOperator));
@@ -68,13 +68,13 @@ namespace SourcemapToolkit.CallstackDeminifier
 					new BindingInformation(
 						name: parentObjectLiteralProperty.Name.Name,
 						sourcePosition: new SourcePosition(
-							zeroBasedLineNumber: parentObjectLiteralProperty.Context.StartLineNumber - 1,
-							zeroBasedColumnNumber: parentObjectLiteralProperty.Context.StartColumn)));
+							line: parentObjectLiteralProperty.Context.StartLineNumber - 1,
+							column: parentObjectLiteralProperty.Context.StartColumn)));
 				return result;
 			}
 
 			// Gets the name of a variable that a function is bound to, like foo in the example "var foo = function () {}"
-			BindingIdentifier bindingIdentifier = (node.Parent is VariableDeclaration parentVariableDeclaration) ?
+			var bindingIdentifier = (node.Parent is VariableDeclaration parentVariableDeclaration) ?
 				parentVariableDeclaration.Binding as BindingIdentifier :
 				node.Binding; // Gets the name bound to the function, like foo in the example "function foo() {}
 			
@@ -84,9 +84,9 @@ namespace SourcemapToolkit.CallstackDeminifier
 					new BindingInformation(
 						name: bindingIdentifier.Name,
 						sourcePosition: new SourcePosition(
-							zeroBasedLineNumber: bindingIdentifier.Context.StartLineNumber - 1,
+							line: bindingIdentifier.Context.StartLineNumber - 1,
 							// Souce maps work with zero based line and column numbers, the AST works with one based line numbers. We want to use zero-based everywhere.
-							zeroBasedColumnNumber: bindingIdentifier.Context.StartColumn)));
+							column: bindingIdentifier.Context.StartColumn)));
 				return result;
 			}
 
@@ -96,7 +96,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		private IEnumerable<BindingInformation> ExtractBindingsFromBinaryOperator(BinaryOperator parentBinaryOperator)
 		{
 			// If the operand has a dot in the name it's a Member. e.g. a.b, a.prototype, a.prototype.b
-			Member member = parentBinaryOperator.Operand1 as Member;
+			var member = parentBinaryOperator.Operand1 as Member;
 			if (member != null)
 			{
 				// Split members into two parts, on the last dot, so a.prototype.b becomes [a.prototype, b]
@@ -107,12 +107,12 @@ namespace SourcemapToolkit.CallstackDeminifier
 				// a.prototype splits into [a, prototype], but we throw away the prototype as this doesn't map to anything useful in the original source
 				if (member.Name != "prototype")
 				{
-					int offset = member.NameContext.Code.StartsWith(".") ? 1 : 0;
+					var offset = member.NameContext.Code.StartsWith(".") ? 1 : 0;
 					yield return new BindingInformation(
 						name: member.Name,
 						sourcePosition: new SourcePosition(
-							zeroBasedLineNumber: member.NameContext.StartLineNumber - 1,
-							zeroBasedColumnNumber: member.NameContext.StartColumn + offset));
+							line: member.NameContext.StartLineNumber - 1,
+							column: member.NameContext.StartColumn + offset));
 				}
 			}
 			else
@@ -126,8 +126,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 			return new BindingInformation(
 				name: node.Context.Code,
 				sourcePosition: new SourcePosition(
-					zeroBasedLineNumber: node.Context.StartLineNumber - 1,
-					zeroBasedColumnNumber: node.Context.StartColumn));
+					line: node.Context.StartLineNumber - 1,
+					column: node.Context.StartColumn));
 		}
 	}
 }

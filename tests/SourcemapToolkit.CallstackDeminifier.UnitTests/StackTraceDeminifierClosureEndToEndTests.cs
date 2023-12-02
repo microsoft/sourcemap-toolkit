@@ -14,10 +14,10 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 
 		private StackTraceDeminifier GetStackTraceDeminifierWithDependencies()
 		{
-			ISourceMapProvider sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
+			var sourceMapProvider = MockRepository.GenerateStrictMock<ISourceMapProvider>();
 			sourceMapProvider.Stub(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/closurecrashcauser.minified.js")).Return(UnitTestUtils.StreamReaderFromString(SourceMapString));
 
-			ISourceCodeProvider sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
+			var sourceCodeProvider = MockRepository.GenerateStrictMock<ISourceCodeProvider>();
 			sourceCodeProvider.Stub(x => x.GetSourceCode("http://localhost:11323/closurecrashcauser.minified.js")).Return(UnitTestUtils.StreamReaderFromString(GeneratedCodeString));
 
 			return StackTraceDeminfierFactory.GetStackTraceDeminfier(sourceMapProvider, sourceCodeProvider, removeSourcesContent: true);
@@ -37,15 +37,15 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyClosureStackTrace_ChromeStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string callstack = @"TypeError: Cannot read property 'length' of undefined
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var callstack = @"TypeError: Cannot read property 'length' of undefined
     at Function.a.a (http://localhost:11323/closurecrashcauser.minified.js:1:99)
     at a.b (http://localhost:11323/closurecrashcauser.minified.js:1:63)
     at c (http://localhost:11323/closurecrashcauser.minified.js:1:135)
     at HTMLButtonElement.<anonymous> (http://localhost:11323/closurecrashcauser.minified.js:1:504)";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(callstack);
+			var results = stackTraceDeminifier.DeminifyStackTrace(callstack);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -55,14 +55,14 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyClosureStackTrace_FireFoxStackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string callstack = @"a.a@http://localhost:11323/closurecrashcauser.minified.js:1:91
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var callstack = @"a.a@http://localhost:11323/closurecrashcauser.minified.js:1:91
 a.prototype.b@http://localhost:11323/closurecrashcauser.minified.js:1:61
 c@http://localhost:11323/closurecrashcauser.minified.js:1:128
 window.onload/<@http://localhost:11323/closurecrashcauser.minified.js:1:504";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(callstack);
+			var results = stackTraceDeminifier.DeminifyStackTrace(callstack);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -72,15 +72,15 @@ window.onload/<@http://localhost:11323/closurecrashcauser.minified.js:1:504";
 		public void DeminifyClosureStackTrace_IE11StackTraceString_CorrectDeminificationWhenPossible()
 		{
 			// Arrange
-			StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-			string callstack = @"TypeError: Unable to get property 'length' of undefined or null reference
+			var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+			var callstack = @"TypeError: Unable to get property 'length' of undefined or null reference
    at a.a (http://localhost:11323/closurecrashcauser.minified.js:1:91)
    at a.prototype.b (http://localhost:11323/closurecrashcauser.minified.js:1:54)
    at c (http://localhost:11323/closurecrashcauser.minified.js:1:121)
    at Anonymous function (http://localhost:11323/closurecrashcauser.minified.js:1:492)";
 
 			// Act
-			DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(callstack);
+			var results = stackTraceDeminifier.DeminifyStackTrace(callstack);
 
 			// Assert
 			ValidateDeminifyStackTraceResults(results);
@@ -90,15 +90,15 @@ window.onload/<@http://localhost:11323/closurecrashcauser.minified.js:1:504";
         public void DeminifyClosureStackTrace_EdgeStackTraceString_CorrectDeminificationWhenPossible()
         {
             // Arrange
-            StackTraceDeminifier stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
-            string callstack = @"TypeError: Unable to get property 'length' of undefined or null reference
+            var stackTraceDeminifier = GetStackTraceDeminifierWithDependencies();
+            var callstack = @"TypeError: Unable to get property 'length' of undefined or null reference
    at a.a (http://localhost:11323/closurecrashcauser.minified.js:1:91)
    at a.prototype.b (http://localhost:11323/closurecrashcauser.minified.js:1:54)
    at c (http://localhost:11323/closurecrashcauser.minified.js:1:121)
    at Anonymous function (http://localhost:11323/closurecrashcauser.minified.js:1:492)";
 
             // Act
-            DeminifyStackTraceResult results = stackTraceDeminifier.DeminifyStackTrace(callstack);
+            var results = stackTraceDeminifier.DeminifyStackTrace(callstack);
 
             // Assert
             ValidateDeminifyStackTraceResults(results);

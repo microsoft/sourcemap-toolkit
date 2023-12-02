@@ -44,17 +44,17 @@ namespace SourcemapToolkit.CallstackDeminifier
 				return null;
 			}
 
-			string sourceCode = sourceCodeStreamReader.ReadToEnd();
+			var sourceCode = sourceCodeStreamReader.ReadToEnd();
 			sourceCodeStreamReader.Close();
 
-			JSParser jsParser = new JSParser();
+			var jsParser = new JSParser();
 
 			// We just want the AST, don't let AjaxMin do any optimizations
-			CodeSettings codeSettings = new CodeSettings { MinifyCode = false };
+			var codeSettings = new CodeSettings { MinifyCode = false };
 
-			Block block = jsParser.Parse(sourceCode, codeSettings);
+			var block = jsParser.Parse(sourceCode, codeSettings);
 
-			FunctionFinderVisitor functionFinderVisitor = new FunctionFinderVisitor(sourceMap);
+			var functionFinderVisitor = new FunctionFinderVisitor(sourceMap);
 			functionFinderVisitor.Visit(block);
 
 			// Sort in descending order by start position.  This allows the first result found in a linear search to be the "closest function to the [consumer's] source position".

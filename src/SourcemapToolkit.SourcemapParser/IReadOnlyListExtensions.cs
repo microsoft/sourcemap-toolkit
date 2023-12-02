@@ -1,53 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SourcemapToolkit.SourcemapParser
+namespace SourcemapToolkit.SourcemapParser;
+
+internal static class IReadOnlyListExtensions
 {
-	internal static class IReadOnlyListExtensions
+	public static int IndexOf<T>(this IReadOnlyList<T> input, T value)
 	{
-		public static int IndexOf<T>(this IReadOnlyList<T> input, T value)
+		var equalityComparer = EqualityComparer<T>.Default;
+		for (var i = 0; i < input.Count; i++)
 		{
-			EqualityComparer<T> equalityComparer = EqualityComparer<T>.Default;
-			for (int i = 0; i < input.Count; i++)
+			if (equalityComparer.Equals(input[i], value))
 			{
-				if (equalityComparer.Equals(input[i], value))
-				{
-					return i;
-				}
+				return i;
 			}
-
-			return -1;
 		}
 
-		/// <summary>
-		/// Copied from: https://referencesource.microsoft.com/#mscorlib/system/collections/generic/arraysorthelper.cs,63a9955a91f2b37b
-		/// </summary>
-		public static int BinarySearch<T>(this IReadOnlyList<T> input, T item, IComparer<T> comparer)
+		return -1;
+	}
+
+	/// <summary>
+	/// Copied from: https://referencesource.microsoft.com/#mscorlib/system/collections/generic/arraysorthelper.cs,63a9955a91f2b37b
+	/// </summary>
+	public static int BinarySearch<T>(this IReadOnlyList<T> input, T item, IComparer<T> comparer)
+	{
+		var lo = 0;
+		var hi = input.Count - 1;
+
+		while (lo <= hi)
 		{
-			int lo = 0;
-			int hi = input.Count - 1;
+			var i = lo + ((hi - lo) >> 1);
+			var order = comparer.Compare(input[i], item);
 
-			while (lo <= hi)
+			if (order == 0)
 			{
-				int i = lo + ((hi - lo) >> 1);
-				int order = comparer.Compare(input[i], item);
-
-				if (order == 0)
-				{
-					return i;
-				}
-
-				if (order < 0)
-				{
-					lo = i + 1;
-				}
-				else
-				{
-					hi = i - 1;
-				}
+				return i;
 			}
 
-			return ~lo;
+			if (order < 0)
+			{
+				lo = i + 1;
+			}
+			else
+			{
+				hi = i - 1;
+			}
 		}
+
+		return ~lo;
 	}
 }

@@ -12,7 +12,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		/// <param name="functionMap">The function map, sorted in decreasing order by start source position, that represents the file containing the code of interest</param>
 		public FunctionMapEntry GetWrappingFunctionForSourceLocation(SourcePosition sourcePosition, IReadOnlyList<FunctionMapEntry> functionMap)
 		{
-			foreach (FunctionMapEntry mapEntry in functionMap)
+			foreach (var mapEntry in functionMap)
 			{
 				if (mapEntry.StartSourcePosition < sourcePosition && mapEntry.EndSourcePosition > sourcePosition)
 				{

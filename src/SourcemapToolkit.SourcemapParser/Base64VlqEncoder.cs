@@ -18,32 +18,31 @@
 
 using System.Text;
 
-namespace SourcemapToolkit.SourcemapParser
+namespace SourcemapToolkit.SourcemapParser;
+
+/// <summary>
+/// This class provides a mechanism for converting an integer to Base64 Variable-length quantity (VLQ)
+/// </summary>
+internal static class Base64VlqEncoder
 {
-	/// <summary>
-	/// This class provides a mechanism for converting an interger to Base64 Variable-length quantity (VLQ)
-	/// </summary>
-	internal static class Base64VlqEncoder
+	public static void Encode(StringBuilder output, int value)
 	{
-		public static void Encode(StringBuilder output, int value)
-		{
-			int vlq = ToVlqSigned(value);
+		var vlq = ToVlqSigned(value);
 
-			do
+		do
+		{
+			var maskResult = vlq & Base64VlqConstants.VlqBaseMask;
+			vlq = vlq >> Base64VlqConstants.VlqBaseShift;
+			if (vlq > 0)
 			{
-				int maskResult = vlq & Base64VlqConstants.VlqBaseMask;
-				vlq = vlq >> Base64VlqConstants.VlqBaseShift;
-				if (vlq > 0)
-				{
-					maskResult |= Base64VlqConstants.VlqContinuationBit;
-				}
-				output.Append(Base64Converter.ToBase64(maskResult));
-			} while (vlq > 0);
-		}
+				maskResult |= Base64VlqConstants.VlqContinuationBit;
+			}
+			output.Append(Base64Converter.ToBase64(maskResult));
+		} while (vlq > 0);
+	}
 
-		private static int ToVlqSigned(int value)
-		{
-			return value < 0 ? ((-value << 1) + 1) : (value << 1) + 0;
-		}
+	private static int ToVlqSigned(int value)
+	{
+		return value < 0 ? ((-value << 1) + 1) : (value << 1) + 0;
 	}
 }

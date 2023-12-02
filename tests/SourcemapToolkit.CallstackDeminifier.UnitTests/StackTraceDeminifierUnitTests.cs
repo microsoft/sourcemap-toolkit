@@ -11,16 +11,16 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyStackTrace_UnableToParseStackTraceString_ReturnsEmptyList()
 		{
 			// Arrange
-			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
-			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(new List<StackFrame>()).OutRef("Error example");
+			var stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
+			var stackTraceString = "foobar";
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out var message)).Return(new List<StackFrame>()).OutRef("Error example");
 
-			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
+			var stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
+			var stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			var result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
 			Assert.Equal(0, result.DeminifiedStackFrameResults.Count);
@@ -30,18 +30,18 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyStackTrace_UnableToDeminifyStackTrace_ResultContainsNullDeminifiedFrame()
 		{
 			// Arrange
-			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
-			List<StackFrame> minifiedStackFrames = new List<StackFrame> { new StackFrame() };
-			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(minifiedStackFrames).OutRef("Error example");
+			var stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
+			var minifiedStackFrames = new List<StackFrame> { new StackFrame() };
+			var stackTraceString = "foobar";
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out var message)).Return(minifiedStackFrames).OutRef("Error example");
 
-			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
+			var stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
 			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0], null)).Return(null);
 			
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
+			var stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			var result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
 			Assert.Equal(1, result.DeminifiedStackFrameResults.Count);
@@ -53,19 +53,19 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests
 		public void DeminifyStackTrace_AbleToDeminifyStackTrace_ResultContainsDeminifiedFrame()
 		{
 			// Arrange
-			IStackTraceParser stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
-			List<StackFrame> minifiedStackFrames = new List<StackFrame> { new StackFrame() };
-			string stackTraceString = "foobar";
-			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out string message)).Return(minifiedStackFrames).OutRef("Error example");
+			var stackTraceParser = MockRepository.GenerateStrictMock<IStackTraceParser>();
+			var minifiedStackFrames = new List<StackFrame> { new StackFrame() };
+			var stackTraceString = "foobar";
+			stackTraceParser.Stub(x => x.ParseStackTrace(stackTraceString, out var message)).Return(minifiedStackFrames).OutRef("Error example");
 
-			IStackFrameDeminifier stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
-			StackFrameDeminificationResult stackFrameDeminification = new StackFrameDeminificationResult();
+			var stackFrameDeminifier = MockRepository.GenerateStrictMock<IStackFrameDeminifier>();
+			var stackFrameDeminification = new StackFrameDeminificationResult();
 			stackFrameDeminifier.Stub(x => x.DeminifyStackFrame(minifiedStackFrames[0], null)).Return(stackFrameDeminification);
 
-			StackTraceDeminifier stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
+			var stackTraceDeminifier = new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
 
 			// Act
-			DeminifyStackTraceResult result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
+			var result = stackTraceDeminifier.DeminifyStackTrace(stackTraceString);
 
 			// Assert
 			Assert.Equal(1, result.DeminifiedStackFrameResults.Count);

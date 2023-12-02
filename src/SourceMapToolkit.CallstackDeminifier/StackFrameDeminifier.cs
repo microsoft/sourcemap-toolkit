@@ -35,8 +35,8 @@ namespace SourcemapToolkit.CallstackDeminifier
 				throw new ArgumentNullException(nameof(stackFrame));
 			}
 
-			SourceMap sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
-			SourcePosition generatedSourcePosition = stackFrame.SourcePosition;
+			var sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
+			var generatedSourcePosition = stackFrame.SourcePosition;
 
 			StackFrameDeminificationResult result = null;
 			if (_methodNameDeminifier != null)
@@ -55,7 +55,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 
 			if (result.DeminificationError == DeminificationError.None)
 			{
-				MappingEntry? generatedSourcePositionMappingEntry =
+				var generatedSourcePositionMappingEntry =
 					sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
 
 				if (generatedSourcePositionMappingEntry == null)
@@ -80,7 +80,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 						result.DeminifiedStackFrame.MethodName = generatedSourcePositionMappingEntry.Value.OriginalName;
 					}
 					result.DeminifiedStackFrame.FilePath = generatedSourcePositionMappingEntry.Value.OriginalFileName;
-					result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry.Value.OriginalSourcePosition;
+					result.DeminifiedStackFrame.SourcePosition = generatedSourcePositionMappingEntry.Value.SourcePosition;
 					result.DeminifiedSymbolName = generatedSourcePositionMappingEntry.Value.OriginalName;
 				}
 			}

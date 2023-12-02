@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser", "src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj", "{69FD1EB5-32F2-4759-9187-9A8E25927BCA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackTestApp", "src\SourcemapToolkit.CallstackTestApp\SourcemapToolkit.CallstackTestApp.csproj", "{31226F91-1050-470C-A19E-D7675DDDE0D6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.UnitTests", "tests\SourcemapToolkit.SourcemapParser.UnitTests\SourcemapToolkit.SourcemapParser.UnitTests.csproj", "{34F16653-1DA1-4F1F-BB00-E673AF55D13D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackDeminifier.UnitTests", "tests\SourcemapToolkit.CallstackDeminifier.UnitTests\SourcemapToolkit.CallstackDeminifier.UnitTests.csproj", "{9F51324A-632A-45C0-9082-B49D78B12962}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackDeminifier", "src\SourceMapToolkit.CallstackDeminifier\SourcemapToolkit.CallstackDeminifier.csproj", "{00F66219-2E6C-4660-9B94-3C30E2B20729}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E282023F-B02E-4FBB-9A95-945725969A78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.NET", "src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.NET.csproj", "{CC137370-03A3-4884-BA5C-7D7543756F2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.UnitTests.NET", "tests\SourcemapToolkit.SourcemapParser.UnitTests\SourcemapToolkit.SourcemapParser.UnitTests.NET.csproj", "{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,18 +21,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69FD1EB5-32F2-4759-9187-9A8E25927BCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69FD1EB5-32F2-4759-9187-9A8E25927BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69FD1EB5-32F2-4759-9187-9A8E25927BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69FD1EB5-32F2-4759-9187-9A8E25927BCA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31226F91-1050-470C-A19E-D7675DDDE0D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31226F91-1050-470C-A19E-D7675DDDE0D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31226F91-1050-470C-A19E-D7675DDDE0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31226F91-1050-470C-A19E-D7675DDDE0D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34F16653-1DA1-4F1F-BB00-E673AF55D13D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34F16653-1DA1-4F1F-BB00-E673AF55D13D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34F16653-1DA1-4F1F-BB00-E673AF55D13D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34F16653-1DA1-4F1F-BB00-E673AF55D13D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F51324A-632A-45C0-9082-B49D78B12962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F51324A-632A-45C0-9082-B49D78B12962}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F51324A-632A-45C0-9082-B49D78B12962}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,8 +33,20 @@ Global
 		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00F66219-2E6C-4660-9B94-3C30E2B20729}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC137370-03A3-4884-BA5C-7D7543756F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC137370-03A3-4884-BA5C-7D7543756F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC137370-03A3-4884-BA5C-7D7543756F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC137370-03A3-4884-BA5C-7D7543756F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9F51324A-632A-45C0-9082-B49D78B12962} = {E282023F-B02E-4FBB-9A95-945725969A78}
+		{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC} = {E282023F-B02E-4FBB-9A95-945725969A78}
 	EndGlobalSection
 EndGlobal

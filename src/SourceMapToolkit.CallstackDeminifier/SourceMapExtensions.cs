@@ -28,16 +28,16 @@ namespace SourcemapToolkit.CallstackDeminifier
 						sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings[0].SourcePosition);
 				}
 
-				MappingEntry? mappingEntry =
+				var mappingEntry =
 					sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings.Last().SourcePosition);
 
 				if (mappingEntry?.OriginalName != null)
 				{
 					if (objectProtoypeMappingEntry?.OriginalName != null)
 					{
-						string objectName = objectProtoypeMappingEntry.Value.OriginalName;
-						if (objectProtoypeMappingEntry.Value.OriginalSourcePosition.ZeroBasedColumnNumber == mappingEntry.Value.OriginalSourcePosition.ZeroBasedColumnNumber
-							&& objectProtoypeMappingEntry.Value.OriginalSourcePosition.ZeroBasedLineNumber == mappingEntry.Value.OriginalSourcePosition.ZeroBasedLineNumber
+						var objectName = objectProtoypeMappingEntry.Value.OriginalName;
+						if (objectProtoypeMappingEntry.Value.SourcePosition.Column == mappingEntry.Value.SourcePosition.Column
+							&& objectProtoypeMappingEntry.Value.SourcePosition.Line == mappingEntry.Value.SourcePosition.Line
 							&& objectName.Length > mappingEntry.Value.OriginalName.Length
 							&& objectName.EndsWith(mappingEntry.Value.OriginalName)
 							&& (objectName[objectName.Length - 1 - mappingEntry.Value.OriginalName.Length] == '.'))

@@ -18,88 +18,87 @@
 
 using System.Collections.Generic;
 
-namespace SourcemapToolkit.SourcemapParser
+namespace SourcemapToolkit.SourcemapParser;
+
+/// <summary>
+/// This class provides a mechanism for converting a Base64 Variable-length quantity (VLQ)
+/// into an array of integers.
+/// </summary>
+internal static class Base64VlqDecoder
 {
 	/// <summary>
-	/// This class provides a mechanism for converting a Base64 Variable-length quantity (VLQ)
-	/// into an array of integers.
+	/// Converts to a two-complement value from a value where the sign bit is
+	/// is placed in the least significant bit.For example, as decimals:
+	/// 2 (10 binary) becomes 1, 3 (11 binary) becomes -1
+	/// 4 (100 binary) becomes 2, 5 (101 binary) becomes -2
 	/// </summary>
-	internal static class Base64VlqDecoder
+	private static int FromVlqSigned(int value)
 	{
-		/// <summary>
-		/// Converts to a two-complement value from a value where the sign bit is
-		/// is placed in the least significant bit.For example, as decimals:
-		/// 2 (10 binary) becomes 1, 3 (11 binary) becomes -1
-		/// 4 (100 binary) becomes 2, 5 (101 binary) becomes -2
-		/// </summary>
-		private static int FromVlqSigned(int value)
+		var negate = (value & 1) == 1;
+		value = value >> 1;
+		return negate ? -value : value;
+	}
+
+	/// <summary>
+	/// Returns a list of integers corresponding to an input string that is Base64 VLQ encoded
+	/// </summary>
+	internal static List<int> Decode(string input)
+	{
+		var result = new List<int>();
+		var charProvider = new Base64CharProvider(input);
+
+		while (!charProvider.IsEmpty())
 		{
-			bool negate = (value & 1) == 1;
-			value = value >> 1;
-			return negate ? -value : value;
+			result.Add(DecodeNextInteger(charProvider));
+		}
+
+		return result;
+	}
+
+	private class Base64CharProvider
+	{
+		private readonly string _backingString;
+		private int _currentIndex = 0;
+
+		public Base64CharProvider(string s)
+		{
+			_backingString = s;
+		}
+
+		internal char GetNextCharacter()
+		{
+			var nextChar = _backingString[_currentIndex];
+			_currentIndex += 1;
+			return nextChar;
 		}
 
 		/// <summary>
-		/// Returns a list of integers corresponding to an input string that is Base64 VLQ encoded
+		/// Returns true when no more characters can be provided.
 		/// </summary>
-		internal static List<int> Decode(string input)
+		internal bool IsEmpty()
 		{
-			List<int> result = new List<int>();
-			Base64CharProvider charProvider = new Base64CharProvider(input);
-
-			while (!charProvider.IsEmpty())
-			{
-				result.Add(DecodeNextInteger(charProvider));
-			}
-
-			return result;
+			return _currentIndex >= _backingString.Length;
 		}
+	}
 
-		private class Base64CharProvider
+	/// <summary>
+	/// Reads characters from the Base64CharProvider until a complete integer value has been extracted.
+	/// </summary>
+	private static int DecodeNextInteger(Base64CharProvider charProvider)
+	{
+		var result = 0;
+		bool continuation;
+		var shift = 0;
+		do
 		{
-			private readonly string _backingString;
-			private int _currentIndex = 0;
+			var c = charProvider.GetNextCharacter();
+			var digit = Base64Converter.FromBase64(c);
+			continuation = (digit & Base64VlqConstants.VlqContinuationBit) != 0;
+			digit &= Base64VlqConstants.VlqBaseMask;
+			result = result + (digit << shift);
+			shift = shift + Base64VlqConstants.VlqBaseShift;
+		} while (continuation);
 
-			public Base64CharProvider(string s)
-			{
-				_backingString = s;
-			}
-
-			internal char GetNextCharacter()
-			{
-				char nextChar = _backingString[_currentIndex];
-				_currentIndex += 1;
-				return nextChar;
-			}
-
-			/// <summary>
-			/// Returns true when no more characters can be provided.
-			/// </summary>
-			internal bool IsEmpty()
-			{
-				return _currentIndex >= _backingString.Length;
-			}
-		}
-
-		/// <summary>
-		/// Reads characters from the Base64CharProvider until a complete integer value has been extracted.
-		/// </summary>
-		private static int DecodeNextInteger(Base64CharProvider charProvider)
-		{
-			int result = 0;
-			bool continuation;
-			int shift = 0;
-			do
-			{
-				char c = charProvider.GetNextCharacter();
-				int digit = Base64Converter.FromBase64(c);
-				continuation = (digit & Base64VlqConstants.VlqContinuationBit) != 0;
-				digit &= Base64VlqConstants.VlqBaseMask;
-				result = result + (digit << shift);
-				shift = shift + Base64VlqConstants.VlqBaseShift;
-			} while (continuation);
-
-			return FromVlqSigned(result);
-		}
+		return FromVlqSigned(result);
 	}
 }

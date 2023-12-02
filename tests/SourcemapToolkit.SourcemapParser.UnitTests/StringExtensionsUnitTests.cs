@@ -27,13 +27,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -47,13 +47,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -67,13 +67,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -87,13 +87,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -107,13 +107,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -127,13 +127,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -147,13 +147,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}
@@ -167,13 +167,13 @@ namespace SourcemapToolkit.SourcemapParser.UnitTests
 			const char delimiter = ',';
 
 			// Act
-			string[] fastSplit = StringExtensions.SplitFast(input, delimiter);
-			string[] normalSplit = input.Split(delimiter);
+			var fastSplit = StringExtensions.SplitFast(input, delimiter);
+			var normalSplit = input.Split(delimiter);
 
 			// Assert
 			Assert.Equal(normalSplit.Length, fastSplit.Length);
 
-			for (int i = 0; i < normalSplit.Length; i++)
+			for (var i = 0; i < normalSplit.Length; i++)
 			{
 				Assert.Equal(normalSplit[i], fastSplit[i]);
 			}

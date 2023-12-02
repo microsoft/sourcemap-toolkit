@@ -108,7 +108,7 @@ namespace SourcemapToolkit.CallstackDeminifier
 		{
 			ValidateArguments(sourceMapProvider, generatedCodeProvider, stackTraceParser);
 
-			SourceMapParser sourceMapParser = new SourceMapParser();
+			var sourceMapParser = new SourceMapParser();
 			IStackFrameDeminifier stackFrameDeminifier = new MethodNameStackFrameDeminifier(new FunctionMapStore(generatedCodeProvider, (url) => sourceMapParser.ParseSourceMap(sourceMapProvider.GetSourceMapContentsForCallstackUrl(url))), new FunctionMapConsumer());
 
 			return new StackTraceDeminifier(stackFrameDeminifier, stackTraceParser);
