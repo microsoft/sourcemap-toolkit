@@ -22,8 +22,11 @@ public class StackTraceDeminifier
 	/// Parses and deminifies a string containing a minified stack trace.
 	/// </summary>
 	/// <param name="stackTraceString">stack trace as string, to deobfuscate</param>
-	/// <param name="preferSourceMapsSymbols">if true, we will use exact sourcemap names for deobfuscation, without guessing the wrapper function name from source code</param>
-	/// <param name="fixOffByOneWithPreferSourceMapSymbols">preferSourceMapsSymbols uses name at call site in deobfuscated frame. Passing this as true fixes that case, to use the caller function name from next frame</param>
+	/// <param name="preferSourceMapsSymbols">if true, we will use exact sourcemap names
+	/// for deobfuscation, without guessing the wrapper function name from source code</param>
+	/// <param name="fixOffByOneWithPreferSourceMapSymbols">preferSourceMapsSymbols uses name
+	/// at call site in deobfuscated frame. Passing this as true fixes that case, to use the
+	/// caller function name from next frame</param>
 	/// <returns></returns>
 	public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString, bool preferSourceMapsSymbols = false, bool fixOffByOneWithPreferSourceMapSymbols = false)
 	{
@@ -43,10 +46,14 @@ public class StackTraceDeminifier
 		deminifiedStackFrameResults.Reverse();
 		if (preferSourceMapsSymbols && fixOffByOneWithPreferSourceMapSymbols)
 		{
-			// we want to move all method names by one frame, so each frame will contain caller name and not callee name. To make callstacks more familiar to C# and js debug versions.
-			// However, for first frame we want to keep calee name (if avaliable) as well since this is interesting info we don't want to lose.
-			// However it means that for last frame (N), if have more then 1 frame in callstack, N-1 frame will have the same name.
-			// It is confusing, so lets replace last one with null. This will cause toString to use the obfuscated name
+			// we want to move all method names by one frame, so each frame will contain caller
+			// name and not callee name. To make callstacks more familiar to C# and js debug versions.
+			// However, for first frame we want to keep calee name (if avaliable) as well since
+			// this is interesting info we don't want to lose.
+			// However it means that for last frame (N), if have more then 1 frame in callstack,
+			// N-1 frame will have the same name.
+			// It is confusing, so lets replace last one with null. This will cause toString to
+			// use the obfuscated name
 			for (var i = 0; i < deminifiedStackFrameResults.Count - 1; i++)
 			{
 				var updatedMethodName = deminifiedStackFrameResults[i + 1].DeminifiedStackFrame.MethodName;

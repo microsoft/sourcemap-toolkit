@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SourcemapToolkit.CallstackDeminifier;
+﻿namespace SourcemapToolkit.CallstackDeminifier;
 
 /// <summary>
 /// Enum indicating if there were any errors encountered when attempting to deminify the StakFrame.
@@ -43,7 +37,7 @@ public enum  DeminificationError
 }
 
 /// <summary>
-/// Represents the result of attmpting to deminify a single entry in a JavaScript stack frame. 
+/// Represents the result of attempting to deminify a single entry in a JavaScript stack frame. 
 /// </summary>
 public class StackFrameDeminificationResult
 {
