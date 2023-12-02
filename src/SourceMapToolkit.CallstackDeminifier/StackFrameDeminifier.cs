@@ -1,5 +1,4 @@
 ﻿using System;
-using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier;
 
