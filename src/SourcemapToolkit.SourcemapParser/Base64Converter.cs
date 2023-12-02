@@ -6,7 +6,7 @@ namespace SourcemapToolkit.SourcemapParser;
 /// <summary>
 /// Used to convert Base64 characters values into integers
 /// </summary>
-internal static class Base64Converter
+internal static class Base64Converter 
 {
 	private const string Base64Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	private static readonly Dictionary<char, int> _base64DecodeMap = new();

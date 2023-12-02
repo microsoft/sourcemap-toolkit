@@ -180,7 +180,7 @@ public class SourceMap
 		var newSourceMap = new SourceMap(
 			version: Version,
 			file: File,
-			mappings: default(string),
+			mappings: default,
 			sources: sources.ToList(),
 			names: names.ToList(),
 			parsedMappings: parsedMappings,

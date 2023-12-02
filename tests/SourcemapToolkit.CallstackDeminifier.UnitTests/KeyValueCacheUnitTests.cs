@@ -1,79 +1,71 @@
 ﻿using System;
+using Moq;
 using Xunit;
-using Rhino.Mocks;
 
-namespace SourcemapToolkit.CallstackDeminifier.UnitTests
+namespace SourcemapToolkit.CallstackDeminifier.UnitTests;
+
+public class KeyValueCacheUnitTests
 {
+    [Fact]
+    public void GetValue_KeyNotInCache_CallValueGetter()
+    {
+        // Arrange
+        Func<string, string> valueGetter = s => s == "bar" ? "foo" : null;
+        var keyValueCache = new KeyValueCache<string, string>(valueGetter);
 
-	public class KeyValueCacheUnitTests
-	{
-		[Fact]
-		public void GetValue_KeyNotInCache_CallValueGetter()
-		{
-			// Arrange
-			var valueGetter = MockRepository.GenerateStrictMock<Func<string, string>>();
-			valueGetter.Stub(x => x("bar")).Return("foo");
-			var keyValueCache = new KeyValueCache<string, string>(valueGetter);
+        // Act
+        var result = keyValueCache.GetValue("bar");
 
-			// Act
-			var result = keyValueCache.GetValue("bar");
+        // Assert
+        Assert.Equal("foo", result);
+    }
 
-			// Assert
-			Assert.Equal("foo", result);
+    [Fact]
+    public void GetValue_CallGetTwice_OnlyCallValueGetterOnce()
+    {
+        // Arrange
+        var call = 0;
+        Func<string, string> valueGetter = s => call++ == 0 && s == "bar" ? "foo" : null;
+        var keyValueCache = new KeyValueCache<string, string>(valueGetter);
+        keyValueCache.GetValue("bar"); // Place the value in the cache
 
-		}
+        // Act
+        var result = keyValueCache.GetValue("bar");
 
-		[Fact]
-		public void GetValue_CallGetTwice_OnlyCallValueGetterOnce()
-		{
-			// Arrange
-			var valueGetter = MockRepository.GenerateStrictMock<Func<string, string>>();
-			valueGetter.Stub(x => x("bar")).Return("foo").Repeat.Once();
-			var keyValueCache = new KeyValueCache<string, string>(valueGetter);
-			keyValueCache.GetValue("bar"); // Place the value in the cache
+        // Assert
+        Assert.Equal("foo", result);
+    }
 
-			// Act
-			var result = keyValueCache.GetValue("bar");
+    [Fact]
+    public void GetValue_CallGetTwiceValueGetterReturnsNull_CallGetterTwice()
+    {
+        // Arrange
+        Func<string, string> valueGetter = s => s == "bar" ? null : throw new AggregateException();
+        var keyValueCache = new KeyValueCache<string, string>(valueGetter);
+        keyValueCache.GetValue("bar"); // Place null in the cache
 
-			// Assert
-			Assert.Equal("foo", result);
-			valueGetter.VerifyAllExpectations();
-		}
+        // Act
+        var result = keyValueCache.GetValue("bar");
 
-		[Fact]
-		public void GetValue_CallGetTwiceValueGetterReturnsNull_CallGetterTwice()
-		{
-			// Arrange
-			var valueGetter = MockRepository.GenerateStrictMock<Func<string, string>>();
-			valueGetter.Stub(x => x("bar")).Return(null).Repeat.Twice();
-			var keyValueCache = new KeyValueCache<string, string>(valueGetter);
-			keyValueCache.GetValue("bar"); // Place null in the cache
+        // Assert
+        Assert.Null(result);
+    }
 
-			// Act
-			var result = keyValueCache.GetValue("bar");
+    [Fact]
+    public void GetValue_CallGetMultipleTimesFirstGetterReturnsNull_CacheFirstNonNullValue()
+    {
+        // Arrange
+        string valueGetterReturn = null; 
+        Func<string, string> valueGetter = s => s == "bar" ? valueGetterReturn : throw new AggregateException();
+        var keyValueCache = new KeyValueCache<string, string>(valueGetter);
+        keyValueCache.GetValue("bar"); // Place null in the cache
+        valueGetterReturn = "foo";
+        keyValueCache.GetValue("bar"); // Place a non null value in the cache
 
-			// Assert
-			Assert.Null(result);
-			valueGetter.VerifyAllExpectations();
-		}
+        // Act
+        var result = keyValueCache.GetValue("bar");
 
-		[Fact]
-		public void GetValue_CallGetMultipleTimesFirstGetterReturnsNull_CacheFirstNonNullValue()
-		{
-			// Arrange
-			var valueGetter = MockRepository.GenerateStrictMock<Func<string, string>>();
-			valueGetter.Stub(x => x("bar")).Return(null).Repeat.Once();
-			var keyValueCache = new KeyValueCache<string, string>(valueGetter);
-			keyValueCache.GetValue("bar"); // Place null in the cache
-			valueGetter.Stub(x => x("bar")).Return("foo").Repeat.Once();
-			keyValueCache.GetValue("bar"); // Place a non null value in the cahce
-
-			// Act
-			var result = keyValueCache.GetValue("bar");
-
-			// Assert
-			Assert.Equal("foo", result);
-			valueGetter.VerifyAllExpectations();
-		}
-	}
+        // Assert
+        Assert.Equal("foo", result);
+    }
 }

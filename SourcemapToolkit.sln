@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.CallstackD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E282023F-B02E-4FBB-9A95-945725969A78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.NET", "src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.NET.csproj", "{CC137370-03A3-4884-BA5C-7D7543756F2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser", "src\SourcemapToolkit.SourcemapParser\SourcemapToolkit.SourcemapParser.csproj", "{CC137370-03A3-4884-BA5C-7D7543756F2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.UnitTests.NET", "tests\SourcemapToolkit.SourcemapParser.UnitTests\SourcemapToolkit.SourcemapParser.UnitTests.NET.csproj", "{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcemapToolkit.SourcemapParser.UnitTests", "tests\SourcemapToolkit.SourcemapParser.UnitTests\SourcemapToolkit.SourcemapParser.UnitTests.csproj", "{7C9C24CD-D28B-4626-AD1A-9ED5D5AA30FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SourcemapToolkit.CallstackDeminifier
+namespace SourcemapToolkit.CallstackDeminifier;
+
+internal interface IFunctionMapStore
 {
-	internal interface IFunctionMapStore
-	{
-		IReadOnlyList<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl);
-	}
+	IReadOnlyList<FunctionMapEntry> GetFunctionMapForSourceCode(string sourceCodeUrl);
 }
