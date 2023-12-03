@@ -49,10 +49,10 @@ public struct MappingEntry
 
 	public bool Equals(MappingEntry that)
 	{
-		return this.OriginalName == that.OriginalName &&
-		       this.OriginalFileName == that.OriginalFileName &&
-		       this.SourceMapPosition.Equals(that.SourceMapPosition) &&
-		       this.SourcePosition.Equals(that.SourcePosition);
+		return OriginalName == that.OriginalName &&
+		       OriginalFileName == that.OriginalFileName &&
+		       SourceMapPosition.Equals(that.SourceMapPosition) &&
+		       SourcePosition.Equals(that.SourcePosition);
 	}
 
 	public override bool Equals(object obj)

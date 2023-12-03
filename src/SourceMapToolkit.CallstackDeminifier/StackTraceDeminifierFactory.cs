@@ -1,4 +1,8 @@
 ﻿using System;
+using SourcemapToolkit.CallstackDeminifier.Mapping;
+using SourcemapToolkit.CallstackDeminifier.SourceProviders;
+using SourcemapToolkit.CallstackDeminifier.StackFrameDeminifiers;
+using SourcemapToolkit.CallstackDeminifier.StackParsers;
 using SourcemapToolkit.SourcemapParser;
 
 namespace SourcemapToolkit.CallstackDeminifier;
@@ -36,7 +40,7 @@ public class StackTraceDeminifierFactory
 	/// <summary>
 	/// Creates a StackTraceDeminifier which does not depend on JS files, and is ES2015+ compatible.
 	/// StackTrace deminifiers created with this method will keep source maps cached, and thus use
-	/// significantly more memory during runtime than the ones generated with GetMethodNameOnlyStackTraceDeminfier.
+	/// significantly more memory during runtime than the ones generated with GetMethodNameDeminifier.
 	/// </summary>
 	/// <param name="sourceMapProvider">Consumers of the API should implement this interface, whichc
 	/// provides the source map for a given JavaScript file. Throws ArgumentNullException if the
@@ -45,7 +49,10 @@ public class StackTraceDeminifierFactory
 	/// a parser for the stacktrace. If null the default is used.</param>
 	/// <param name="removeSourcesContent">Optional parameter that will remove "SourcesContent" data from
 	/// the loaded source maps, which will use less memory for the cached map files</param>
-	public static StackTraceDeminifier GetMapOnlyDeminifier(ISourceMapProvider sourceMapProvider, IStackTraceParser stackTraceParser = null, bool removeSourcesContent = false)
+	public static StackTraceDeminifier GetMapOnlyDeminifier(
+		ISourceMapProvider sourceMapProvider,
+		IStackTraceParser stackTraceParser = null,
+		bool removeSourcesContent = false)
 	{
         ArgumentNullException.ThrowIfNull(sourceMapProvider);
         ArgumentNullException.ThrowIfNull(sourceMapProvider);
@@ -69,13 +76,22 @@ public class StackTraceDeminifierFactory
 	/// <param name="stackTraceParser">Consumers of the API should implement this interface, which
 	/// provides a parser for the stacktrace. If null the default is used.
 	/// </param>
-	public static StackTraceDeminifier GetMethodNameDeminifier(ISourceMapProvider sourceMapProvider, ISourceCodeProvider generatedCodeProvider, IStackTraceParser stackTraceParser = null)
+	public static StackTraceDeminifier GetMethodNameDeminifier(
+		ISourceMapProvider sourceMapProvider, 
+		ISourceCodeProvider generatedCodeProvider, 
+		IStackTraceParser stackTraceParser = null)
 	{
 		ArgumentNullException.ThrowIfNull(sourceMapProvider);
 		ArgumentNullException.ThrowIfNull(generatedCodeProvider);
 
 		var sourceMapParser = new SourceMapParser();
-		var stackFrameDeminifier = new MethodNameStackFrameDeminifier(new FunctionMapStore(generatedCodeProvider, (url) => sourceMapParser.ParseSourceMap(sourceMapProvider.GetSourceMapContentsForCallstackUrl(url))), new FunctionMapConsumer());
+		var stackFrameDeminifier = new MethodNameStackFrameDeminifier(
+			new FunctionMapStore(
+				generatedCodeProvider,
+				url => sourceMapParser.ParseSourceMap(sourceMapProvider.GetSourceMapContentsForCallstackUrl(url))
+			),
+			new FunctionMapConsumer()
+		);
 
 		return new(stackFrameDeminifier, stackTraceParser ?? new StackTraceParser());
 	}

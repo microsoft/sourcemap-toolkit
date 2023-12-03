@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>SourcemapToolkit.SourcemapParser.UnitTests.NET</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

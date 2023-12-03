@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SourcemapToolkit.SourcemapParser.Base64;
+using SourcemapToolkit.SourcemapParser.Extensions;
 
 namespace SourcemapToolkit.SourcemapParser;
 

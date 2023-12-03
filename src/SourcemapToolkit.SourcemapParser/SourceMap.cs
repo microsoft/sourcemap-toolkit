@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SourcemapToolkit.SourcemapParser.Extensions;
 
 namespace SourcemapToolkit.SourcemapParser;
 
@@ -138,10 +139,10 @@ public class SourceMap
 
 		var sources = new HashSet<string>(StringComparer.Ordinal);
 		var names = new HashSet<string>(StringComparer.Ordinal);
-		var parsedMappings = new List<MappingEntry>(this.ParsedMappings.Count);
+		var parsedMappings = new List<MappingEntry>(ParsedMappings.Count);
 
 		// transform mappings in this source map
-		foreach (var mappingEntry in this.ParsedMappings)
+		foreach (var mappingEntry in ParsedMappings)
 		{
 			var newMappingEntry = mappingEntry;
 

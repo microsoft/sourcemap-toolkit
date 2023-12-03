@@ -1,6 +1,7 @@
 ﻿using SourcemapToolkit.SourcemapParser;
 using System.Collections.Generic;
 using System.Text;
+using SourcemapToolkit.CallstackDeminifier.StackFrameDeminifiers;
 
 namespace SourcemapToolkit.CallstackDeminifier;
 
@@ -21,7 +22,7 @@ public class DeminifyStackTraceResult
 
 		for (var i = 0; i < DeminifiedStackFrameResults.Count; i++)
 		{
-			var deminFrame = DeminifiedStackFrameResults[i].DeminifiedStackFrame;
+			var deminFrame = DeminifiedStackFrameResults[i].StackFrame;
 
 			// Use deminified info wherever possible, merging if necessary so we always print a full frame
 			var frame = new StackFrame()

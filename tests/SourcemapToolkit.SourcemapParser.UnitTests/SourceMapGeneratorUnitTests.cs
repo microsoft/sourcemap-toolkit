@@ -111,7 +111,7 @@ public class SourceMapGeneratorUnitTests
 	{
 		// Arrange
 		var sourceMapGenerator = new SourceMapGenerator();
-		var input = this.GetSimpleSourceMap();
+		var input = GetSimpleSourceMap();
 
 		// Act
 		var output = sourceMapGenerator.SerializeMapping(input);
@@ -136,7 +136,7 @@ public class SourceMapGeneratorUnitTests
 	{
 		// Arrange
 		var sourceMapGenerator = new SourceMapGenerator();
-		var input = this.GetSimpleSourceMap();
+		var input = GetSimpleSourceMap();
 
 		// Act
 		var output = sourceMapGenerator.GenerateSourceMapInlineComment(input);

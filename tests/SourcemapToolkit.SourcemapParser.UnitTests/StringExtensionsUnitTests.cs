@@ -1,4 +1,5 @@
 ﻿using System;
+using SourcemapToolkit.SourcemapParser.Extensions;
 using Xunit;
 
 namespace SourcemapToolkit.SourcemapParser.UnitTests;

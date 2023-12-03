@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using SourcemapToolkit.CallstackDeminifier.StackFrameDeminifiers;
+using SourcemapToolkit.CallstackDeminifier.StackParsers;
 
 namespace SourcemapToolkit.CallstackDeminifier;
 
@@ -39,7 +41,7 @@ public class StackTraceDeminifier
 		for (var i = minifiedStackFrames.Count - 1; i >= 0; i--)
 		{
 			var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrames[i], callerSymbolName, preferSourceMapsSymbols);
-			callerSymbolName = frame?.DeminifiedSymbolName;
+			callerSymbolName = frame?.SymbolName;
 			deminifiedStackFrameResults.Add(frame);
 		}
 
@@ -48,7 +50,7 @@ public class StackTraceDeminifier
 		{
 			// we want to move all method names by one frame, so each frame will contain caller
 			// name and not callee name. To make callstacks more familiar to C# and js debug versions.
-			// However, for first frame we want to keep calee name (if avaliable) as well since
+			// However, for first frame we want to keep callee name (if available) as well since
 			// this is interesting info we don't want to lose.
 			// However it means that for last frame (N), if have more then 1 frame in callstack,
 			// N-1 frame will have the same name.
@@ -56,16 +58,16 @@ public class StackTraceDeminifier
 			// use the obfuscated name
 			for (var i = 0; i < deminifiedStackFrameResults.Count - 1; i++)
 			{
-				var updatedMethodName = deminifiedStackFrameResults[i + 1].DeminifiedStackFrame.MethodName;
-				if (i == 0 && deminifiedStackFrameResults[i].DeminifiedStackFrame.MethodName != null)
+				var updatedMethodName = deminifiedStackFrameResults[i + 1].StackFrame.MethodName;
+				if (i == 0 && deminifiedStackFrameResults[i].StackFrame.MethodName != null)
 				{
-					updatedMethodName = updatedMethodName + "=>" + deminifiedStackFrameResults[i].DeminifiedStackFrame.MethodName;
+					updatedMethodName = updatedMethodName + "=>" + deminifiedStackFrameResults[i].StackFrame.MethodName;
 				}
-				deminifiedStackFrameResults[i].DeminifiedStackFrame.MethodName = updatedMethodName;
+				deminifiedStackFrameResults[i].StackFrame.MethodName = updatedMethodName;
 			}
 			if (deminifiedStackFrameResults.Count > 1)
 			{
-				deminifiedStackFrameResults[deminifiedStackFrameResults.Count - 1].DeminifiedStackFrame.MethodName = null;
+				deminifiedStackFrameResults[deminifiedStackFrameResults.Count - 1].StackFrame.MethodName = null;
 			}
 		}
 		var result = new DeminifyStackTraceResult(message, minifiedStackFrames, deminifiedStackFrameResults);

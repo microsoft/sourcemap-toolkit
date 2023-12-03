@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
+using SourcemapToolkit.SourcemapParser.Base64;
+using SourcemapToolkit.SourcemapParser.Extensions;
 
 namespace SourcemapToolkit.SourcemapParser;
 
@@ -77,7 +79,7 @@ public class SourceMapGenerator
 	public string GenerateSourceMapInlineComment(SourceMap sourceMap, JsonSerializerSettings jsonSerializerSettings = null)
 	{
 		var mappings = SerializeMapping(sourceMap, jsonSerializerSettings);
-		var bytes = System.Text.Encoding.UTF8.GetBytes(mappings);
+		var bytes = Encoding.UTF8.GetBytes(mappings);
 		var encoded = Convert.ToBase64String(bytes);
 
 		return @"//# sourceMappingURL=data:application/json;base64," + encoded;
