@@ -20,7 +20,7 @@ public class StackTraceDeminifierEndToEndTests
 		sourceCodeProvider.Setup(x => x.GetSourceCode("http://localhost:11323/crashcauser.min.js"))
 			.Returns(UnitTestUtils.StreamReaderFromString(GeneratedCodeString));
 
-		return StackTraceDeminfierFactory.GetStackTraceDeminfier(sourceMapProvider.Object, sourceCodeProvider.Object, removeSourcesContent: true);
+		return StackTraceDeminifierFactory.GetDeminifier(sourceMapProvider.Object, sourceCodeProvider.Object, removeSourcesContent: true);
 	}
 
 	private static void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)

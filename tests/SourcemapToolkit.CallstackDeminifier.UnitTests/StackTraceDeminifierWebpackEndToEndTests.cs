@@ -36,7 +36,7 @@ public class StackTraceDeminifierWebpackEndToEndTests
 	private StackTraceDeminifier GetStackTraceDeminifierWithDependencies()
 	{
 		var provider = new WebpackTestProvider();
-		return StackTraceDeminfierFactory.GetStackTraceDeminfier(provider, provider);
+		return StackTraceDeminifierFactory.GetDeminifier(provider, provider);
 	}
 
 	[Fact]

@@ -8,29 +8,24 @@ namespace SourcemapToolkit.CallstackDeminifier;
 internal class FunctionMapGenerator : IFunctionMapGenerator
 {
 	/// <summary>
-	/// Returns a FunctionMap describing the locations of every funciton in the source code.
+	/// Returns a FunctionMap describing the locations of every function in the source code.
 	/// The functions are to be sorted descending by start position.
 	/// </summary>
 	public IReadOnlyList<FunctionMapEntry> GenerateFunctionMap(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
 	{
-		if (sourceCodeStreamReader == null || sourceMap == null)
-		{
-			return null;
-		}
-
-		IReadOnlyList<FunctionMapEntry> result;
+		if (sourceCodeStreamReader == null || sourceMap == null) return null;
+		
 		try
 		{
-			result = ParseSourceCode(sourceCodeStreamReader, sourceMap);
+			return ParseSourceCode(sourceCodeStreamReader, sourceMap);
 		}
 		catch
 		{
 			// Failed to parse JavaScript source. This is common as the JS parser does not support ES2015+.
 			// Continue to regular source map deminification.
-			result = null;
 		}
 
-		return result;
+		return null;
 	}
 
 	/// <summary>
@@ -38,10 +33,7 @@ internal class FunctionMapGenerator : IFunctionMapGenerator
 	/// </summary>
 	internal IReadOnlyList<FunctionMapEntry> ParseSourceCode(StreamReader sourceCodeStreamReader, SourceMap sourceMap)
 	{
-		if (sourceCodeStreamReader == null)
-		{
-			return null;
-		}
+		if (sourceCodeStreamReader == null) return null;
 
 		var sourceCode = sourceCodeStreamReader.ReadToEnd();
 		sourceCodeStreamReader.Close();

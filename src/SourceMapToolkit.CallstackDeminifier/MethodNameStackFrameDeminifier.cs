@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SourcemapToolkit.CallstackDeminifier;
 
 /// <summary>
-/// This class only deminfies the method name in a stack frame. It does not depend on having a source map available during runtime.
+/// This class only deminifies the method name in a stack frame. It does not depend on having a source map available during runtime.
 /// </summary>
 internal class MethodNameStackFrameDeminifier : IStackFrameDeminifier
 {
@@ -21,17 +21,14 @@ internal class MethodNameStackFrameDeminifier : IStackFrameDeminifier
 	/// </summary>
 	public virtual StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName, bool preferSourceMapsSymbols = false)
 	{
-		if (stackFrame == null)
-		{
-			throw new ArgumentNullException(nameof(stackFrame));
-		}
+        ArgumentNullException.ThrowIfNull(stackFrame);
 
-		var result = new StackFrameDeminificationResult
-		{
-			DeminificationError = DeminificationError.None
-		};
-			
-		FunctionMapEntry wrappingFunction = null;
+        var result = new StackFrameDeminificationResult
+        {
+	        DeminificationError = DeminificationError.None
+        };
+
+        FunctionMapEntry wrappingFunction = null;
 
 		// This code deminifies the stack frame by finding the wrapping function in 
 		// the generated code and then using the source map to find the name and 
@@ -52,7 +49,7 @@ internal class MethodNameStackFrameDeminifier : IStackFrameDeminifier
 			result.DeminificationError = DeminificationError.NoSourceCodeProvided;
 		}
 
-		result.DeminifiedStackFrame = new() {MethodName = wrappingFunction?.DeminifiedMethodName};
+		result.DeminifiedStackFrame = new() { MethodName = wrappingFunction?.DeminifiedMethodName };
 		return result;
 	}
 }

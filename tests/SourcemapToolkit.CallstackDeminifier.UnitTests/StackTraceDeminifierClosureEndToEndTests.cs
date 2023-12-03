@@ -20,7 +20,7 @@ public class StackTraceDeminifierClosureEndToEndTests
 		sourceCodeProvider.Setup(x => x.GetSourceCode("http://localhost:11323/closurecrashcauser.minified.js"))
 			.Returns(UnitTestUtils.StreamReaderFromString(GeneratedCodeString));
 
-		return StackTraceDeminfierFactory.GetStackTraceDeminfier(sourceMapProvider.Object, sourceCodeProvider.Object, removeSourcesContent: true);
+		return StackTraceDeminifierFactory.GetDeminifier(sourceMapProvider.Object, sourceCodeProvider.Object, removeSourcesContent: true);
 	}
 
 	private void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)

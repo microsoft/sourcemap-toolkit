@@ -15,7 +15,7 @@ public class StackTraceDeminifierMapOnlyEndToEndTests
 		var sourceMapProvider = new Mock<ISourceMapProvider>();
 		sourceMapProvider.Setup(x => x.GetSourceMapContentsForCallstackUrl("http://localhost:11323/crashcauser.min.js"))
 			.Returns(UnitTestUtils.StreamReaderFromString(SourceMapString));
-		return StackTraceDeminfierFactory.GetMapOnlyStackTraceDeminfier(sourceMapProvider.Object);
+		return StackTraceDeminifierFactory.GetMapOnlyDeminifier(sourceMapProvider.Object);
 	}
 
 	private static void ValidateDeminifyStackTraceResults(DeminifyStackTraceResult results)

@@ -33,19 +33,11 @@ internal class StackFrameDeminifier : IStackFrameDeminifier
 	/// could be null if the value could not be extracted. </returns>
 	public StackFrameDeminificationResult DeminifyStackFrame(StackFrame stackFrame, string callerSymbolName, bool preferSourceMapsSymbols = false)
 	{
-		if (stackFrame == null)
-		{
-			throw new ArgumentNullException(nameof(stackFrame));
-		}
+        ArgumentNullException.ThrowIfNull(stackFrame);
 
-		var sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
+        var sourceMap = _sourceMapStore.GetSourceMapForUrl(stackFrame.FilePath);
 		var generatedSourcePosition = stackFrame.SourcePosition;
-
-		StackFrameDeminificationResult result = null;
-		if (_methodNameDeminifier != null)
-		{
-			result = _methodNameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName);
-		}
+		var result = _methodNameDeminifier?.DeminifyStackFrame(stackFrame, callerSymbolName);
 
 		if (result == null || result.DeminificationError == DeminificationError.NoSourceCodeProvided)
 		{
