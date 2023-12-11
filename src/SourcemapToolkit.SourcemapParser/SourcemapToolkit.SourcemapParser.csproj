@@ -11,12 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>SourcemapToolkit.SourcemapParser.UnitTests</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>SourcemapToolkit.CallstackDeminifier</_Parameter1>
-        </AssemblyAttribute>
+        <InternalsVisibleTo Include="SourcemapToolkit.SourcemapParser.UnitTests" />
+        <InternalsVisibleTo Include="SourcemapToolkit.CallstackDeminifier" />
     </ItemGroup>
     
 </Project>

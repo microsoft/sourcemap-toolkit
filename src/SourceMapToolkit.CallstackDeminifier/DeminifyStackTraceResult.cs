@@ -11,6 +11,16 @@ public class DeminifyStackTraceResult
 	public IReadOnlyList<StackFrame> MinifiedStackFrames { get; }
 	public IReadOnlyList<StackFrameDeminificationResult> DeminifiedStackFrameResults { get; }
 
+	public DeminifyStackTraceResult(
+		string message,
+		IReadOnlyList<StackFrame> minifiedStackFrames,
+		IReadOnlyList<StackFrameDeminificationResult> deminifiedStackFrameResults)
+	{
+		Message = message;
+		MinifiedStackFrames = minifiedStackFrames;
+		DeminifiedStackFrameResults = deminifiedStackFrameResults;
+	}
+	
 	public override string ToString()
 	{
 		var sb = new StringBuilder();
@@ -38,15 +48,5 @@ public class DeminifyStackTraceResult
 		}
 
 		return sb.ToString();
-	}
-
-	public DeminifyStackTraceResult(
-		string message,
-		IReadOnlyList<StackFrame> minifiedStackFrames,
-		IReadOnlyList<StackFrameDeminificationResult> deminifiedStackFrameResults)
-	{
-		Message = message;
-		MinifiedStackFrames = minifiedStackFrames;
-		DeminifiedStackFrameResults = deminifiedStackFrameResults;
 	}
 }

@@ -32,20 +32,20 @@ public class StackTraceDeminifier
 	/// <returns></returns>
 	public DeminifyStackTraceResult DeminifyStackTrace(string stackTraceString, bool preferSourceMapsSymbols = false, bool fixOffByOneWithPreferSourceMapSymbols = false)
 	{
-		var minifiedStackFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out var message);
-		var deminifiedStackFrameResults = new List<StackFrameDeminificationResult>(minifiedStackFrames.Count);
+		var minifiedFrames = _stackTraceParser.ParseStackTrace(stackTraceString, out var message);
+		var frameResults = new List<StackFrameDeminificationResult>(minifiedFrames.Count);
 
 		// Deminify frames in reverse order so we can pass the symbol name from caller
 		// (i.e. the function name) into the next level's deminification.
 		string callerSymbolName = null;
-		for (var i = minifiedStackFrames.Count - 1; i >= 0; i--)
+		for (var i = minifiedFrames.Count - 1; i >= 0; i--)
 		{
-			var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrames[i], callerSymbolName, preferSourceMapsSymbols);
+			var frame = _stackFrameDeminifier.DeminifyStackFrame(minifiedFrames[i], callerSymbolName, preferSourceMapsSymbols);
 			callerSymbolName = frame?.SymbolName;
-			deminifiedStackFrameResults.Add(frame);
+			frameResults.Add(frame);
 		}
 
-		deminifiedStackFrameResults.Reverse();
+		frameResults.Reverse();
 		if (preferSourceMapsSymbols && fixOffByOneWithPreferSourceMapSymbols)
 		{
 			// we want to move all method names by one frame, so each frame will contain caller
@@ -56,21 +56,21 @@ public class StackTraceDeminifier
 			// N-1 frame will have the same name.
 			// It is confusing, so lets replace last one with null. This will cause toString to
 			// use the obfuscated name
-			for (var i = 0; i < deminifiedStackFrameResults.Count - 1; i++)
+			for (var i = 0; i < frameResults.Count - 1; i++)
 			{
-				var updatedMethodName = deminifiedStackFrameResults[i + 1].StackFrame.MethodName;
-				if (i == 0 && deminifiedStackFrameResults[i].StackFrame.MethodName != null)
+				var updatedMethodName = frameResults[i + 1].StackFrame.MethodName;
+				if (i == 0 && frameResults[i].StackFrame.MethodName != null)
 				{
-					updatedMethodName = updatedMethodName + "=>" + deminifiedStackFrameResults[i].StackFrame.MethodName;
+					updatedMethodName = updatedMethodName + "=>" + frameResults[i].StackFrame.MethodName;
 				}
-				deminifiedStackFrameResults[i].StackFrame.MethodName = updatedMethodName;
+				frameResults[i].StackFrame.MethodName = updatedMethodName;
 			}
-			if (deminifiedStackFrameResults.Count > 1)
+			if (frameResults.Count > 1)
 			{
-				deminifiedStackFrameResults[deminifiedStackFrameResults.Count - 1].StackFrame.MethodName = null;
+				frameResults[frameResults.Count - 1].StackFrame.MethodName = null;
 			}
 		}
-		var result = new DeminifyStackTraceResult(message, minifiedStackFrames, deminifiedStackFrameResults);
+		var result = new DeminifyStackTraceResult(message, minifiedFrames, frameResults);
 
 		return result;
 	}

@@ -53,7 +53,7 @@ internal class StackFrameDeminifier : IStackFrameDeminifier
 		if (result.Error == DeminificationError.None)
 		{
 			var generatedSourcePositionMappingEntry =
-				sourceMap?.GetMappingEntryForGeneratedSourcePosition(generatedSourcePosition);
+				sourceMap?.GetMappingEntryForGeneratedPosition(generatedSourcePosition);
 
 			if (generatedSourcePositionMappingEntry == null)
 			{

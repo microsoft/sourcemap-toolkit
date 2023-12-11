@@ -12,32 +12,22 @@ internal static class SourceMapExtensions
 	/// </summary>
 	internal static string GetDeminifiedMethodName(this SourceMap sourceMap, IReadOnlyList<BindingInformation> bindings)
 	{
-		if (sourceMap == null)
-		{
-			throw new ArgumentNullException(nameof(sourceMap));
-		}
+        ArgumentNullException.ThrowIfNull(sourceMap);
 
-		string methodName = null;
+        string methodName = null;
 
 		if (bindings != null && bindings.Count > 0)
 		{
-			MappingEntry? objectPrototypeMappingEntry = null;
-			if (bindings.Count == 2)
-			{
-				objectPrototypeMappingEntry =
-					sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings[0].SourcePosition);
-			}
-
-			var mappingEntry =
-				sourceMap.GetMappingEntryForGeneratedSourcePosition(bindings.Last().SourcePosition);
+			var prototypeMappingEntry = bindings.Count == 2 ? sourceMap.GetMappingEntryForGeneratedPosition(bindings[0].SourcePosition) : null;
+			var mappingEntry = sourceMap.GetMappingEntryForGeneratedPosition(bindings.Last().SourcePosition);
 
 			if (mappingEntry?.OriginalName != null)
 			{
-				if (objectPrototypeMappingEntry?.OriginalName != null)
+				if (prototypeMappingEntry?.OriginalName != null)
 				{
-					var objectName = objectPrototypeMappingEntry.Value.OriginalName;
-					if (objectPrototypeMappingEntry.Value.SourcePosition.Column == mappingEntry.Value.SourcePosition.Column
-					    && objectPrototypeMappingEntry.Value.SourcePosition.Line == mappingEntry.Value.SourcePosition.Line
+					var objectName = prototypeMappingEntry.Value.OriginalName;
+					if (prototypeMappingEntry.Value.SourcePosition.Column == mappingEntry.Value.SourcePosition.Column
+					    && prototypeMappingEntry.Value.SourcePosition.Line == mappingEntry.Value.SourcePosition.Line
 					    && objectName.Length > mappingEntry.Value.OriginalName.Length
 					    && objectName.EndsWith(mappingEntry.Value.OriginalName)
 					    && (objectName[objectName.Length - 1 - mappingEntry.Value.OriginalName.Length] == '.'))

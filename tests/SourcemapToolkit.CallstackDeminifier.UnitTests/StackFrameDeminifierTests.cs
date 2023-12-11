@@ -12,7 +12,9 @@ namespace SourcemapToolkit.CallstackDeminifier.UnitTests;
 
 public class StackFrameDeminifierTests
 { 
-	private IStackFrameDeminifier GetStackFrameDeminifierWithMockDependencies(ISourceMapStore sourceMapStore = null, IFunctionMapStore functionMapStore = null, IFunctionMapConsumer functionMapConsumer = null, bool useSimpleStackFrameDeminier = false)
+	private IStackFrameDeminifier GetStackFrameDeminifierWithMockDependencies(
+		ISourceMapStore sourceMapStore = null, IFunctionMapStore functionMapStore = null,
+		IFunctionMapConsumer functionMapConsumer = null, bool useSimpleStackFrameDeminifier = false)
 	{
 		if (sourceMapStore == null)
 		{
@@ -29,7 +31,7 @@ public class StackFrameDeminifierTests
 			functionMapConsumer = new Mock<IFunctionMapConsumer>().Object;
 		}
 
-		if (useSimpleStackFrameDeminier)
+		if (useSimpleStackFrameDeminifier)
 		{
 			return new MethodNameStackFrameDeminifier(functionMapStore, functionMapConsumer);
 		}
@@ -76,7 +78,7 @@ public class StackFrameDeminifierTests
 		functionMapStore.Setup(c => c.GetFunctionMapForSourceCode(filePath))
 			.Returns((IReadOnlyList<FunctionMapEntry>)null);
 
-		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, useSimpleStackFrameDeminier:true);
+		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, useSimpleStackFrameDeminifier:true);
 
 		// Act
 		var stackFrameDeminification = stackFrameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName: null);
@@ -101,7 +103,7 @@ public class StackFrameDeminifierTests
 		functionMapConsumer.Setup(c => c.GetWrappingFunction(It.IsAny<SourcePosition>(), It.IsAny<List<FunctionMapEntry>>()))
 			.Returns((FunctionMapEntry)null);
 
-		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, functionMapConsumer: functionMapConsumer.Object, useSimpleStackFrameDeminier: true);
+		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, functionMapConsumer: functionMapConsumer.Object, useSimpleStackFrameDeminifier: true);
 
 		// Act
 		var stackFrameDeminification = stackFrameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName: null);
@@ -127,7 +129,7 @@ public class StackFrameDeminifierTests
 		functionMapConsumer.Setup(c => c.GetWrappingFunction(It.IsAny<SourcePosition>(), It.IsAny<List<FunctionMapEntry>>()))
 			.Returns(wrapingFunctionMapEntry);
 
-		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, functionMapConsumer: functionMapConsumer.Object, useSimpleStackFrameDeminier: true);
+		var stackFrameDeminifier = GetStackFrameDeminifierWithMockDependencies(functionMapStore: functionMapStore.Object, functionMapConsumer: functionMapConsumer.Object, useSimpleStackFrameDeminifier: true);
 
 		// Act
 		var stackFrameDeminification = stackFrameDeminifier.DeminifyStackFrame(stackFrame, callerSymbolName: null);

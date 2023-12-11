@@ -60,7 +60,7 @@ public class SourceMapExtensionsTests
 		};
 
 		var sourceMap = CreateSourceMapMock();
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(It.IsAny<SourcePosition>()))
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(It.IsAny<SourcePosition>()))
 			.Returns<MappingEntry?>(null!);
 
 		// Act
@@ -82,7 +82,7 @@ public class SourceMapExtensionsTests
 		};
 
 		var sourceMap = CreateSourceMapMock();
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(It.Is<SourcePosition>(y => y.Line == 5 && y.Column == 8)))
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(It.Is<SourcePosition>(y => y.Line == 5 && y.Column == 8)))
 			.Returns(new MappingEntry(sourceMapPosition: default, originalName: "foo"));
 
 		// Act
@@ -108,11 +108,11 @@ public class SourceMapExtensionsTests
 
 		var sourceMap = CreateSourceMapMock();
 		
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(
 				It.Is<SourcePosition>(y => y.Line == 86 && y.Column == 52)))
 			.Returns((MappingEntry?)null);
 		
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(
 				It.Is<SourcePosition>(y => y.Line == 88 && y.Column == 78)))
 			.Returns(new MappingEntry(sourceMapPosition: default, originalName: "baz"));
 
@@ -138,11 +138,11 @@ public class SourceMapExtensionsTests
 		};
 
 		var sourceMap = CreateSourceMapMock();
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(
 				It.Is<SourcePosition>(y => y.Line == 5 && y.Column == 5)))
 			.Returns(new MappingEntry(sourceMapPosition: default, originalName: "bar"));
 
-		sourceMap.Setup(x => x.GetMappingEntryForGeneratedSourcePosition(
+		sourceMap.Setup(x => x.GetMappingEntryForGeneratedPosition(
 				It.Is<SourcePosition>(y => y.Line == 20 && y.Column == 10)))
 			.Returns(new MappingEntry(sourceMapPosition: default, originalName: "baz"));
 		// Act

@@ -71,10 +71,7 @@ public struct SourcePosition : IComparable<SourcePosition>, IEquatable<SourcePos
 	public bool IsEqualish(SourcePosition other)
 	{
 		// If the column numbers differ by 1, we can say that the source code is approximately equal
-		if (Line == other.Line && Math.Abs(Column - other.Column) <= 1)
-		{
-			return true;
-		}
+		if (Line == other.Line && Math.Abs(Column - other.Column) <= 1) return true;
 
 		// This handles the case where we are comparing code at the end of one line and the beginning of the next line.
 		// If the column number on one of the entries is zero, it is ok for the line numbers to differ by 1, so
@@ -84,11 +81,7 @@ public struct SourcePosition : IComparable<SourcePosition>, IEquatable<SourcePos
 		if (Math.Abs(Line - other.Line) == 1)
 		{
 			var largerLineNumber = Line > other.Line ? this : other;
-
-			if (largerLineNumber.Column == 0)
-			{
-				return true;
-			}
+			return largerLineNumber.Column == 0;
 		}
 
 		return false;

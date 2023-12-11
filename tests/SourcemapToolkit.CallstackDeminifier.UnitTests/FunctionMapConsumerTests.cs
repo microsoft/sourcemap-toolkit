@@ -79,9 +79,7 @@ public class FunctionMapConsumerTests
 	public void GetWrappingFunctionForSourceLocation_MultipleFunctionMapEntriesSingleRelevantFunctionMapEntry_ReturnWrappingFunction()
 	{
 		// Arrange
-		var sourcePosition = new SourcePosition(
-			line: 31,
-			column: 0);
+		var sourcePosition = new SourcePosition(line: 31, column: 0);
 		var functionMapEntry = new FunctionMapEntry(
 			bindings: default,
 			deminifiedMethodName: default,

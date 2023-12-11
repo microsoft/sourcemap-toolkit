@@ -33,13 +33,13 @@ internal class MethodNameStackFrameDeminifier : IStackFrameDeminifier
         {
             var wrappingFunction = _functionMapConsumer.GetWrappingFunction(stackFrame.SourcePosition, functionMap);
 
-            return new StackFrameDeminificationResult()
+            return new StackFrameDeminificationResult
             {
                 StackFrame = new StackFrame { MethodName = wrappingFunction?.DeminifiedMethodName },
                 Error = wrappingFunction == null ? DeminificationError.NoWrapingFunctionFound : DeminificationError.None
             };
         }
 
-        return new StackFrameDeminificationResult() { Error = DeminificationError.NoSourceCodeProvided };
+        return new StackFrameDeminificationResult { Error = DeminificationError.NoSourceCodeProvided };
     }
 }

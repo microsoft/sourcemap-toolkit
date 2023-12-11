@@ -57,4 +57,33 @@ public class StackTraceDeminifierWebpackTests
 		// Assert
 		Assert.Equal(deminifiedStackTrace.Replace("\r", ""), results.ToString().Replace("\r", ""));
 	}
+	
+	[Fact]
+	public void DeminifyStackTrace_MinifiedStackTrace_CorrectDeminificationPerMethodWhenPossible()
+	{
+		var provider = new WebpackTestProvider();
+		var deminifier = StackTraceDeminifierFactory.GetDeminifier(provider, provider);
+		var deminifierMapOnly = StackTraceDeminifierFactory.GetMapOnlyDeminifier(provider);
+		var deminifierMethod = StackTraceDeminifierFactory.GetMethodNameDeminifier(provider, provider);
+		
+		// Arrange
+		var chromeStackTrace = @"TypeError: Cannot read property 'nonExistantmember' of undefined
+    at t.onButtonClick (http://localhost:3000/js/bundle.ffe51781aee314a37903.min.js:1:3573)
+    at Object.sh (https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410)";
+
+		Assert.Equal(@"TypeError: Cannot read property 'nonExistantmember' of undefined
+  at _this.onButtonClick in webpack:///./components/App.tsx:11:46
+  at Object.sh in https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410",
+			deminifier.DeminifyStackTrace(chromeStackTrace).ToString());
+		
+		Assert.Equal(@"TypeError: Cannot read property 'nonExistantmember' of undefined
+  at t.onButtonClick in webpack:///./components/App.tsx:11:46
+  at Object.sh in https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410",
+			deminifierMapOnly.DeminifyStackTrace(chromeStackTrace).ToString());
+
+		Assert.Equal(@"TypeError: Cannot read property 'nonExistantmember' of undefined
+  at _this.onButtonClick in http://localhost:3000/js/bundle.ffe51781aee314a37903.min.js:1:3573
+  at Object.sh in https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js:164:410",
+			deminifierMethod.DeminifyStackTrace(chromeStackTrace).ToString());
+	}
 }

@@ -148,7 +148,7 @@ public class SourceMap
 
 			if (mappingEntry.OriginalFileName == sourceFile && mappingEntry.SourcePosition != SourcePosition.NotFound)
 			{
-				var correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedSourcePosition(mappingEntry.SourcePosition);
+				var correspondingSubMapMappingEntry = submap.GetMappingEntryForGeneratedPosition(mappingEntry.SourcePosition);
 
 				if (correspondingSubMapMappingEntry != null)
 				{
@@ -196,7 +196,7 @@ public class SourceMap
 	/// </summary>
 	/// <param name="generatedSourcePosition">The location in generated code for which we want to discover a mapping entry</param>
 	/// <returns>A mapping entry that is a close match for the desired generated code location</returns>
-	public virtual MappingEntry? GetMappingEntryForGeneratedSourcePosition(SourcePosition generatedSourcePosition)
+	public virtual MappingEntry? GetMappingEntryForGeneratedPosition(SourcePosition generatedSourcePosition)
 	{
 		if (ParsedMappings == null)
 		{

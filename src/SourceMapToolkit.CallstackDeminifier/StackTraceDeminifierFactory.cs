@@ -42,7 +42,7 @@ public class StackTraceDeminifierFactory
 	/// StackTrace deminifiers created with this method will keep source maps cached, and thus use
 	/// significantly more memory during runtime than the ones generated with GetMethodNameDeminifier.
 	/// </summary>
-	/// <param name="sourceMapProvider">Consumers of the API should implement this interface, whichc
+	/// <param name="sourceMapProvider">Consumers of the API should implement this interface, which
 	/// provides the source map for a given JavaScript file. Throws ArgumentNullException if the
 	/// parameter is set to null.</param>
 	/// <param name="stackTraceParser">Consumers of the API should implement this interface, which provides

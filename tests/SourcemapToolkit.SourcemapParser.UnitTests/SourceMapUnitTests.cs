@@ -14,7 +14,7 @@ public class SourceMapUnitTests
 		var sourcePosition = new SourcePosition(line: 4, column: 3);
 
 		// Act
-		var result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+		var result = sourceMap.GetMappingEntryForGeneratedPosition(sourcePosition);
 
 		// Asset
 		Assert.Null(result);
@@ -34,7 +34,7 @@ public class SourceMapUnitTests
 		var sourcePosition = new SourcePosition(line: 4, column: 3);
 
 		// Act
-		var result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+		var result = sourceMap.GetMappingEntryForGeneratedPosition(sourcePosition);
 
 		// Asset
 		Assert.Null(result);
@@ -57,7 +57,7 @@ public class SourceMapUnitTests
 		var sourcePosition = new SourcePosition(line: 8, column: 13);
 
 		// Act
-		var result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+		var result = sourceMap.GetMappingEntryForGeneratedPosition(sourcePosition);
 
 		// Asset
 		Assert.Equal(matchingMappingEntry, result);
@@ -79,7 +79,7 @@ public class SourceMapUnitTests
 		var sourcePosition = new SourcePosition(line: 10, column: 14);
 
 		// Act
-		var result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+		var result = sourceMap.GetMappingEntryForGeneratedPosition(sourcePosition);
 
 		// Asset
 		Assert.Equal(matchingMappingEntry, result);
@@ -101,7 +101,7 @@ public class SourceMapUnitTests
 		var sourcePosition = new SourcePosition(line: 24, column: 0);
 
 		// Act
-		var result = sourceMap.GetMappingEntryForGeneratedSourcePosition(sourcePosition);
+		var result = sourceMap.GetMappingEntryForGeneratedPosition(sourcePosition);
 
 		// Asset
 		Assert.Equal(matchingMappingEntry, result);
@@ -120,7 +120,7 @@ public class SourceMapUnitTests
 			parsedMappings: new List<MappingEntry> { mappingEntry });
 
 		// Act
-		var rootEntry = sourceMap.GetMappingEntryForGeneratedSourcePosition(generated1);
+		var rootEntry = sourceMap.GetMappingEntryForGeneratedPosition(generated1);
 
 		// Assert
 		Assert.Equal(rootEntry, mappingEntry);
@@ -238,7 +238,7 @@ public class SourceMapUnitTests
 		Assert.NotNull(combinedMap);
 		Assert.Single(combinedMap.ParsedMappings);
 		Assert.Single(combinedMap.Sources);
-		var rootMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
+		var rootMapping = combinedMap.GetMappingEntryForGeneratedPosition(generated2);
 		Assert.Equal(0, rootMapping.Value.SourcePosition.CompareTo(childMapping.SourcePosition));
 	}
 
@@ -278,9 +278,9 @@ public class SourceMapUnitTests
 		Assert.NotNull(combinedMap);
 		Assert.Equal(2, combinedMap.ParsedMappings.Count);
 		Assert.Equal(2, combinedMap.Sources.Count);
-		var firstCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
+		var firstCombinedMapping = combinedMap.GetMappingEntryForGeneratedPosition(generated3);
 		Assert.True(firstCombinedMapping.Equals(mapping2));
-		var secondCombinedMapping = combinedMap.GetMappingEntryForGeneratedSourcePosition(generated2);
+		var secondCombinedMapping = combinedMap.GetMappingEntryForGeneratedPosition(generated2);
 		Assert.Equal(0, secondCombinedMapping.Value.SourcePosition.CompareTo(childMapping.SourcePosition));
 	}
 
@@ -322,7 +322,7 @@ public class SourceMapUnitTests
 		Assert.NotNull(firstCombinedMap);
 		var secondCombinedMap = firstCombinedMap.ApplySourceMap(grandChildMap);
 		Assert.NotNull(secondCombinedMap);
-		var rootMapping = secondCombinedMap.GetMappingEntryForGeneratedSourcePosition(generated3);
+		var rootMapping = secondCombinedMap.GetMappingEntryForGeneratedPosition(generated3);
 		Assert.Equal(0, rootMapping.Value.SourcePosition.CompareTo(mapLevel2.SourcePosition));
 	}
 
